@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { ItensVerificadosService } from './services/itens-verificados.service';
+import { AddItemVerifComponent } from "./pages/add-item-verif/add-item-verif.component";
 
 @Component({
-  selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  imports: [HomeComponent, AddItemVerifComponent],
+  providers: []
 })
 export class AppComponent {
   title = 'ProjetoANGULAR';

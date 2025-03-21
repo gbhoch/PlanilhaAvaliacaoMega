@@ -1,0 +1,138 @@
+.header{
+  background-color: #00843d;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding: auto;
+  height: 60px;
+  width: 100%;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.container-lg{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Pai dos campos Input */
+
+.input-box{
+  margin: 15px;
+  padding: 15px;
+  width: 75%;
+  gap: 15px;
+  display: grid;
+  grid-template-columns: 110px 110px;
+  grid-template-rows: 30px 30px;
+  justify-content: space-evenly;
+  border: none;
+}
+
+/* Todos Inputs respectivamente */
+.input-text{
+  height: 25px;
+  width: 100%;
+  font-family: "Outfit", serif;
+  border: none;
+  border-bottom-style: groove;
+  outline: none;
+}
+
+/* Esconde o Placeholder quando clicado em cima */
+
+input:focus::-webkit-input-placeholder{
+  opacity: 0;
+}
+
+input:focus::-moz-placeholder{
+  opacity: 0;
+}
+
+input:focus::-ms-placeholder{
+  opacity: 0;
+}
+
+/* Esconde o spin button do Input > Type = Number */
+
+.input-text::-webkit-calendar-picker-indicator { font-variant-caps: titling-caps; }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+  -moz-appearance:textfield; /* Firefox */
+}
+
+/* Botão de Adicionar mais itens */
+.button-add{
+  height: 30px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #00843d;
+  border: none;
+  border-radius: 2px;
+  font-size: 20px;
+  opacity: 1;
+}
+
+.table{
+  height: 50%;
+  width: 80%;
+  margin: 15px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #00843d;
+  color: white;
+}
+
+/* Título Item */
+th.item{
+  display: inline;
+  margin-right: 500px;
+  font-style: white;
+  font-size: 24px;
+  font-weight: 300;
+}
+
+/* Pai dos botões confirmar / cancelar */
+.buttons-btn{
+  margin: 15px;
+  padding: 15px;
+  width: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.btn-confirmar{
+  background-color: rgb(35, 219, 35);
+  border: none;
+  border-radius: 2px;
+  font-family: "Outfit", serif;
+  font-style: normal;
+  height: 35px;
+}
+
+.btn-cancelar{
+  background-color: red;
+  border: none;
+  border-radius: 2px;
+  font-family: "Outfit", serif;
+  font-style: normal;
+  height: 35px;
+}
+

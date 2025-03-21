@@ -1,0 +1,33 @@
+<header class="header">Planilha de Avaliação 5S e BPF</header>
+
+<div class="container-lg">
+  <div class="input-box">
+    <input class="input-text" type="number" placeholder="Matrícula" id="matricula">
+    <input class="input-text" type="text" placeholder="Avaliador" id="nome">
+    <input class="input-text" type="date" id="data">
+    <input class="input-text" type="text" placeholder="Áreas Comuns" id="area">
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <app-add-item-verif></app-add-item-verif>
+        <th class="item">Itens</th>
+        <button class="button-add" type="button" #openModal>+</button>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let item of itensVerificados" >
+      <tr>
+        <td class="checkbox">{{ item.descricaoItem }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>XVX</div>
+
+  <div class="buttons-btn">
+    <button class="btn-confirmar">Confirmar</button>
+    <button class="btn-cancelar">Cancelar</button>
+  </div>
+</div>
