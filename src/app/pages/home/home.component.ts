@@ -1,69 +1,40 @@
 import { AddItemVerifComponent } from './../add-item-verif/add-item-verif.component';
+import { ItensVerificados } from './../../models/ItensVerificados';
 import { ItensVerificadosService } from './../../services/itens-verificados.service';
-import { FuncionarioService } from './../../services/funcionario.service';
 import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { Funcionario } from '../../models/Funcionario';
-import { ItensVerificados } from '../../models/ItensVerificados';
-import { NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { DxButtonModule, DxDataGridModule } from 'devextreme-angular';
+import notify from 'devextreme/ui/notify';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
-  imports: [NgFor, CommonModule, AddItemVerifComponent]
+  imports: [CommonModule, DxDataGridModule, DxButtonModule, AddItemVerifComponent, FormsModule]
 })
 
 export class HomeComponent implements OnInit {
 
   itensVerificados : ItensVerificados[] = [];
-  itensVerificadosGeral : ItensVerificados[] = [];
+  listDatasource: any;
 
-  constructor (private ItensVerificadosService : ItensVerificadosService){}
+  @ViewChild('modalAddItem')
+  private modal?: AddItemVerifComponent
 
-  ngOnInit(): void {
-    this.ItensVerificadosService.GetItensVerificados().subscribe(data => {
-      const dados = data.dados;
+  constructor (private ItensVerificadosService : ItensVerificadosService){
 
-      dados.map((item) => {                                                                     // .map percorre todos itens e transforma em outro array
-        item.dataDeCriacao = new Date(item.dataDeCriacao!).toLocaleDateString('pt-BR');
-        item.dataDeModificacao = new Date(item.dataDeModificacao!).toLocaleDateString('pt-BR');
-      })
-
-      this.itensVerificados = data.dados;
-      this.itensVerificadosGeral = data.dados;
-    })
+    this.ItensVerificadosService.getItensVerificados().subscribe(data => {
+      this.itensVerificados = data
+    });
   }
 
-  @ViewChild('openModal') openModal! : AddItemVerifComponent;
-  ngOnOpenModal(){
-    this.openModal.toggle();
+  ngOnInit(): void {}
+
+  showModal = () => {
+    this.modal?.showModal();
   }
-
-
 
 }
-/*
-export class HomeComponent implements OnInit {
 
-  funcionarios : Funcionario[] = [];
-  funcionarioGeral : Funcionario[] = [];
-
-  constructor (private FuncionarioService : FuncionarioService){}
-
-  ngOnInit(): void {
-    this.FuncionarioService.GetFuncionario().subscribe(data => {
-      const dados = data.dados;
-
-      dados.map((item) => {
-        item.dataDeCriacao = new Date(item.dataDeCriacao!).toLocaleDateString('pt-BR');
-        item.dataDeModificacao = new Date(item.dataDeModificacao!).toLocaleDateString('pt-BR');
-      })
-
-      this.funcionarios = data.dados;
-      this.funcionarioGeral = data.dados;
-    })
-  }
-
-}*/

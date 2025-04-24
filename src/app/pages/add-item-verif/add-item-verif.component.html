@@ -1,14 +1,26 @@
-<!-- <button id="open-modal" (click)="toggle()"></button> -->
-<div id="fade" class="hide"></div>
-<div id="modal" class="hide" *ngIf="openModal">
-  <div class="modal-header">
-    <header>Adicionar Itens</header>
-  </div>
-  <div class="modal-body">
-    <div class="checkbox">Teste</div>
-  </div>
+
+<dialog #modal>
+  <h3 class="header"> Adicionar Itens </h3>
+
+  <dx-data-grid id="dataGrid" height="300" width="900"
+  [dataSource]="add"
+  [showBorders]="true"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true">
+    <dxo-toolbar class="toolbar" id="toolbar">
+      <dxi-item location="before" id="divItem">
+        <div id="itemTitulo">ITENS</div>
+      </dxi-item>
+    </dxo-toolbar>
+    <dxi-column alignment="center" dataField="ativo" caption="Ativo" [width]="80" type="checkbox"> </dxi-column>
+    <dxi-column alignment="center" dataField="descricaoItem" caption="Descrição"> </dxi-column>
+    <dxi-column alignment="center" dataField="dataDeModificacao" caption="Data de Modificação" [width]="150"> </dxi-column>
+  </dx-data-grid>
+
   <div class="buttons-btn-modal">
-    <button class="btn-confirmar">Confirmar</button>
-    <button class="btn-cancelar">Cancelar</button>
+    <button class="btn-confirmar" (click)="closeModal()">Confirmar</button>
+    <button class="btn-cancelar" (click)="closeModal()">Cancelar</button>
   </div>
-</div>
+</dialog>
+
+

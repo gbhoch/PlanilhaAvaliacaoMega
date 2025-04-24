@@ -1,4 +1,4 @@
-export interface ItensVerificados{
+export interface AddItens {
   itemID: number;
   descricaoItem: string;
   ativo: boolean;

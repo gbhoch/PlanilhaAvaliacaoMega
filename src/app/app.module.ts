@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddItemVerifComponent } from './pages/add-item-verif/add-item-verif.component';
+import { LoginComponent } from './pages/login/login/login.component';
 
 @NgModule({
   declarations: [],
@@ -11,6 +12,7 @@ import { AddItemVerifComponent } from './pages/add-item-verif/add-item-verif.com
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    LoginComponent
   ],
   providers: [],
   bootstrap: []

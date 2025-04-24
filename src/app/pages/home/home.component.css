@@ -1,3 +1,4 @@
+
 .header{
   background-color: #00843d;
   color: white;
@@ -20,9 +21,24 @@
   flex-direction: column;
 }
 
+#itemTitulo{
+  color: white;
+  margin: 14px;
+}
+
+#addItem{
+  margin: 8px 20px;
+}
+
+#dataGrid{
+  width: 100%;
+  margin-top: 20px;
+  background-color: #00843d;
+}
+
 /* Pai dos campos Input */
 
-.input-box{
+/* .input-box{
   margin: 15px;
   padding: 15px;
   width: 75%;
@@ -32,7 +48,7 @@
   grid-template-rows: 30px 30px;
   justify-content: space-evenly;
   border: none;
-}
+} */
 
 /* Todos Inputs respectivamente */
 .input-text{
@@ -40,8 +56,10 @@
   width: 100%;
   font-family: "Outfit", serif;
   border: none;
-  border-bottom-style: groove;
+  border-radius: 2px;
+  /* border-bottom-style: groove; */
   outline: none;
+  margin: 10px;
 }
 
 /* Esconde o Placeholder quando clicado em cima */
@@ -86,31 +104,9 @@ input[type=number] {
   opacity: 1;
 }
 
-.table{
-  height: 50%;
-  width: 80%;
-  margin: 15px;
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: #00843d;
-  color: white;
-}
-
-/* Título Item */
-th.item{
-  display: inline;
-  margin-right: 500px;
-  font-style: white;
-  font-size: 24px;
-  font-weight: 300;
-}
-
 /* Pai dos botões confirmar / cancelar */
 .buttons-btn{
   margin: 15px;
-  padding: 15px;
   width: 75%;
   display: flex;
   align-items: center;

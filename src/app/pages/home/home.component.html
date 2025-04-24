@@ -1,30 +1,31 @@
 <header class="header">Planilha de Avaliação 5S e BPF</header>
 
 <div class="container-lg">
-  <div class="input-box">
-    <input class="input-text" type="number" placeholder="Matrícula" id="matricula">
-    <input class="input-text" type="text" placeholder="Avaliador" id="nome">
-    <input class="input-text" type="date" id="data">
-    <input class="input-text" type="text" placeholder="Áreas Comuns" id="area">
-  </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <app-add-item-verif></app-add-item-verif>
-        <th class="item">Itens</th>
-        <button class="button-add" type="button" #openModal>+</button>
-      </tr>
-    </thead>
+  <app-add-item-verif #modalAddItem></app-add-item-verif>
 
-    <tbody *ngFor="let item of itensVerificados" >
-      <tr>
-        <td class="checkbox">{{ item.descricaoItem }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div>XVX</div>
+  <dx-data-grid id="dataGrid"
+    [dataSource]="itensVerificados" width="80%" height="400px"
+    [showBorders]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true">
+    <dxo-toolbar class="toolbar" id="toolbar">
+      <dxi-item location="before">
+        <div id="itemTitulo">ITENS</div>
+      </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="number" placeholder="Matrícula" id="matricula"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="text" placeholder="Avaliador" id="nome"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="date" id="data"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="text" placeholder="Áreas Comuns" id="area"> </dxi-item>
+      <dxi-item location="after" class="button" id="addItem">
+        <dx-button text="+" (onClick)="showModal()" [width]="35" [height]="30"></dx-button>
+      </dxi-item>
+    </dxo-toolbar>
+    <dxi-column alignment="center" dataField="ativo" caption="Ativo" [width]="80"> </dxi-column>
+    <dxi-column alignment="center" dataField="descricaoItem" caption="Descrição"> </dxi-column>
+    <dxi-column alignment="center" dataField="dataDeCriacao" caption="Criado em:" [width]="120"> </dxi-column>
+    <dxi-column alignment="center" dataField="dataDeModificacao" caption="Data de Modificação" [width]="150"> </dxi-column>
+  </dx-data-grid>
 
   <div class="buttons-btn">
     <button class="btn-confirmar">Confirmar</button>

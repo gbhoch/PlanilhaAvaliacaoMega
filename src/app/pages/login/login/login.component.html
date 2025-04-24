@@ -1,0 +1,15 @@
+<div class="contentWrapper">
+  <div id="formLogin">
+    <h2>Login</h2>
+    <dx-number-box
+    placeholder = "Código de Acesso"
+    [(ngModel)]="credentials.codigo">
+    </dx-number-box>
+    <dx-text-box
+    placeholder = "Senha de Acesso"
+    [(ngModel)] = "credentials.senha"
+    mode = "password"
+    ></dx-text-box>
+    <dx-button [type] = "'success'" (click)="loginButton($event)" text="Acessar"></dx-button>
+  </div>
+</div>
