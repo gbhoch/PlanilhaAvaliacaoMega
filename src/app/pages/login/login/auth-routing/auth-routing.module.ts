@@ -2,16 +2,22 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from '../login.component';
+import { HomeComponent } from '../../../home/home.component';
 
 const routes : Routes = [
+  // {
+  // path : '',
+  // redirectTo : 'login',
+  // pathMatch : "full"
+  // },
   {
-  path : '',
-  redirectTo : 'login',
-  pathMatch : "full"
-  },
-  {
+
     path : 'login',
     component : LoginComponent
+  },
+  {
+    path : 'planilha',
+    component : HomeComponent
   }
 ]
 
@@ -19,7 +25,7 @@ const routes : Routes = [
   declarations: [],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forRoot(routes)
   ],
   exports : [RouterModule]
 })

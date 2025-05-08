@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { DxButtonModule, DxDataGridModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { FormsModule } from '@angular/forms';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   standalone: true,
@@ -20,6 +21,9 @@ export class HomeComponent implements OnInit {
   itensVerificados : ItensVerificados[] = [];
   listDatasource: any;
 
+  allMode : string | undefined;
+  checkBoxesMode : string | undefined;
+
   @ViewChild('modalAddItem')
   private modal?: AddItemVerifComponent
 
@@ -28,6 +32,9 @@ export class HomeComponent implements OnInit {
     this.ItensVerificadosService.getItensVerificados().subscribe(data => {
       this.itensVerificados = data
     });
+
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('') ? 'always' : 'onClick';
   }
 
   ngOnInit(): void {}

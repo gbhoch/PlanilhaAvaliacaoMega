@@ -8,6 +8,9 @@ dialog {
   &::backdrop {
     backdrop-filter: blur(1px);
   }
+
+  width: 50%;
+  height: 35%;
 }
 
 :host {
@@ -32,6 +35,16 @@ dialog {
   color: white;
   background-color: #00843d;
   font-weight: 300;
+}
+
+#input-text{
+  margin: 25px;
+  padding: 10px;
+  width: 85%;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #divItem{

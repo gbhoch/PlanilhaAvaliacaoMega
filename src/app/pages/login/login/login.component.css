@@ -1,0 +1,38 @@
+header{
+  width: 100%;
+}
+
+body{
+  background: #f7f7f7;
+  background: linear-gradient(330deg, rgba(247, 247, 247, 1) 0%, rgba(143, 143, 143, 1) 50%, rgba(77, 77, 77, 1) 100%);
+}
+
+.contentWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+#formLogin{
+  display: flex;
+  flex-direction: column;
+  background-color: #00843d;
+  color: #f7f7f7;
+  border: solid 1px #0000012f;
+  border-radius: 10px;
+  box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  padding: 10px;
+  gap: 10px;
+  width: 300px;
+}
+
+span{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

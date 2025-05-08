@@ -1,12 +1,14 @@
-import { Router } from '@angular/router';
+import { provideRouter, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Component, OnInit } from "@angular/core";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector : 'app-boot',
+  selector : 'root-boot',
   template : `
-  <router-outlet></router-outlet>
-  `
+  <!-- <router-outlet></router-outlet> -->
+  `,
+  providers:[RouterOutlet]
 })
 
 export class BootComponent implements OnInit{

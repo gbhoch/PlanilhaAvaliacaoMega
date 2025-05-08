@@ -1,4 +1,4 @@
 export type LoginType = {
-  codigo : number | null,
+  codigo : any,
   senha : string
 }

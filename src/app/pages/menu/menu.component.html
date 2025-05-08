@@ -1,0 +1,17 @@
+<dx-drawer
+    class="drawer"
+    template="template"
+    [(opened)]="isDrawerOpen"
+    revealMode="expand">
+    <button type="button" (click)="openSidenav()">+</button>
+    <div *dxTemplate="let data of 'template'">
+      <dx-list
+          class="drawerList"
+          selectionMode="single"
+          (onSelectionChanged)="this.isDrawerOpen = true"
+          [hoverStateEnabled]="true"
+          [dataSource]="navigation"
+          (onItemClick)="menuItemCLick($event)">
+      </dx-list>
+  </div>
+</dx-drawer>

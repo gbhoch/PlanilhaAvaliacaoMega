@@ -1,15 +1,25 @@
-<div class="contentWrapper">
-  <div id="formLogin">
-    <h2>Login</h2>
-    <dx-number-box
-    placeholder = "Código de Acesso"
-    [(ngModel)]="credentials.codigo">
-    </dx-number-box>
-    <dx-text-box
-    placeholder = "Senha de Acesso"
-    [(ngModel)] = "credentials.senha"
-    mode = "password"
-    ></dx-text-box>
-    <dx-button [type] = "'success'" (click)="loginButton($event)" text="Acessar"></dx-button>
+<header class="header">
+  <div class="head-icons">
+    <img src="/src/assets/Logo_MegaGoglio_Branco.png" alt="MegaGoglioIcon">
+    <img src="/src/assets/Logo_5S_BRANCO.png" alt="5SIcon">
   </div>
-</div>
+</header>
+<body>
+  <div class="contentWrapper">
+    <form id="formLogin"(submit)="loginButton()">
+      <span>Login</span>
+      <dx-number-box
+      class="input-box"
+      placeholder = "Matrícula"
+      [(value)]="credentials.codigo">
+      </dx-number-box>
+      <dx-text-box
+      class="input-box"
+      placeholder = "Senha de Acesso"
+      [(value)] = "credentials.senha"
+      mode = "password"
+      ></dx-text-box>
+      <dx-button type = "success" (click)="loginButton()" text="Acessar" [useSubmitBehavior]="true"/>
+    </form>
+  </div>
+</body>

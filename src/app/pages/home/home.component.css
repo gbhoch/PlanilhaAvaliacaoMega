@@ -38,26 +38,24 @@
 
 /* Pai dos campos Input */
 
-/* .input-box{
+.input-box{
   margin: 15px;
-  padding: 15px;
-  width: 75%;
+  width: 100%;
   gap: 15px;
-  display: grid;
-  grid-template-columns: 110px 110px;
-  grid-template-rows: 30px 30px;
-  justify-content: space-evenly;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
-} */
+}
 
 /* Todos Inputs respectivamente */
 .input-text{
   height: 25px;
-  width: 100%;
+  width: 15%;
   font-family: "Outfit", serif;
   border: none;
   border-radius: 2px;
-  /* border-bottom-style: groove; */
+  border-bottom-style: groove;
   outline: none;
   margin: 10px;
 }

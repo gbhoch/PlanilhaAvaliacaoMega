@@ -3,14 +3,13 @@ import { AuthService } from './../../../services/auth.service';
 import { Component, inject, NgModule, Type } from '@angular/core';
 import { LoginType } from '../../../models/types/login';
 import notify from 'devextreme/ui/notify';
-import { DxButtonModule, DxNumberBoxModule } from 'devextreme-angular';
-import { FormsModule } from '@angular/forms';
-
+import { DxButtonModule, DxNumberBoxModule, DxTextBoxModule } from 'devextreme-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [DxNumberBoxModule, FormsModule, DxButtonModule],
+  imports: [DxNumberBoxModule, FormsModule, DxButtonModule, DxTextBoxModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -24,7 +23,7 @@ export class LoginComponent {
     senha : ''
   };
 
-  loginButton(evt : any){
+  loginButton(){
     let result = this.AuthService.login(this.credentials);
     if(!result){
       notify({
@@ -35,7 +34,7 @@ export class LoginComponent {
       return;
     }
 
-    this.router.navigate(['']);
+    this.router.navigate(['/menu']);
   }
 
 }

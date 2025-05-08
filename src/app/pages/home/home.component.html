@@ -1,5 +1,9 @@
 <header class="header">Planilha de Avaliação 5S e BPF</header>
 
+<div class="input-box">
+  <input class="input-text" type="text" placeholder="Agrupador" id="agrupador">
+</div>
+
 <div class="container-lg">
 
   <app-add-item-verif #modalAddItem></app-add-item-verif>
@@ -13,15 +17,28 @@
       <dxi-item location="before">
         <div id="itemTitulo">ITENS</div>
       </dxi-item>
-      <dxi-item location="center"> <input class="input-text" type="number" placeholder="Matrícula" id="matricula"> </dxi-item>
+      <!-- <dxi-item location="center"> <input class="input-text" type="number" placeholder="Matrícula" id="matricula"> </dxi-item>
       <dxi-item location="center"> <input class="input-text" type="text" placeholder="Avaliador" id="nome"> </dxi-item>
       <dxi-item location="center"> <input class="input-text" type="date" id="data"> </dxi-item>
-      <dxi-item location="center"> <input class="input-text" type="text" placeholder="Áreas Comuns" id="area"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="text" placeholder="Áreas Comuns" id="area"> </dxi-item> -->
       <dxi-item location="after" class="button" id="addItem">
         <dx-button text="+" (onClick)="showModal()" [width]="35" [height]="30"></dx-button>
       </dxi-item>
     </dxo-toolbar>
-    <dxi-column alignment="center" dataField="ativo" caption="Ativo" [width]="80"> </dxi-column>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxo-editing
+    mode="cell"
+    [allowDeleting]="true"
+    [useIcons]="true"
+    dataField="Excluir"
+  >
+  </dxo-editing>
+    <dxo-selection
+      [selectAllMode]="allMode"
+      [showCheckBoxesMode]="checkBoxesMode"
+      mode="multiple"
+      dataField="Selecionar"
+    ></dxo-selection>
     <dxi-column alignment="center" dataField="descricaoItem" caption="Descrição"> </dxi-column>
     <dxi-column alignment="center" dataField="dataDeCriacao" caption="Criado em:" [width]="120"> </dxi-column>
     <dxi-column alignment="center" dataField="dataDeModificacao" caption="Data de Modificação" [width]="150"> </dxi-column>

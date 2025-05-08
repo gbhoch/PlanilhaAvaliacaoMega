@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddItemVerifComponent } from './pages/add-item-verif/add-item-verif.component';
 import { LoginComponent } from './pages/login/login/login.component';
+import { AuthRoutingModule } from './pages/login/login/auth-routing/auth-routing.module';
+
 
 @NgModule({
   declarations: [],
@@ -12,7 +13,8 @@ import { LoginComponent } from './pages/login/login/login.component';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    LoginComponent
+    LoginComponent,
+    AuthRoutingModule
   ],
   providers: [],
   bootstrap: []
