@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DxToolbarModule, DxButtonModule, DxListModule } from 'devextreme-angular';
+import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import notify from 'devextreme/ui/notify';
+import { MenuToolbarService } from '../../../../services/menu-toolbar.service';
+import { MenuComponent } from '../../menu.component';
 
 @Component({
   selector: 'app-toolbar-menu',
@@ -12,11 +16,18 @@ import { DxToolbarModule, DxButtonModule, DxListModule } from 'devextreme-angula
 
 export class ToolbarMenuComponent {
 
+  // private menuToolbar = inject(MenuToolbarService);
   isDrawerOpen: boolean = false;
 
-  openSidenav(){
-    console.log('click')
-    this.isDrawerOpen = !this.isDrawerOpen;
-  }
+  constructor (private toolbarService : MenuToolbarService) {}
 
+  // public SidenavOpen(toolbar : MenuComponent){
+  //   this.isDrawerOpen = !this.isDrawerOpen;
+  // }
+  SidenavOpen : DxButtonTypes.Properties = {
+    icon: 'menu',
+    onClick : () => {
+      notify('.');
+    }
+  };
 }

@@ -1,3 +1,15 @@
-.toolbar{
+.toolbar {
   background-color: #00843d;
 }
+
+.dx-toolbar-items-container{
+}
+
+#titulo{
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+

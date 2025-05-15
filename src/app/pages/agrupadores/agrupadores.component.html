@@ -1,0 +1,20 @@
+<header>TESTE</header>
+
+<div class="container-lg">
+  <dx-data-grid
+  id="dataGrid"
+  [showBorders]="true"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true">
+    <dxo-toolbar class="toolbar" id="toolbar">
+      <dxi-item location="before">
+        <div id="itemTitulo">AGRUPADORES</div>
+      </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="number" placeholder="Matrícula" id="matricula"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="text" placeholder="Avaliador" id="nome"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="date" id="data"> </dxi-item>
+      <dxi-item location="center"> <input class="input-text" type="text" placeholder="Áreas Comuns" id="area"> </dxi-item>
+    </dxo-toolbar>
+  </dx-data-grid>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
+</div>
