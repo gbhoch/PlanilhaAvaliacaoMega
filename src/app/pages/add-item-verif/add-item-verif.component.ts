@@ -10,7 +10,7 @@ import themes from 'devextreme/ui/themes';
 @Component({
   selector: 'app-add-item-verif',
   standalone: true,
-  imports: [CommonModule /*, NgIf*/, HomeComponent, DxDataGridModule, DxSelectBoxModule],
+  imports: [CommonModule, HomeComponent, DxDataGridModule, DxSelectBoxModule],
   templateUrl: './add-item-verif.component.html',
   template: `
     <ng-content/>

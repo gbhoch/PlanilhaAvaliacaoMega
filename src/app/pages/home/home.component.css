@@ -1,5 +1,4 @@
-
-.header{
+/* .header{
   background-color: #00843d;
   color: white;
   display: flex;
@@ -7,11 +6,11 @@
   align-items: center;
   margin: auto;
   padding: auto;
-  height: 60px;
+  height: 50px;
   width: 100%;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 400;
-}
+} */
 
 .container-lg{
   width: 100%;
@@ -39,7 +38,7 @@
 /* Pai dos campos Input */
 
 .input-box{
-  margin: 15px;
+  /* margin: 15px; */
   width: 100%;
   gap: 15px;
   display: flex;
@@ -50,12 +49,12 @@
 
 /* Todos Inputs respectivamente */
 .input-text{
-  height: 25px;
-  width: 15%;
+  height: 27px;
+  /* width: 15%; */
   font-family: "Outfit", serif;
   border: none;
   border-radius: 2px;
-  border-bottom-style: groove;
+  /* border-bottom-style: groove; */
   outline: none;
   margin: 10px;
 }

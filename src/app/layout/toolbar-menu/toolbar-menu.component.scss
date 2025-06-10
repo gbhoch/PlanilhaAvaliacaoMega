@@ -1,0 +1,40 @@
+::ng-deep {
+  .header{
+    background-color: #00843d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: auto;
+    height: 50px;
+    width: 100%;
+  }
+
+  .toolbar {
+    background-color: #00843d;
+  }
+
+  .dx-button-mode-contained {
+    .dx-icon{
+      margin: 4px 0 0 15px;
+
+      &::before{
+        color: white;
+      }
+    }
+  }
+
+  #titulo{
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .dx-list-item{
+    color: white;
+  }
+}
+

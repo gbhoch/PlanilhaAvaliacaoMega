@@ -7,6 +7,10 @@ body{
   padding: 0;
 }
 
+.drawer::-webkit-scrollbar {
+  display: none;
+}
+
 ::ng-deep .dx-overlay-content {
   background-color: lightgray;
 }

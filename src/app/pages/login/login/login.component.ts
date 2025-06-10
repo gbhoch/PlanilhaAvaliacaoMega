@@ -28,8 +28,9 @@ export class LoginComponent {
     if(!result){
       notify({
         message : 'Usuário e/ou senha incorretos!',
-        type : 'warning',
-        displayTime : 3000
+        type : 'error',
+        displayTime : 3000,
+        width : 300
       }, {direction : 'up-stack', position : 'top center'})
       return;
     }

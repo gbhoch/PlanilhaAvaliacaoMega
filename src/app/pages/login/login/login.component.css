@@ -1,26 +1,36 @@
-header{
-  width: 100%;
-}
 
 body{
   background: #f7f7f7;
-  background: linear-gradient(330deg, rgba(247, 247, 247, 1) 0%, rgba(143, 143, 143, 1) 50%, rgba(77, 77, 77, 1) 100%);
+  /* background: linear-gradient(330deg, rgba(247, 247, 247, 1) 0%, rgba(143, 143, 143, 1) 50%, rgba(77, 77, 77, 1) 100%); */
+  background: linear-gradient(90deg, #605E5E 0%, #CCCCCC 100%); /* gradient site megagoglio.com */
+  height: 100%;
+  width: 100%;
+}
+
+.images{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.logo-images{
+  margin: 8px;
+  padding: 8px;
 }
 
 .contentWrapper{
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
+  /* flex-direction: column; */
+  height: 70%;
 }
 
 #formLogin{
   display: flex;
   flex-direction: column;
-  background-color: #00843d;
-  color: #f7f7f7;
+  background-color: white;
+  color: #00843d;
   border: solid 1px #0000012f;
   border-radius: 10px;
   box-sizing: border-box;
@@ -34,5 +44,13 @@ span{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.input-box{
+  border: none;
+  /* outline: #00843d; */
+  /* border-style: groove; */
+  border-bottom-style: groove;
+  border-color: #00843d;
 }
 

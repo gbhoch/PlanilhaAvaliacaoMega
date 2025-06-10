@@ -1,40 +1,27 @@
 import { Routes } from '@angular/router';
-import { BootComponent } from './boot/boot-routing/boot.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login/login.component';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './pages/menu/menu.component';
-import { AddItemVerifComponent } from './pages/add-item-verif/add-item-verif.component';
+import { AgrupadoresComponent } from './pages/agrupadores/agrupadores.component';
+import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
   {
+    path : 'login',
+    component : LoginComponent
+  },
+  {
     path:'',
-    component:AppComponent,
+    component: LayoutComponent,
     children:[
     {
-      path: '',
-      pathMatch : 'full',
-      redirectTo : 'login'
-    },
-    {
-      path : 'login',
-      component : LoginComponent
+      path : 'agrupadores',
+      component : AgrupadoresComponent,  //Tela de Cadastro dos Itens e Agrupadores
     },
     {
       path : 'planilha',
-      component : HomeComponent
-    },
-    {
-      path : 'menu',
-      component : MenuComponent
+      component : HomeComponent, //Tela da Planilha com Agrupadores e Itens
     }]
   },
 
-];
-
-export const routesSideNav: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'planilha', component: AddItemVerifComponent },
-  { path: 'menu', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
 ];

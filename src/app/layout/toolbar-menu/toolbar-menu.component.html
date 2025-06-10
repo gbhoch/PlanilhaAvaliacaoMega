@@ -1,0 +1,17 @@
+<header class="header">
+  <dx-toolbar class="toolbar">
+    <dxi-item location="before" widget="dxButton" [options]="SidenavOpen" id="button"></dxi-item>
+    <dxi-item location="before" type="text" id="titulo">Planilha de Avaliação 5S
+      <small>(v{{'1.0'}})</small>
+    </dxi-item>
+    <dxi-item>
+      <div *ngIf="" class="usuario">
+        <span>
+          <strong>Usuário:</strong>
+          {{ 'usuario.codigo' }} - {{ 'usuario.nome' }}
+        </span>
+        <button>Sair</button>
+       </div>
+    </dxi-item>
+  </dx-toolbar>
+</header>

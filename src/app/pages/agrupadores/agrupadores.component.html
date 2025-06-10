@@ -1,8 +1,8 @@
-<header>TESTE</header>
 
 <div class="container-lg">
   <dx-data-grid
   id="dataGrid"
+  [dataSource]="agrupadoresList" width="80%" height="400px"
   [showBorders]="true"
   [showRowLines]="true"
   [rowAlternationEnabled]="true">
@@ -15,6 +15,13 @@
       <dxi-item location="center"> <input class="input-text" type="date" id="data"> </dxi-item>
       <dxi-item location="center"> <input class="input-text" type="text" placeholder="Áreas Comuns" id="area"> </dxi-item>
     </dxo-toolbar>
-  </dx-data-grid>
+    <dxi-column alignment="center" dataField="" caption="Agrupadores"> </dxi-column>
+    <dxi-column alignment="center" dataField="" caption="Itens"> </dxi-column>
   <dxo-scrolling mode="virtual"></dxo-scrolling>
+  </dx-data-grid>
+
+  <div class="buttons-btn">
+    <button class="btn-confirmar">Confirmar</button>
+    <button class="btn-cancelar">Cancelar</button>
+  </div>
 </div>
