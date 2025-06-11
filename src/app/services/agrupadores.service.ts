@@ -17,7 +17,7 @@ const agrupList: Agrupadores [] = [
     "ativo": true,
     "dataDeCriacao": "20/05/2025",
     "dataDeModificacao": "--",
-    "itens": ['Pergunta 1', 'Pergunta 2']
+    "itens": []
   },
   {
     "nomeAgrup": "Senso de Limpeza",
