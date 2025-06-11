@@ -108,3 +108,56 @@ input[type=number] {
   font-style: normal;
   height: 35px;
 }
+
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-body {
+  margin-top: 20px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.cursor-pointer:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.btn-trash {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-trash:hover {
+  color: red;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+

@@ -2,6 +2,7 @@
 <div class="container-lg">
   <dx-data-grid
   id="dataGrid"
+  (onCellClick)="onCellClick($event)"
   [dataSource]="agrupadoresList" width="80%" height="400px"
   [showBorders]="true"
   [showRowLines]="true"
@@ -15,10 +16,64 @@
       <dxi-item location="center"> <input class="input-text" type="date" id="data"> </dxi-item>
       <dxi-item location="center"> <input class="input-text" type="text" placeholder="Áreas Comuns" id="area"> </dxi-item>
     </dxo-toolbar>
-    <dxi-column alignment="center" dataField="" caption="Agrupadores"> </dxi-column>
-    <dxi-column alignment="center" dataField="" caption="Itens"> </dxi-column>
+    <dxi-column alignment="center" dataField="nomeAgrup" caption="Agrupadores">
+      <ng-template dxTemplate="cellTemplate" let-data="data">
+        <span class="cursor-pointer">{{ data.nomeAgrup }}</span>
+      </ng-template>
+    </dxi-column>
+    <dxi-column alignment="center" dataField="" caption="Itens" [cellTemplate]="itensTemplate"> </dxi-column>
+    <ng-template #itensTemplate let-data="data">
+      <span>{{ data.itens?.length ? data.itens.join(', ') : '-' }}</span>
+    </ng-template>
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   </dx-data-grid>
+
+  <div class="drawer" *ngIf="drawerAberto">
+    <div class="drawer-header">
+      <h3>Detalhes do Agrupador</h3>
+      <button (click)="drawerAberto = false">Fechar</button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Edição do nome -->
+      <label>Nome do Agrupador:</label>
+      <input *ngIf="selectedAgrupador" type="text" [(ngModel)]="selectedAgrupador.nomeAgrup" (blur)="salvarNome()" />
+
+      <!-- Lista de perguntas -->
+      <h4>Perguntas:</h4>
+      <ul *ngIf="selectedAgrupador">
+        <li *ngFor="let pergunta of selectedAgrupador.itens || []; let i = index">
+          {{ pergunta }}
+          <button class="btn-trash" (click)="abrirPopupConfirmacao(i)">🗑️</button>
+        </li>
+      <dx-popup
+        [(visible)]="popupExcluirVisible"
+        [showTitle]="true"
+        title="Confirmar Exclusão"
+        [width]="400"
+        [height]="200"
+        [dragEnabled]="false"
+        [showCloseButton]="true"
+      >
+        <div class="popup-content">
+          <p>Tem certeza que deseja excluir este item?</p>
+          <div class="popup-actions">
+            <button class="btn-confirmar" (click)="confirmarExclusao()">Confirmar</button>
+            <button class="btn-cancelar" (click)="fecharPopup()">Cancelar</button>
+          </div>
+        </div>
+      </dx-popup>
+
+      </ul>
+
+
+      <!-- Input para nova pergunta -->
+      <input type="text" placeholder="Nova pergunta" [(ngModel)]="novaPergunta" />
+        <button (click)="adicionarPergunta()">Adicionar</button>
+    </div>
+  </div>
+
+
 
   <div class="buttons-btn">
     <button class="btn-confirmar">Confirmar</button>

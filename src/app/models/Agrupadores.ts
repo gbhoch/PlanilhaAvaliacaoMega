@@ -3,4 +3,5 @@ export interface Agrupadores{
   ativo: boolean;
   dataDeCriacao?: string;
   dataDeModificacao?: string;
+  itens?: string[];  // Perguntas do agrupador
 }

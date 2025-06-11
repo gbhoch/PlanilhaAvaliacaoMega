@@ -9,42 +9,42 @@ const agrupList: Agrupadores [] = [
   "nomeAgrup": "Senso de Utilização",
   "ativo": true,
   "dataDeCriacao": "20/05/2025",
-  "dataDeModificacao": "--"
+  "dataDeModificacao": "--",
+  "itens" : []
   },
   {
     "nomeAgrup": "Senso de Organização",
     "ativo": true,
     "dataDeCriacao": "20/05/2025",
-    "dataDeModificacao": "--"
-  },
-  {
-    "nomeAgrup": "Senso de Organização",
-    "ativo": true,
-    "dataDeCriacao": "20/05/2025",
-    "dataDeModificacao": "--"
+    "dataDeModificacao": "--",
+    "itens": ['Pergunta 1', 'Pergunta 2']
   },
   {
     "nomeAgrup": "Senso de Limpeza",
     "ativo": true,
     "dataDeCriacao": "20/05/2025",
-    "dataDeModificacao": "--"
+    "dataDeModificacao": "--",
+    "itens" : []
   },
   {
     "nomeAgrup": "Senso de Asseio",
     "ativo": true,
     "dataDeCriacao": "20/05/2025",
-    "dataDeModificacao": "--"
+    "dataDeModificacao": "--",
+    "itens" : []
   },{
     "nomeAgrup": "Senso de Autodisciplina",
     "ativo": true,
     "dataDeCriacao": "20/05/2025",
-    "dataDeModificacao": "--"
+    "dataDeModificacao": "--",
+    "itens" : []
   }
   ,{
     "nomeAgrup": "Senso de Segurança",
     "ativo": true,
     "dataDeCriacao": "20/05/2025",
-    "dataDeModificacao": "--"
+    "dataDeModificacao": "--",
+    "itens" : []
   }
 ]
 
