@@ -1,6 +1,9 @@
+body{
+  width: 100%;
+}
 
 .container-lg{
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,13 +16,12 @@
 }
 
 #dataGrid{
-  width: 100%;
+  /* width: 100%; */
   margin-top: 20px;
   background-color: #00843d;
 }
 
 /* Pai dos campos Input */
-
 .input-box{
   margin: 15px;
   width: 100%;
@@ -114,8 +116,12 @@ input[type=number] {
   font-family: "Outfit", sans-serif;
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
-  pointer-events: none;
-  visibility: hidden;
+}
+
+.drawer-top {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .drawer.open {
@@ -137,25 +143,6 @@ input[type=number] {
   margin: 0;
 }
 
-.drawer-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.btn-icon {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: #666;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.btn-icon:hover {
-  color: #00843d;
-}
-
 .drawer-header button {
   background: none;
   border: none;
@@ -169,65 +156,68 @@ input[type=number] {
   color: #ff4d4f;
 }
 
+.agrupador-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.agrupador-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agrupador-inputs input,
+.agrupador-inputs textarea {
+  width: 100%;
+  padding: 8px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.agrupador-inputs input:focus,
+.agrupador-inputs textarea:focus {
+  border-color: #00843d;
+}
+
+.agrupador-status {
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.status-indicator span {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+}
+
+.status-indicator .ativo {
+  background-color: #d0f0da;
+  color: #00843d;
+  border: 1px solid #00843d;
+}
+
+.status-indicator .inativo {
+  background-color: #f8d7da;
+  color: #a94442;
+  border: 1px solid #a94442;
+}
+
+
 .drawer-divider {
   border: none;
   border-top: 1px solid rgba(0, 0, 0, 0.1); /* linha fina e translúcida */
   margin: 10px 0;
-}
-
-/* Barra de Navegação */
-
-.drawer-tabs {
-  position: sticky;
-  top: 80px; /* ajusta conforme altura do cabeçalho + input */
-  background-color: #f9f9f9;
-  z-index: 10;
-  display: flex;
-  gap: 10px;
-  padding: 12px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.drawer-tab {
-  padding: 8px 16px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  font-weight: 500;
-  color: #555;
-  cursor: pointer;
-  transition: border 0.2s ease, color 0.2s ease;
-}
-
-.drawer-tab:hover {
-  color: #00843d;
-}
-
-.drawer-tab.active {
-  border-bottom: 2px solid #00843d;
-  color: #00843d;
-}
-
-.drawer-tabs button {
-  background: none;
-  border: none;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #605e5c;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.drawer-tabs button:hover {
-  background-color: rgba(0, 0, 0, 0.03);
-}
-
-.drawer-tabs button.active {
-  color: /*#0078d4*/#00843d;
-  border-bottom: 2px solid /*#0078d4*/#00843d;
-  font-weight: 600;
 }
 
 /* Body do Drawer */
@@ -244,7 +234,6 @@ input[type=number] {
 }
 
 /* Text Area da Aba Descrição */
-
 .drawer-body textarea {
   width: 100%;
   padding: 10px;
@@ -269,10 +258,6 @@ input[type=number] {
   width: 50%;
 }
 
-.cadastro-itens {
-  margin-top: 1rem;
-}
-
 .cadastro-itens input {
   padding: 8px;
   width: calc(100% - 100px);
@@ -294,6 +279,24 @@ input[type=number] {
 
 .btn-add:hover {
   background-color: #006f32;
+}
+
+.lista-itens {
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.lista-itens dx-data-grid {
+  flex-grow: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.lista-itens h4 {
+  margin: 0;
 }
 
 .lista-itens ul {
@@ -330,5 +333,17 @@ input[type=number] {
   gap: 10px;
   margin-top: 20px;
 }
+
+.drawer-footer {
+  position: sticky;
+  bottom: 0;
+  /* background-color: #f9f9f9; */
+  padding: 16px 24px;
+  /* box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05); */
+  display: flex;
+  justify-content: flex-start;
+  z-index: 10;
+}
+
 
 

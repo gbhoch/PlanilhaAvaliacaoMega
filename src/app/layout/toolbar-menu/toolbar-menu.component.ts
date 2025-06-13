@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { DxToolbarModule, DxButtonModule } from 'devextreme-angular';
+import {
+  DxToolbarModule,
+  DxButtonModule,
+  DxMenuModule,
+  DxPopoverModule,
+} from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { MenuToolbarService } from '../../services';
 import { NgIf } from '@angular/common';
@@ -7,25 +12,34 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-toolbar-menu',
   standalone: true,
-  imports: [DxToolbarModule, DxButtonModule, NgIf],
+  imports: [DxToolbarModule, DxButtonModule, NgIf, DxMenuModule],
   templateUrl: './toolbar-menu.component.html',
-  styleUrl: './toolbar-menu.component.scss'
+  styleUrl: './toolbar-menu.component.scss',
 })
-
 export class ToolbarMenuComponent {
+  mostrarPopover = false;
+  nomeUsuario = 'Gabriel Hochscheidt';
 
-  constructor (private toolbarService : MenuToolbarService) {}
+  constructor(private toolbarService: MenuToolbarService) {}
 
-  SidenavOpen : DxButtonTypes.Properties = {
+  SidenavOpen: DxButtonTypes.Properties = {
     icon: 'menu',
-    onClick : () => {
+    onClick: () => {
       this.toolbarService.ToggleMenuState();
-    }
+    },
   };
 
-  // Logout(){
-  //   this.securityService.logoff().subscribe(rst => {
-  //     this.router.navigate(['auth/login']);
-  //   });
-  // }
+  usuarioMenu = [
+    { text: 'Usuário: Gabriel'}
+  ];
+
+  onUsuarioMenuClick(e: any) {
+    if (e.itemData?.action === 'logout') {
+      const confirmado = confirm('Deseja realmente sair?');
+      if (confirmado) {
+        // this.securityService.logoff().subscribe(() => this.router.navigate(['auth/login']));
+        console.log('Logout confirmado');
+      }
+    }
+  }
 }

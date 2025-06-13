@@ -1,7 +1,8 @@
 export interface Agrupadores{
   nomeAgrup : string
   ativo: boolean;
+  descricao?: string;
   dataDeCriacao?: string;
   dataDeModificacao?: string;
-  itens?: string[];  // Perguntas do agrupador
+  itens?: { nome: string }[] ;  // Perguntas do agrupador
 }

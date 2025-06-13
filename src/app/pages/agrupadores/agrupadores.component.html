@@ -42,9 +42,9 @@
       </dxi-item>
     </dxo-toolbar>
 
-    <dxi-column alignment="center" dataField="nomeAgrup" caption="Agrupadores">
+    <dxi-column alignment="center" dataField="nome" caption="Agrupadores">
       <ng-template dxTemplate="cellTemplate" let-data="data">
-        <span class="cursor-pointer">{{ data.nomeAgrup }}</span>
+        <span class="cursor-pointer">{{ data.nome }}</span>
       </ng-template>
     </dxi-column>
 
@@ -67,72 +67,71 @@
   <div class="drawer" [class.open]="drawerAberto">
     <div class="drawer-header">
       <h3>Detalhes do Agrupador</h3>
-      <div class="drawer-actions">
-        <button class="btn-icon" (click)="abrirPopupEditar()" title="Editar nome">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="header-btn-cancelar" (click)="drawerAberto = false">X</button>
-      </div>
+      <button class="header-btn-cancelar" (click)="drawerAberto = false">
+        X
+      </button>
     </div>
 
-    <div class="drawer-top">
-      <div class="drawer-body no-scroll">
-        <!-- Edição do nome -->
-        <div class="agrupador-header">
-          <div class="agrupador-nome">
-            <h2 *ngIf="selectedAgrupador">{{ selectedAgrupador.nomeAgrup }}</h2>
+    <ng-container *ngIf="selectedAgrupador">
+      <!-- Parte de cima: Nome, descrição e status -->
+      <div class="drawer-top">
+        <div class="agrupador-info">
+          <div class="agrupador-inputs">
+            <label>Nome do Agrupador</label>
+            <input
+              type="text"
+              [(ngModel)]="selectedAgrupador!.nome"
+              placeholder="Digite o nome do agrupador"
+            />
+
+            <textarea
+              [(ngModel)]="selectedAgrupador!.descricao"
+              rows="2"
+              placeholder="Descrição..."
+            ></textarea>
+          </div>
+
+          <div class="agrupador-status">
+            <label>Status</label>
+            <div class="status-indicator">
+              <span
+                [class.ativo]="selectedAgrupador?.ativo"
+                [class.inativo]="!selectedAgrupador?.ativo"
+              >
+                {{ selectedAgrupador?.ativo ? "Ativo" : "Inativo" }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <hr class="drawer-divider" />
+
+        <!-- Parte de baixo: cadastro de itens -->
+        <div class="drawer-body">
+          <div class="cadastro-itens">
+            <input type="text" placeholder="Novo item" [(ngModel)]="novoItem" />
+            <button class="btn-add" (click)="adicionarItem()">Adicionar</button>
+          </div>
+
+          <div class="lista-itens">
+            <h4>Itens Verificados:</h4>
+            <!-- Lista de itens -->
+            <dx-data-grid
+            [dataSource]="selectedAgrupador.itens || []"
+            [showBorders]="true"
+            [columnAutoWidth]="true"
+            [rowAlternationEnabled]="true"
+            [scrolling]="{ mode : 'virtual' }"
+            style="flex-grow: 1; min-height: 0; overflow: auto;">
+
+            <dxi-column dataField="descricao" caption="Item"/>
+            <dxi-column
+            type="buttons"
+            [buttons]="botaoExcluir"></dxi-column>
+            </dx-data-grid>
           </div>
         </div>
       </div>
-
-      <div class="drawer-tabs sticky-tabs">
-        <button
-          class="drawer-tab"
-          [class.active]="abaSelecionada === 'descricao'"
-          (click)="abaSelecionada = 'descricao'"
-        >
-          Descrição
-        </button>
-        <button
-          class="drawer-tab"
-          [class.active]="abaSelecionada === 'itens'"
-          (click)="abaSelecionada = 'itens'"
-        >
-          Itens Verificados
-        </button>
-      </div>
-    </div>
-
-    <!-- Conteúdo da aba Descrição -->
-    <div class="drawer-body" *ngIf="abaSelecionada === 'descricao'">
-      <textarea
-        id="descricaoAgrupador"
-        placeholder="Digite algo..."
-        rows="4"
-      ></textarea>
-    </div>
-
-    <!-- Conteúdo da aba Itens -->
-    <div class="drawer-body" *ngIf="abaSelecionada === 'itens'">
-      <div class="cadastro-itens">
-        <!-- Input para nova pergunta -->
-        <input type="text" placeholder="Novo item" [(ngModel)]="novoItem" />
-        <button class="btn-add" (click)="adicionarItem()">Adicionar</button>
-      </div>
-
-      <div class="lista-itens">
-        <h4>Itens Verificados:</h4>
-        <!-- Lista de itens -->
-        <ul *ngIf="selectedAgrupador">
-          <li *ngFor="let item of selectedAgrupador.itens || []; let i = index">
-            {{ item }}
-            <button class="btn-trash" (click)="abrirPopupConfirmacao(i)">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </ng-container>
 
     <!-- Popup -->
     <dx-popup
@@ -154,34 +153,41 @@
         </div>
       </div>
     </dx-popup>
-  </div>
 
-  <dx-popup
-    [(visible)]="popupEditarNomeVisible"
-    [showTitle]="true"
-    title="Editar Nome do Agrupador"
-    [width]="400"
-    [height]="220"
-    [dragEnabled]="false"
-    [showCloseButton]="true"
-  >
-    <div class="popup-content">
-      <label>Novo Nome:</label>
-      <input type="text" [(ngModel)]="novoNomeAgrupador" />
-      <div class="popup-actions">
-        <button class="btn-confirmar" (click)="confirmarEdicaoNome()">
-          Confirmar
-        </button>
-        <button class="btn-cancelar" (click)="popupEditarNomeVisible = false">
-          Cancelar
-        </button>
+    <dx-popup
+      [(visible)]="popupEditarNomeVisible"
+      [showTitle]="true"
+      title="Editar Nome do Agrupador"
+      [width]="400"
+      [height]="220"
+      [dragEnabled]="false"
+      [showCloseButton]="true"
+    >
+      <div class="popup-content">
+        <label>Novo Nome:</label>
+        <input type="text" [(ngModel)]="novoNomeAgrupador" />
+        <div class="popup-actions">
+          <button class="btn-confirmar" (click)="confirmarEdicaoNome()">
+            Confirmar
+          </button>
+          <button class="btn-cancelar" (click)="popupEditarNomeVisible = false">
+            Cancelar
+          </button>
+        </div>
       </div>
-    </div>
-  </dx-popup>
+    </dx-popup>
 
-  <!-- Botões Confirmar/Cancelar -->
-  <div class="buttons-btn">
-    <button class="btn-confirmar">Confirmar</button>
-    <button class="btn-cancelar">Cancelar</button>
+    <!-- Botão de salvar alterações -->
+    <div class="drawer-footer">
+      <button class="btn-confirmar" (click)="salvarNome()">
+        Salvar Alterações
+      </button>
+    </div>
+
+    <!-- Botões Confirmar/Cancelar -->
+    <!-- <div class="buttons-btn">
+      <button class="btn-confirmar">Confirmar</button>
+      <button class="btn-cancelar">Cancelar</button>
+    </div> -->
   </div>
 </div>

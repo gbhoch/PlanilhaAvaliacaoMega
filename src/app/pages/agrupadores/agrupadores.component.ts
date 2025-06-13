@@ -1,4 +1,4 @@
-import { subscribe } from 'diagnostics_channel';
+
 import { AgrupadoresService } from './../../services/agrupadores.service';
 import { Component } from '@angular/core';
 import {
@@ -8,9 +8,9 @@ import {
   DxToolbarModule,
 } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { Agrupadores } from '../../models/Agrupadores';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SensoInterface } from '../../models/interfaces/senso.interface';
 
 @Component({
   selector: 'app-agrupadores',
@@ -22,15 +22,16 @@ import { FormsModule } from '@angular/forms';
     DxiItemModule,
     FormsModule,
     DxPopupModule,
+    DxDataGridModule,
   ],
   templateUrl: './agrupadores.component.html',
   styleUrl: './agrupadores.component.css',
 })
 export class AgrupadoresComponent {
-  agrupadoresList: Agrupadores[] = [];
+  agrupadoresList: SensoInterface[] = [];
   listDataSource: any;
 
-  selectedAgrupador?: Agrupadores | undefined;
+  selectedAgrupador?: SensoInterface | undefined;
   drawerAberto = false;
 
   novoItem: string = '';
@@ -51,7 +52,7 @@ export class AgrupadoresComponent {
   }
 
   onCellClick(e: any) {
-    if (e.column?.dataField === 'nomeAgrup') {
+    if (e.column?.dataField === 'nome') {
       this.selectedAgrupador = e.data;
 
       if (this.selectedAgrupador) {
@@ -66,14 +67,14 @@ export class AgrupadoresComponent {
 
   abrirPopupEditar() {
     if (this.selectedAgrupador) {
-      this.novoNomeAgrupador = this.selectedAgrupador.nomeAgrup;
+      this.novoNomeAgrupador = this.selectedAgrupador.nome;
       this.popupEditarNomeVisible = true;
     }
   }
 
   confirmarEdicaoNome() {
     if (this.selectedAgrupador && this.novoNomeAgrupador.trim()) {
-      this.selectedAgrupador.nomeAgrup = this.novoNomeAgrupador.trim();
+      this.selectedAgrupador.nome = this.novoNomeAgrupador.trim();
       this.salvarNome(); // se já tiver esse método
     }
     this.popupEditarNomeVisible = false;
@@ -89,8 +90,8 @@ export class AgrupadoresComponent {
   }
 
   adicionarItem() {
-    if (this.novoItem.trim() && this.selectedAgrupador) {
-      this.selectedAgrupador.itens!.push(this.novoItem.trim());
+    if (this.selectedAgrupador && this.novoItem.trim()) {
+      this.selectedAgrupador.itens?.push({ descricao: this.novoItem.trim() });
       this.novoItem = '';
     }
   }
@@ -118,4 +119,12 @@ export class AgrupadoresComponent {
     this.indexParaExcluir = index;
     this.popupExcluirVisible = true;
   }
+
+  botaoExcluir = [
+    {
+      hint: 'Excluir',
+      icon: 'trash',
+      onClick: (e: any) => this.abrirPopupConfirmacao(e.rowIndex),
+    },
+  ];
 }

@@ -2,7 +2,7 @@
   .header{
     background-color: #00843d;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin: auto;
     padding: auto;
@@ -31,6 +31,23 @@
     align-items: center;
     font-size: 20px;
     font-weight: 400;
+
+    .versao {
+      font-size: 12px;
+      margin-left: 6px;
+    }
+  }
+
+  .usuario-menu {
+    margin-right: 10px;
+
+    .dx-menu-item {
+      color: white;
+    }
+
+    .dx-menu {
+      background-color: transparent;
+    }
   }
 
   .dx-list-item{
