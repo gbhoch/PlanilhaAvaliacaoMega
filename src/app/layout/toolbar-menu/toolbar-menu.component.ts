@@ -30,7 +30,7 @@ export class ToolbarMenuComponent {
   };
 
   usuarioMenu = [
-    { text: 'Usuário: Gabriel'}
+    { text: 'Usuário: Gabriel Hochscheidt'}
   ];
 
   onUsuarioMenuClick(e: any) {
