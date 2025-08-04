@@ -16,9 +16,7 @@ export class MenuComponent implements OnInit {
   public menuItems : MenuItem[] = navigation;
   public menuState : boolean = true;
 
-  constructor (public menuService : MenuToolbarService){
-
-  }
+  constructor (public menuService : MenuToolbarService){}
 
   ngOnInit(): void {
     this.menuService.$menuState.subscribe((state : boolean) => {

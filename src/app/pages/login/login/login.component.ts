@@ -35,7 +35,7 @@ export class LoginComponent {
       return;
     }
 
-    this.router.navigate(['/menu']);
+    this.router.navigate(['/agrupadores']);
   }
 
 }

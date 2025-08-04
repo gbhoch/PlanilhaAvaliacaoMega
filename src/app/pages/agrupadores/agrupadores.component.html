@@ -1,19 +1,175 @@
 <div class="container-lg">
   <dx-data-grid
     id="dataGrid"
-    (onCellClick)="onCellClick($event)"
+    (onCellDblClick)="onCellDblClick($event)"
     [dataSource]="agrupadoresList"
     width="80%"
-    height="400px"
+    style="min-height: 70vh;"
     [showBorders]="true"
     [showRowLines]="true"
     [rowAlternationEnabled]="true"
   >
     <dxo-toolbar class="toolbar" id="toolbar">
-      <dxi-item location="before">
+      <dxi-item location="center">
         <div id="itemTitulo">AGRUPADORES</div>
       </dxi-item>
-      <dxi-item location="center">
+      <dxi-item>
+        <dx-button icon="add" class="btn-criar" (click)="PopupNovoAgrupador()"></dx-button>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column alignment="center" dataField="nome" caption="Agrupadores">
+      <ng-template dxTemplate="cellTemplate" let-data="data">
+        <span class="cursor-pointer">{{ data.nome }}</span>
+      </ng-template>
+    </dxi-column>
+
+    <dxi-column
+      alignment="center"
+      dataField=""
+      caption="Itens"
+      [cellTemplate]="itensTemplate"
+    >
+    </dxi-column>
+
+    <ng-template #itensTemplate let-data="data">
+      <span>{{ data.itens?.length ? data.itens.join(", ") : "-" }}</span>
+    </ng-template>
+
+    <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+  </dx-data-grid>
+
+  <!-- Drawer Agrupadores -->
+  <div class="drawer" [class.open]="drawerAberto">
+    <div class="drawer-header">
+      <h3>Detalhes do Agrupador</h3>
+      <button class="header-btn-cancelar" (click)="drawerAberto = false">
+        X
+      </button>
+    </div>
+
+    <ng-container *ngIf="agrupadorEditando">
+      <!-- Parte de cima: Nome, descrição e status -->
+      <div class="drawer-top">
+        <div class="agrupador-info">
+          <div class="agrupador-inputs">
+            <label>Nome do Agrupador</label>
+            <input
+              type="text"
+              [(ngModel)]="agrupadorEditando!.nome"
+              placeholder="Digite o nome do agrupador"
+            />
+
+            <textarea
+              [(ngModel)]="agrupadorEditando!.descricao"
+              rows="2"
+              placeholder="Descrição..."
+            ></textarea>
+          </div>
+
+          <div class="agrupador-status">
+            <label>Status</label>
+            <div class="status-indicator">
+              <span
+                [class.ativo]="agrupadorEditando?.ativo"
+                [class.inativo]="!agrupadorEditando?.ativo"
+              >
+                {{ agrupadorEditando?.ativo ? "Ativo" : "Inativo" }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <hr class="drawer-divider" />
+
+        <!-- Parte de baixo: cadastro de itens -->
+        <div class="drawer-body">
+          <div class="cadastro-itens">
+            <input type="text" placeholder="Novo item" [(ngModel)]="novoItem" />
+            <button class="btn-add" (click)="adicionarItem()">Adicionar</button>
+          </div>
+
+          <div class="lista-itens">
+            <h4>Itens Verificados:</h4>
+            <!-- Lista de itens -->
+            <dx-data-grid
+              style="height: 60vh"
+              [dataSource]="agrupadorEditando.itens || []"
+              [showBorders]="true"
+              [columnAutoWidth]="true"
+              [rowAlternationEnabled]="true"
+              [scrolling]="{ mode: 'virtual' }"
+              style="flex-grow: 1; min-height: 50vh; overflow: auto; margin-top: 15px"
+            >
+              <dxi-column dataField="descricao" caption="Item" />
+              <dxi-column type="buttons" [buttons]="botaoExcluir"></dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Popup -->
+    <dx-popup
+      [(visible)]="popupNovoAgrupadorVisivel"
+      [showTitle]="true"
+      title="Novo Agrupador"
+      [width]="400"
+      [height]="200"
+      [dragEnabled]="false"
+      [showCloseButton]="true"
+      [closeOnOutsideClick]="true"
+    >
+      <div class="popup-content">
+        <input
+          type="text"
+          class="popup-input"
+          placeholder="Nome do Agrupador"
+          [(ngModel)]="novoAgrupadorNome"
+        />
+        <div class="popup-actions">
+          <button class="btn-confirmar" (click)="salvarNovoAgrupador()">
+            Confirmar
+          </button>
+          <button class="btn-cancelar" (click)="cancelarNovoAgrupador()">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </dx-popup>
+
+    <dx-popup
+      [(visible)]="popupExcluirVisible"
+      [showTitle]="true"
+      title="Confirmar Exclusão"
+      [width]="400"
+      [height]="200"
+      [dragEnabled]="false"
+      [showCloseButton]="true"
+    >
+      <div class="popup-content">
+        <p>Tem certeza que deseja excluir este item?</p>
+        <div class="popup-actions">
+          <button class="btn-confirmar" (click)="confirmarExclusao()">
+            Confirmar
+          </button>
+          <button class="btn-cancelar" (click)="fecharPopup()">Cancelar</button>
+        </div>
+      </div>
+    </dx-popup>
+
+    <!-- Botão de salvar alterações -->
+    <div class="drawer-footer" style="gap: 15px;">
+      <button class="btn-confirmar" (click)="salvarAlteracoes()">
+        Salvar Alterações
+      </button>
+      <button class="btn-cancelar" (click)="cancelarAlteracoes()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- <dxi-item location="center">
         <input
           class="input-text"
           type="number"
@@ -39,127 +195,16 @@
           placeholder="Áreas Comuns"
           id="area"
         />
-      </dxi-item>
-    </dxo-toolbar>
+      </dxi-item> -->
 
-    <dxi-column alignment="center" dataField="nome" caption="Agrupadores">
-      <ng-template dxTemplate="cellTemplate" let-data="data">
-        <span class="cursor-pointer">{{ data.nome }}</span>
-      </ng-template>
-    </dxi-column>
+      <!-- POP UP DE CONFIRMAÇÃO PARA EDITAR NOME DO AGRUPADOR -->
 
-    <dxi-column
-      alignment="center"
-      dataField=""
-      caption="Itens"
-      [cellTemplate]="itensTemplate"
-    >
-    </dxi-column>
-
-    <ng-template #itensTemplate let-data="data">
-      <span>{{ data.itens?.length ? data.itens.join(", ") : "-" }}</span>
-    </ng-template>
-
-    <dxo-scrolling mode="virtual"></dxo-scrolling>
-  </dx-data-grid>
-
-  <!-- Drawer Agrupadores -->
-  <div class="drawer" [class.open]="drawerAberto">
-    <div class="drawer-header">
-      <h3>Detalhes do Agrupador</h3>
-      <button class="header-btn-cancelar" (click)="drawerAberto = false">
-        X
-      </button>
-    </div>
-
-    <ng-container *ngIf="selectedAgrupador">
-      <!-- Parte de cima: Nome, descrição e status -->
-      <div class="drawer-top">
-        <div class="agrupador-info">
-          <div class="agrupador-inputs">
-            <label>Nome do Agrupador</label>
-            <input
-              type="text"
-              [(ngModel)]="selectedAgrupador!.nome"
-              placeholder="Digite o nome do agrupador"
-            />
-
-            <textarea
-              [(ngModel)]="selectedAgrupador!.descricao"
-              rows="2"
-              placeholder="Descrição..."
-            ></textarea>
-          </div>
-
-          <div class="agrupador-status">
-            <label>Status</label>
-            <div class="status-indicator">
-              <span
-                [class.ativo]="selectedAgrupador?.ativo"
-                [class.inativo]="!selectedAgrupador?.ativo"
-              >
-                {{ selectedAgrupador?.ativo ? "Ativo" : "Inativo" }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <hr class="drawer-divider" />
-
-        <!-- Parte de baixo: cadastro de itens -->
-        <div class="drawer-body">
-          <div class="cadastro-itens">
-            <input type="text" placeholder="Novo item" [(ngModel)]="novoItem" />
-            <button class="btn-add" (click)="adicionarItem()">Adicionar</button>
-          </div>
-
-          <div class="lista-itens">
-            <h4>Itens Verificados:</h4>
-            <!-- Lista de itens -->
-            <dx-data-grid
-            [dataSource]="selectedAgrupador.itens || []"
-            [showBorders]="true"
-            [columnAutoWidth]="true"
-            [rowAlternationEnabled]="true"
-            [scrolling]="{ mode : 'virtual' }"
-            style="flex-grow: 1; min-height: 0; overflow: auto;">
-
-            <dxi-column dataField="descricao" caption="Item"/>
-            <dxi-column
-            type="buttons"
-            [buttons]="botaoExcluir"></dxi-column>
-            </dx-data-grid>
-          </div>
-        </div>
-      </div>
-    </ng-container>
-
-    <!-- Popup -->
-    <dx-popup
-      [(visible)]="popupExcluirVisible"
-      [showTitle]="true"
-      title="Confirmar Exclusão"
-      [width]="400"
-      [height]="200"
-      [dragEnabled]="false"
-      [showCloseButton]="true"
-    >
-      <div class="popup-content">
-        <p>Tem certeza que deseja excluir este item?</p>
-        <div class="popup-actions">
-          <button class="btn-confirmar" (click)="confirmarExclusao()">
-            Confirmar
-          </button>
-          <button class="btn-cancelar" (click)="fecharPopup()">Cancelar</button>
-        </div>
-      </div>
-    </dx-popup>
-
-    <dx-popup
+    <!-- <dx-popup
       [(visible)]="popupEditarNomeVisible"
       [showTitle]="true"
       title="Editar Nome do Agrupador"
       [width]="400"
-      [height]="220"
+      [height]="200"
       [dragEnabled]="false"
       [showCloseButton]="true"
     >
@@ -175,19 +220,4 @@
           </button>
         </div>
       </div>
-    </dx-popup>
-
-    <!-- Botão de salvar alterações -->
-    <div class="drawer-footer">
-      <button class="btn-confirmar" (click)="salvarNome()">
-        Salvar Alterações
-      </button>
-    </div>
-
-    <!-- Botões Confirmar/Cancelar -->
-    <!-- <div class="buttons-btn">
-      <button class="btn-confirmar">Confirmar</button>
-      <button class="btn-cancelar">Cancelar</button>
-    </div> -->
-  </div>
-</div>
+    </dx-popup> -->

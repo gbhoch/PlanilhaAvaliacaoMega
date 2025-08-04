@@ -1,0 +1,110 @@
+<div class="container-lg">
+  <dx-data-grid
+    id="dataGrid"
+    (onCellDblClick)="onCellDblClick($event)"
+    [dataSource]="setoresList"
+    width="80%"
+    style="min-height: 70vh"
+    [showBorders]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+  >
+    <dxo-toolbar class="toolbar" id="toolbar">
+      <dxi-item location="center">
+        <div id="itemTitulo">CADASTRO DE SETORES</div>
+      </dxi-item>
+      <dxi-item>
+        <dx-button
+          icon="add"
+          class="btn-criar"
+          (click)="openDrawer()"
+        ></dx-button>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column alignment="center" dataField="nome" caption="Setores">
+      <ng-template dxTemplate="cellTemplate" let-data="data">
+        <span class="cursor-pointer">{{ data.nome }}</span>
+      </ng-template>
+    </dxi-column>
+  </dx-data-grid>
+
+  <!-- Drawer Setores -->
+  <div class="drawer" [class.open]="drawerAberto">
+    <div class="drawer-header">
+      <h3>Detalhes do Setor</h3>
+      <button class="header-btn-cancelar" (click)="drawerAberto = false">
+        X
+      </button>
+    </div>
+
+    <ng-container *ngIf="setorEditando">
+      <!-- Parte de cima: Nome, descrição e status -->
+      <div class="drawer-top">
+        <div class="setor-info">
+          <div class="setor-inputs">
+            <label>Nome do Setor</label>
+            <input
+              type="text"
+              [(ngModel)]="setorEditando!.nome"
+              placeholder="Digite o nome do setor"
+            />
+
+            <textarea
+              [(ngModel)]="setorEditando!.descricao"
+              rows="4"
+              placeholder="Descrição..."
+            ></textarea>
+          </div>
+
+          <div class="setor-status">
+            <label>Status</label>
+            <div class="status-indicator">
+              <span
+                [class.ativo]="setorEditando?.ativo"
+                [class.inativo]="!setorEditando?.ativo"
+              >
+                {{ setorEditando?.ativo ? "Ativo" : "Inativo" }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <hr class="drawer-divider" />
+      </div>
+    </ng-container>
+
+    <!-- Popup -->
+
+    <dx-popup
+      [(visible)]="popupExcluirVisible"
+      [showTitle]="true"
+      title="Confirmar Exclusão"
+      [width]="400"
+      [height]="200"
+      [dragEnabled]="false"
+      [showCloseButton]="true"
+    >
+      <div class="popup-content">
+        <p>Tem certeza que deseja excluir este item?</p>
+        <div class="popup-actions">
+          <button class="btn-confirmar" (click)="confirmarExclusao()">
+            Confirmar
+          </button>
+          <button class="btn-cancelar" (click)="fecharPopup()">Cancelar</button>
+        </div>
+      </div>
+    </dx-popup>
+
+    <!-- Botão de salvar alterações -->
+    <div class="drawer-footer"
+    style="gap: 15px;">
+      <button class="btn-confirmar" (click)="salvarAlteracoes()">
+        Salvar Alterações
+      </button>
+
+      <button class="btn-cancelar" (click)="cancelarAlteracoes()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

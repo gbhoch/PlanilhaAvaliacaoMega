@@ -11,12 +11,20 @@
       <small class="versao">(v{{ "1.0" }})</small>
     </dxi-item>
     <dxi-item location="after" cssClass="usuario-menu">
-      <dx-menu
-        [items]="usuarioMenu"
-        displayExpr="text"
-        (onItemClick)="onUsuarioMenuClick($event)"
+      <div class="usuario-nome" (click)="mostrarPopover = true" #botaoUsuario>
+        Usuário: {{ nomeUsuario }}
+      </div>
+
+      <dx-popover
+        [target]="botaoUsuario"
+        [visible]="mostrarPopover"
+        (onHiding)="mostrarPopover = false"
+        [closeOnOutsideClick]="true"
+        [width]="150"
+        position="bottom"
       >
-      </dx-menu>
+        <div class="popover-logout" (click)="logout()">Sair</div>
+      </dx-popover>
     </dxi-item>
   </dx-toolbar>
 </header>

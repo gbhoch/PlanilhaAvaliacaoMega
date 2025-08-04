@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login/login.component';
 import { AppComponent } from './app.component';
 import { AgrupadoresComponent } from './pages/agrupadores/agrupadores.component';
 import { LayoutComponent } from './layout/layout.component';
+import { SetoresComponent } from './pages/setores/setores.component';
 
 export const routes: Routes = [
   {
@@ -16,12 +17,15 @@ export const routes: Routes = [
     children:[
     {
       path : 'agrupadores',
-      component : AgrupadoresComponent,  //Tela de Cadastro dos Itens e Agrupadores
+      component : AgrupadoresComponent  //Tela de Cadastro dos Itens e Agrupadores
+    },
+    {
+      path : 'setores',
+      component : SetoresComponent  // Tela de cadastro de Setores
     },
     {
       path : 'planilha',
-      component : HomeComponent, //Tela da Planilha com Agrupadores e Itens
+      component : HomeComponent //Tela da Planilha com Agrupadores e Itens
     }]
   },
-
 ];

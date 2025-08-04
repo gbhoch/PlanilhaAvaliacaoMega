@@ -1,11 +1,12 @@
 import { AddItemVerifComponent } from './../add-item-verif/add-item-verif.component';
 import { ItensVerificados } from './../../models/ItensVerificados';
 import { ItensVerificadosService } from './../../services/itens-verificados.service';
-import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxButtonModule, DxDataGridModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import themes from 'devextreme/ui/themes';
 
 @Component({
@@ -27,7 +28,8 @@ export class HomeComponent implements OnInit {
   @ViewChild('modalAddItem')
   private modal?: AddItemVerifComponent
 
-  constructor (private ItensVerificadosService : ItensVerificadosService){
+  constructor (
+    private ItensVerificadosService : ItensVerificadosService){
 
     this.ItensVerificadosService.getItensVerificados().subscribe(data => {
       this.itensVerificados = data
@@ -42,6 +44,5 @@ export class HomeComponent implements OnInit {
   showModal = () => {
     this.modal?.showModal();
   }
-
 }
 

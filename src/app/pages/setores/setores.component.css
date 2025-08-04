@@ -117,7 +117,7 @@ input[type=number] {
   height: 35px;
 }
 
-/* DRAWER AGRUPADORES */
+/* DRAWER SETOR */
 
 .drawer {
   position: fixed;
@@ -175,21 +175,21 @@ input[type=number] {
   color: #ff4d4f;
 }
 
-.agrupador-info {
+.setor-info {
   display: flex;
   justify-content: space-between;
   gap: 24px;
 }
 
-.agrupador-inputs {
+.setor-inputs {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.agrupador-inputs input,
-.agrupador-inputs textarea {
+.setor-inputs input,
+.setor-inputs textarea {
   width: 100%;
   padding: 8px;
   font-family: "Outfit", sans-serif;
@@ -199,12 +199,12 @@ input[type=number] {
   outline: none;
 }
 
-.agrupador-inputs input:focus,
-.agrupador-inputs textarea:focus {
+.setor-inputs input:focus,
+.setor-inputs textarea:focus {
   border-color: #00843d;
 }
 
-.agrupador-status {
+.setor-status {
   min-width: 120px;
   display: flex;
   flex-direction: column;
@@ -232,24 +232,10 @@ input[type=number] {
   border: 1px solid #a94442;
 }
 
-
 .drawer-divider {
   border: none;
   border-top: 1px solid rgba(0, 0, 0, 0.1); /* linha fina e translúcida */
   margin: 10px 0;
-}
-
-/* Body do Drawer */
-.drawer-body {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.drawer-body label {
-  font-weight: 600;
-  color: #333;
 }
 
 /* Text Area da Aba Descrição */
@@ -275,80 +261,6 @@ input[type=number] {
   border-radius: 4px;
   font-size: 14px;
   width: 50%;
-}
-
-.cadastro-itens input {
-  padding: 8px;
-  width: calc(100% - 100px);
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  margin-right: 10px;
-}
-
-.cadastro-itens input:focus{
-  border-color: /*#0078d4*/#00843d;
-  outline: none;
-}
-
-.btn-add {
-  padding: 8px 12px;
-  background-color: #00843d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-add:hover {
-  background-color: #006f32;
-}
-
-.lista-itens {
-  max-height: 70vh;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  min-height: 0;
-}
-
-.lista-itens dx-data-grid {
-  flex-grow: 1;
-  min-height: 0;
-  overflow: auto;
-}
-
-.lista-itens h4 {
-  margin: 0;
-}
-
-.lista-itens ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.lista-itens li {
-  padding: 6px 0;
-  border-bottom: 1px solid #eaeaea;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.btn-trash {
-  margin-left: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #666;
-  transition: color 0.2s ease;
-}
-
-.btn-trash:hover {
-  color: #e53935; /* vermelho suave */
 }
 
 /* POP UP */

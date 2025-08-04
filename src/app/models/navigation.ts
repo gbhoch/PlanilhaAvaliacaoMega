@@ -15,14 +15,14 @@ export const navigation : MenuItem[] = [
   },
   {
     id: 3,
-    text: "Planilha de Avaliação",
+    text: "Setores",
     icon: "",
-    path: "planilha" //Tela da Planilha com Agrupadores e Itens
+    path: "setores" //Tela de cadastro dos Setores
   },
   {
     id: 4,
-    text: "Sair",
+    text: "Planilha de Avaliação",
     icon: "",
-    path: "login"
+    path: "planilha" //Tela da Planilha com Agrupadores e Itens
   }
 ]

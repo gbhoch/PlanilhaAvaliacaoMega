@@ -1,11 +1,11 @@
 ::ng-deep {
-  .header{
+  .header {
     background-color: #00843d;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: auto;
-    padding: auto;
+    padding: 0 16px;
     height: 50px;
     width: 100%;
   }
@@ -15,16 +15,16 @@
   }
 
   .dx-button-mode-contained {
-    .dx-icon{
-      margin: 4px 0 0 15px;
+    .dx-icon {
+      margin: 4px 0 0 5px;
 
-      &::before{
+      &::before {
         color: white;
       }
     }
   }
 
-  #titulo{
+  #titulo {
     color: white;
     display: flex;
     justify-content: center;
@@ -38,20 +38,26 @@
     }
   }
 
-  .usuario-menu {
-    margin-right: 10px;
-
-    .dx-menu-item {
-      color: white;
-    }
-
-    .dx-menu {
-      background-color: transparent;
-    }
+  .usuario-nome {
+    cursor: pointer;
+    padding: 8px;
+    color: white;
+    margin-right: 20px;
   }
 
-  .dx-list-item{
+  .popover-logout {
+    cursor: pointer;
+    color: #d32f2f;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  .popover-opcao:hover {
+    background-color: #f5f5f5;
+  }
+
+  .dx-list-item {           // Itens do Drawer verde
     color: white;
+    font-weight: 500;
   }
 }
-
