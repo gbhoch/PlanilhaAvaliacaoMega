@@ -3,14 +3,14 @@
     id="dataGrid"
     (onCellDblClick)="onCellDblClick($event)"
     [dataSource]="setoresList"
-    width="80%"
-    style="min-height: 70vh"
     [showBorders]="true"
     [showRowLines]="true"
     [rowAlternationEnabled]="true"
+    width="100%"
+    height="100%"
   >
     <dxo-toolbar class="toolbar" id="toolbar">
-      <dxi-item location="center">
+      <dxi-item location="before">
         <div id="itemTitulo">CADASTRO DE SETORES</div>
       </dxi-item>
       <dxi-item>
@@ -18,6 +18,8 @@
           icon="add"
           class="btn-criar"
           (click)="openDrawer()"
+          [height]="35"
+          [width]="35"
         ></dx-button>
       </dxi-item>
     </dxo-toolbar>

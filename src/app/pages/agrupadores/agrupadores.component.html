@@ -1,20 +1,27 @@
 <div class="container-lg">
   <dx-data-grid
     id="dataGrid"
+    (onCellClick)="onCellClick($event)"
     (onCellDblClick)="onCellDblClick($event)"
     [dataSource]="agrupadoresList"
-    width="80%"
-    style="min-height: 70vh;"
     [showBorders]="true"
     [showRowLines]="true"
     [rowAlternationEnabled]="true"
+    height="100%"
+    width="100%"
   >
     <dxo-toolbar class="toolbar" id="toolbar">
-      <dxi-item location="center">
-        <div id="itemTitulo">AGRUPADORES</div>
+      <dxi-item location="before">
+        <div id="itemTitulo">CADASTRO DE AGRUPADORES</div>
       </dxi-item>
       <dxi-item>
-        <dx-button icon="add" class="btn-criar" (click)="PopupNovoAgrupador()"></dx-button>
+        <dx-button
+          icon="add"
+          class="btn-criar"
+          (click)="openDrawer()"
+          [height]="35"
+          width="35"
+        ></dx-button>
       </dxi-item>
     </dxo-toolbar>
 
@@ -26,10 +33,13 @@
 
     <dxi-column
       alignment="center"
-      dataField=""
+      dataField="itens"
       caption="Itens"
       [cellTemplate]="itensTemplate"
     >
+      <ng-template dxTemplate="cellTemplate" let-data="data">
+        <span class="cursor-pointer">{{ data.item }}</span>
+      </ng-template>
     </dxi-column>
 
     <ng-template #itensTemplate let-data="data">
@@ -98,7 +108,12 @@
               [columnAutoWidth]="true"
               [rowAlternationEnabled]="true"
               [scrolling]="{ mode: 'virtual' }"
-              style="flex-grow: 1; min-height: 50vh; overflow: auto; margin-top: 15px"
+              style="
+                flex-grow: 1;
+                min-height: 50vh;
+                overflow: auto;
+                margin-top: 15px;
+              "
             >
               <dxi-column dataField="descricao" caption="Item" />
               <dxi-column type="buttons" [buttons]="botaoExcluir"></dxi-column>
@@ -109,34 +124,6 @@
     </ng-container>
 
     <!-- Popup -->
-    <dx-popup
-      [(visible)]="popupNovoAgrupadorVisivel"
-      [showTitle]="true"
-      title="Novo Agrupador"
-      [width]="400"
-      [height]="200"
-      [dragEnabled]="false"
-      [showCloseButton]="true"
-      [closeOnOutsideClick]="true"
-    >
-      <div class="popup-content">
-        <input
-          type="text"
-          class="popup-input"
-          placeholder="Nome do Agrupador"
-          [(ngModel)]="novoAgrupadorNome"
-        />
-        <div class="popup-actions">
-          <button class="btn-confirmar" (click)="salvarNovoAgrupador()">
-            Confirmar
-          </button>
-          <button class="btn-cancelar" (click)="cancelarNovoAgrupador()">
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </dx-popup>
-
     <dx-popup
       [(visible)]="popupExcluirVisible"
       [showTitle]="true"
@@ -158,7 +145,7 @@
     </dx-popup>
 
     <!-- Botão de salvar alterações -->
-    <div class="drawer-footer" style="gap: 15px;">
+    <div class="drawer-footer" style="gap: 15px">
       <button class="btn-confirmar" (click)="salvarAlteracoes()">
         Salvar Alterações
       </button>
@@ -197,9 +184,9 @@
         />
       </dxi-item> -->
 
-      <!-- POP UP DE CONFIRMAÇÃO PARA EDITAR NOME DO AGRUPADOR -->
+<!-- POP UP DE CONFIRMAÇÃO PARA EDITAR NOME DO AGRUPADOR -->
 
-    <!-- <dx-popup
+<!-- <dx-popup
       [(visible)]="popupEditarNomeVisible"
       [showTitle]="true"
       title="Editar Nome do Agrupador"

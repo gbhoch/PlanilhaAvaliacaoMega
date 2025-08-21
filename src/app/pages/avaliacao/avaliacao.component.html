@@ -1,1 +1,87 @@
-<p>avaliacao works!</p>
+<div class="container-lg">
+  <dx-data-grid
+    id="dataGrid"
+    [dataSource]="setoresList"
+    [rowAlternationEnabled]="true"
+    [showRowLines]="true"
+    [showBorders]="true"
+    width="100%"
+    height="100%"
+  >
+    <dxo-toolbar class="toolbar" id="toolbar">
+      <dxi-item location="before" id="itemTitulo">
+        PLANILHAS DE AVALIAÇÃO
+      </dxi-item>
+      <dxi-item>
+        <dx-button
+          icon="add"
+          class="btn-criar"
+          (click)="openPlanilhas()"
+          [height]="35"
+          [width]="35"
+        ></dx-button>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column
+      alignment="center"
+      dataField="nomePlanilha"
+      caption="Lista de Planilhas"
+    >
+    </dxi-column>
+  </dx-data-grid>
+</div>
+
+<dx-drawer
+  class="drawer"
+  [opened]="drawerAberto"
+  position="right"
+  revealMode="slide"
+  [closeOnOutsideClick]="false"
+  [height]="250"
+  template="template"
+>
+  <ng-template dxTemplate="template">
+    <div class="drawer-header">
+      <h3>Detalhes do Setor</h3>
+      <button class="header-btn-cancelar" (click)="drawerAberto = false">
+        X
+      </button>
+    </div>
+
+    <div class="container-lg">
+      <dx-data-grid
+        height="100%"
+        width="100%"
+        [rowAlternationEnabled]="true"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [dataSource]="agrupadoresList"
+        [rowAlternationEnabled]="true"
+      >
+        <dxo-toolbar>
+          <dxi-item location="center">
+            <div>AGRUPADORES</div>
+          </dxi-item>
+        </dxo-toolbar>
+
+        <dxi-column
+          alignment="center"
+          dataField="ItensVerificados"
+          caption="Itens"
+        ></dxi-column>
+      </dx-data-grid>
+    </div>
+
+    <!-- Botão de salvar alterações -->
+    <div class="drawer-footer" style="gap: 15px">
+      <button class="btn-confirmar" (click)="salvarAlteracoes()">
+        Salvar Alterações
+      </button>
+
+      <button class="btn-cancelar" (click)="cancelarAlteracoes()">
+        Cancelar
+      </button>
+    </div>
+  </ng-template>
+</dx-drawer>

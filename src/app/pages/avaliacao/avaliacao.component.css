@@ -1,0 +1,68 @@
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container-lg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}
+
+#itemTitulo {
+  color: #00843d;
+  font-size: 15px;
+  font-weight: 500;
+  padding-left: 10px;
+}
+
+.btn-criar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00843d;
+  color: white !important;
+  border: none;
+  border-radius: 8px;
+  font-size: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-criar:hover {
+  background-color: #006b30;
+}
+
+.btn-criar:active {
+  transform: scale(0.97); /* leve efeito de clique */
+}
+
+.btn-criar .dx-icon {
+  font-size: 18px;
+}
+
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 700px;
+  height: 100%;
+  background-color: #f9f9f9;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  /* border-left: 5px solid #00843d; */
+  font-family: "Outfit", sans-serif;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}

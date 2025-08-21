@@ -1,14 +1,23 @@
-*{
+* {
   font-family: "Outfit", serif;
 }
 
-body{
+body {
   margin: 0;
   padding: 0;
 }
 
 .drawer::-webkit-scrollbar {
   display: none;
+}
+
+::ng-deep .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-state-focused{
+  background-color: #019443 !important; /* Cor que fica quando a opção está selecionada! */
+}
+
+::ng-deep .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-list-item-selected,
+::ng-deep .dx-state-hover{
+  color: white !important; /* Evita que a opção selecionada fique com a cor preta */
 }
 
 ::ng-deep .dx-overlay-content {
@@ -20,7 +29,7 @@ body{
 }
 
 ::ng-deep #toolbar {
-  background-color: rgba(191, 191, 191, .15);
+  background-color: rgba(191, 191, 191, 0.15);
   padding: 5px 10px;
 }
 ::ng-deep .dx-toolbar-button .dx-button {
@@ -31,16 +40,16 @@ body{
   margin-left: -7px;
 }
 
-.drawer{
+.drawer {
   background-color: white;
 }
 
-.dx-template-wrapper{
+.dx-template-wrapper {
   height: 100%;
 }
 
-.drawerList{
-  width: 35vh;
-  background-color: #00843d;
+.drawerList {
+  /* width: 35vh; */
+  /* background-color: #00843d; */
+  background-color: #00642f;
 }
-

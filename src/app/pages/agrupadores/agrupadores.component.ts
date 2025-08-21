@@ -1,11 +1,9 @@
 import { AgrupadoresService } from './../../services/agrupadores.service';
 import { Component } from '@angular/core';
 import {
-  DxButtonComponent,
   DxButtonModule,
   DxDataGridModule,
   DxPopupModule,
-  DxTemplateModule,
   DxToolbarModule,
 } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -34,7 +32,9 @@ export class AgrupadoresComponent {
   agrupadoresList: SensoInterface[] = [];
   listDataSource: any;
 
-  agrupadorEditando?: SensoInterface;
+  itensSelecionados: any[] = [];
+
+  agrupadorEditando: any = null;
 
   selectedAgrupador?: SensoInterface | undefined;
   drawerAberto = false;
@@ -49,8 +49,11 @@ export class AgrupadoresComponent {
 
   abaSelecionada: 'descricao' | 'itens' = 'descricao';
 
-  popupNovoAgrupadorVisivel = false;
   novoAgrupadorNome: string = '';
+  isNovoAgrupador = false;
+
+  itemSelecionadoParaExcluir: any = null;
+  modoEdicao = false;
 
   constructor(
     private AgrupadoresService: AgrupadoresService,
@@ -62,13 +65,15 @@ export class AgrupadoresComponent {
     });
   }
 
-  PopupNovoAgrupador() {
-    this.novoAgrupadorNome = '';
-    this.popupNovoAgrupadorVisivel = true;
-  }
-
-  cancelarNovoAgrupador() {
-    this.popupNovoAgrupadorVisivel = false;
+  openDrawer(): void {
+    this.agrupadorEditando = {
+      nome: '',
+      descricao: '',
+      ativo: true,
+      itens: [],
+    };
+    this.modoEdicao = false;
+    this.drawerAberto = true;
   }
 
   salvarNovoAgrupador() {
@@ -82,29 +87,27 @@ export class AgrupadoresComponent {
         },
       ];
     }
-    this.popupNovoAgrupadorVisivel = false;
   }
 
-  onCellDblClick(e: any) {
-    if (e.column?.dataField === 'nome') {
-      this.selectedAgrupador = e.data;
-      this.agrupadorEditando = JSON.parse(JSON.stringify(e.data)); // Deep copy
-      this.drawerAberto = true;
+  onCellClick(event: any): void {
+    const agrupador = event.data;
+    if (!agrupador) return;
 
-      if (this.selectedAgrupador) {
-        if (!this.selectedAgrupador.itens) {
-          this.selectedAgrupador.itens = [];
-        }
-        this.drawerAberto = true;
-      }
-    }
+    this.itensSelecionados = agrupador.itens || [];
   }
 
-  abrirPopupEditar() {
-    if (this.selectedAgrupador) {
-      this.novoNomeAgrupador = this.selectedAgrupador.nome;
-      this.popupEditarNomeVisible = true;
-    }
+  onCellDblClick(event: any): void {
+    const agrupador = event.data;
+    if (!agrupador) return;
+
+    // Faz uma cópia para evitar mutações diretas
+    this.agrupadorEditando = {
+      ...agrupador,
+      itens: [...agrupador.itens],
+    };
+
+    this.modoEdicao = true;
+    this.drawerAberto = true;
   }
 
   confirmarEdicaoNome() {
@@ -115,35 +118,33 @@ export class AgrupadoresComponent {
     this.popupEditarNomeVisible = false;
   }
 
-  salvarAlteracoes() {
-    if (this.selectedAgrupador && this.agrupadorEditando) {
-      const index = this.agrupadoresList.indexOf(this.selectedAgrupador);
+  salvarAlteracoes(): void {
+    if (!this.agrupadorEditando.nome) return;
 
+    if (this.modoEdicao) {
+      // Edição: atualiza no array
+      const index = this.agrupadoresList.findIndex(
+        (a) => a.nome === this.agrupadorEditando.nome
+      );
       if (index !== -1) {
-        // Adiciona a data e atualiza
-        this.agrupadorEditando.dataDeModificacao = new Date()
-          .toISOString()
-          .slice(0, 10);
-
         this.agrupadoresList[index] = { ...this.agrupadorEditando };
       }
-
-      this.drawerAberto = false;
-      this.selectedAgrupador = undefined;
-      this.agrupadorEditando = undefined;
+    } else {
+      // Criação: adiciona ao array
+      this.agrupadoresList.push({ ...this.agrupadorEditando });
     }
-  }
 
-  cancelarAlteracoes(){
     this.drawerAberto = false;
   }
 
-  adicionarItem() {
-    if (this.agrupadorEditando && this.novoItem.trim()) {
-      if (!this.agrupadorEditando.itens) {
-        this.agrupadorEditando.itens = [];
-      }
+  cancelarAlteracoes(): void {
+    this.drawerAberto = false;
+    this.agrupadorEditando = null;
+    this.novoItem = '';
+  }
 
+  adicionarItem(): void {
+    if (this.novoItem?.trim()) {
       this.agrupadorEditando.itens.push({ descricao: this.novoItem.trim() });
       this.novoItem = '';
     }
@@ -155,12 +156,11 @@ export class AgrupadoresComponent {
     }
   }
 
-  confirmarExclusao() {
-    if (this.agrupadorEditando?.itens && this.indexParaExcluir !== null) {
-      this.agrupadorEditando.itens.splice(this.indexParaExcluir, 1);
-    }
-
-    this.fecharPopup();
+  confirmarExclusao(): void {
+    this.agrupadorEditando.itens = this.agrupadorEditando.itens.filter(
+      (item: any) => item !== this.itemSelecionadoParaExcluir
+    );
+    this.popupExcluirVisible = false;
   }
 
   fecharPopup() {
@@ -177,7 +177,10 @@ export class AgrupadoresComponent {
     {
       hint: 'Excluir',
       icon: 'trash',
-      onClick: (e: any) => this.abrirPopupConfirmacao(e.rowIndex),
+      onClick: (e: any) => {
+        this.itemSelecionadoParaExcluir = e.row.data;
+        this.popupExcluirVisible = true;
+      },
     },
   ];
 }

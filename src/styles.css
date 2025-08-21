@@ -10,7 +10,23 @@ body, html
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+}
+
+app-root {
+  height: 100vh;
+  /* display: flex; */
+}
+app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+app-toolbar-menu {
+  display: flex;
+}
+app-menu {
+  flex-grow: 1;
+  display: flex;
 }
 
 button{

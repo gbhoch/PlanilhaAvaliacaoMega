@@ -2,14 +2,16 @@
     class="drawer"
     template="template"
     [opened]="menuState"
-    revealMode="expand">
+    revealMode="expand"
+    width="100%">
     <div *dxTemplate="let data of 'template'">
       <dx-list
           class="drawerList"
           selectionMode="single"
           [hoverStateEnabled]="true"
           [dataSource]="menuItems"
-          (onItemClick)="menuItemCLick($event)">
+          (onItemClick)="menuItemCLick($event)"
+          width="200px">
       </dx-list>
   </div>
   <ng-content></ng-content>

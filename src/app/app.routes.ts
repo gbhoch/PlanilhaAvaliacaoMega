@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AgrupadoresComponent } from './pages/agrupadores/agrupadores.component';
 import { LayoutComponent } from './layout/layout.component';
 import { SetoresComponent } from './pages/setores/setores.component';
+import { AvaliacaoComponent } from './pages/avaliacao/avaliacao.component';
 
 export const routes: Routes = [
   {
@@ -25,7 +26,7 @@ export const routes: Routes = [
     },
     {
       path : 'planilha',
-      component : HomeComponent //Tela da Planilha com Agrupadores e Itens
+      component : AvaliacaoComponent //Tela da Planilha com Agrupadores e Itens
     }]
   },
 ];
