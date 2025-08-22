@@ -16,7 +16,7 @@
         <dx-button
           icon="add"
           class="btn-criar"
-          (click)="openPlanilhas()"
+          (onClick)="openPlanilhas($event)"
           [height]="35"
           [width]="35"
         ></dx-button>
@@ -32,7 +32,37 @@
   </dx-data-grid>
 </div>
 
+<!-- Drawer -->
 <dx-drawer
+  [(opened)]="drawerNovo"
+  position="right"
+  revealMode="slide"
+  [minSize]="0"
+  height="100%"
+  [shading]="true"
+  [closeOnOutsideClick]="true"
+  template="novoDrawerTemplate"
+>
+  <div *dxTemplate="let data of 'novoDrawerTemplate'">
+    <div class="drawer-template">
+      <div class="drawer-header">
+        <h3>Novo Drawer</h3>
+        <dx-button text="Fechar" (onClick)="fecharNovoDrawer()"></dx-button>
+      </div>
+
+      <div class="drawer-content">
+        <ng-container *ngIf="setorEditando">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="setorEditando.nome" />
+          <label>Descrição</label>
+          <textarea [(ngModel)]="setorEditando.descricao"></textarea>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</dx-drawer>
+
+<!-- <dx-drawer
   class="drawer"
   [opened]="drawerAberto"
   position="right"
@@ -73,7 +103,7 @@
       </dx-data-grid>
     </div>
 
-    <!-- Botão de salvar alterações -->
+    Botão de salvar alterações
     <div class="drawer-footer" style="gap: 15px">
       <button class="btn-confirmar" (click)="salvarAlteracoes()">
         Salvar Alterações
@@ -84,4 +114,4 @@
       </button>
     </div>
   </ng-template>
-</dx-drawer>
+</dx-drawer> -->
