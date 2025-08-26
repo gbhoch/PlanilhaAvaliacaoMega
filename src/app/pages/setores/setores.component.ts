@@ -56,7 +56,7 @@ export class SetoresComponent {
   onCellDblClick(e: any) {
     if (e.data) {
       this.setorEditando = JSON.parse(JSON.stringify(e.data));
-      this.isNovoSetor = false; // sinaliza que estamos editando
+      this.isNovoSetor = false; // sinaliza que esta editando
       this.drawerAberto = true;
     }
   }

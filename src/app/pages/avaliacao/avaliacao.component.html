@@ -16,7 +16,7 @@
         <dx-button
           icon="add"
           class="btn-criar"
-          (onClick)="openPlanilhas($event)"
+          (click)="openPlanilhas()"
           [height]="35"
           [width]="35"
         ></dx-button>
@@ -26,84 +26,51 @@
     <dxi-column
       alignment="center"
       dataField="nomePlanilha"
-      caption="Lista de Planilhas"
+      caption="Lista de Setores"
     >
     </dxi-column>
   </dx-data-grid>
 </div>
 
 <!-- Drawer -->
-<dx-drawer
-  [(opened)]="drawerNovo"
-  position="right"
-  revealMode="slide"
-  [minSize]="0"
-  height="100%"
-  [shading]="true"
-  [closeOnOutsideClick]="true"
-  template="novoDrawerTemplate"
->
-  <div *dxTemplate="let data of 'novoDrawerTemplate'">
-    <div class="drawer-template">
-      <div class="drawer-header">
-        <h3>Novo Drawer</h3>
-        <dx-button text="Fechar" (onClick)="fecharNovoDrawer()"></dx-button>
-      </div>
-
-      <div class="drawer-content">
-        <ng-container *ngIf="setorEditando">
-          <label>Nome</label>
-          <input type="text" [(ngModel)]="setorEditando.nome" />
-          <label>Descrição</label>
-          <textarea [(ngModel)]="setorEditando.descricao"></textarea>
-        </ng-container>
-      </div>
-    </div>
+<div class="drawer" [class.open]="drawerAberto">
+  <div class="drawer-header">
+    <h3>Configuração de Planilha</h3>
+    <button class="header-btn-cancelar" (click)="drawerAberto = false">
+      X
+    </button>
   </div>
-</dx-drawer>
+  <div class="drawer-top">
+    <dx-data-grid
+      id="dataGridDrawer"
+      [dataSource]="agrupadoresList"
+      [rowAlternationEnabled]="true"
+      [showRowLines]="true"
+      [showBorders]="true"
+      width="100%"
+      height="100%"
+    >
+      <dxo-toolbar class="toolbar" id="toolbar">
+        <!-- <dxi-item location="center" id="itemTitulo"> Agrupadores </dxi-item> -->
+      </dxo-toolbar>
 
-<!-- <dx-drawer
-  class="drawer"
-  [opened]="drawerAberto"
-  position="right"
-  revealMode="slide"
-  [closeOnOutsideClick]="false"
-  [height]="250"
-  template="template"
->
-  <ng-template dxTemplate="template">
-    <div class="drawer-header">
-      <h3>Detalhes do Setor</h3>
-      <button class="header-btn-cancelar" (click)="drawerAberto = false">
-        X
-      </button>
-    </div>
-
-    <div class="container-lg">
-      <dx-data-grid
-        height="100%"
-        width="100%"
-        [rowAlternationEnabled]="true"
-        [showRowLines]="true"
-        [showBorders]="true"
-        [dataSource]="agrupadoresList"
-        [rowAlternationEnabled]="true"
+      <dxi-column
+        alignment="center"
+        dataField="nomePlanilha"
+        caption="Agrupadores"
       >
-        <dxo-toolbar>
-          <dxi-item location="center">
-            <div>AGRUPADORES</div>
-          </dxi-item>
-        </dxo-toolbar>
+        <dx-drop-down-box>
+          <dx-list
+            class="chechbox"
+            [dataSource]="agrupadoresList"
+            [allowItemDeleting]="true"
+          >
+          </dx-list>
+        </dx-drop-down-box>
+      </dxi-column>
+    </dx-data-grid>
 
-        <dxi-column
-          alignment="center"
-          dataField="ItensVerificados"
-          caption="Itens"
-        ></dxi-column>
-      </dx-data-grid>
-    </div>
-
-    Botão de salvar alterações
+    <!-- Botão de salvar alterações -->
     <div class="drawer-footer" style="gap: 15px">
       <button class="btn-confirmar" (click)="salvarAlteracoes()">
         Salvar Alterações
@@ -113,5 +80,5 @@
         Cancelar
       </button>
     </div>
-  </ng-template>
-</dx-drawer> -->
+  </div>
+</div>

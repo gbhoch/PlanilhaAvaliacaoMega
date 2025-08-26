@@ -48,12 +48,11 @@ body {
   font-size: 18px;
 }
 
-
 .drawer {
   position: fixed;
   top: 0;
   right: 0;
-  width: 700px;
+  width: 60%;
   height: 100%;
   background-color: #f9f9f9;
   box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
@@ -65,4 +64,71 @@ body {
   font-family: "Outfit", sans-serif;
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
+}
+
+.drawer-top {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.drawer.open {
+  transform: translateX(0%);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.drawer-header h3 {
+  font-size: 1.4rem;
+  color: #333;
+  margin: 0;
+}
+
+.drawer-header button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.drawer-header button:hover {
+  color: #ff4d4f;
+}
+
+.drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: #f9f9f9;
+  padding-top: 10px;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: flex-start;
+  z-index: 10;
+}
+
+.btn-confirmar{
+  background-color: rgb(35, 219, 35);
+  border: none;
+  border-radius: 2px;
+  font-family: "Outfit", serif;
+  font-style: normal;
+  height: 35px;
+}
+
+.btn-cancelar{
+  background-color: red;
+  border: none;
+  border-radius: 2px;
+  font-family: "Outfit", serif;
+  font-style: normal;
+  height: 35px;
 }

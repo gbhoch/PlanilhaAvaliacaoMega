@@ -1,41 +1,51 @@
 import { planilhaInterface } from '../../models/interfaces/planilha.interface';
 import { Component } from '@angular/core';
-import { DxDataGridModule, DxToolbarModule, DxButtonModule, DxDrawerModule, DxTemplateModule } from 'devextreme-angular';
+import {
+  DxDataGridModule,
+  DxToolbarModule,
+  DxButtonModule,
+  DxDrawerModule,
+  DxTemplateModule,
+  DxDropDownBoxModule,
+  DxListModule,
+} from 'devextreme-angular';
 import { SetorInterface } from '../../models/interfaces/setores.interface';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuToolbarService } from '../../services';
 
-
 @Component({
   selector: 'app-avaliacao',
   standalone: true,
-  imports: [DxDrawerModule,
-  DxButtonModule,
-  DxTemplateModule,
-  FormsModule,
-  CommonModule,
-  DxDataGridModule],
+  imports: [
+    DxDrawerModule,
+    DxButtonModule,
+    DxTemplateModule,
+    FormsModule,
+    CommonModule,
+    DxDataGridModule,
+    DxDropDownBoxModule,
+    DxListModule,
+  ],
   templateUrl: './avaliacao.component.html',
-  styleUrl: './avaliacao.component.css'
+  styleUrl: './avaliacao.component.css',
 })
 export class AvaliacaoComponent {
-
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
+
+  dataSource = this.agrupadoresList;
 
   isNovaPlanilha = false;
   setorEditando?: SetorInterface;
 
-  drawerNovo: boolean = false;
+  drawerAberto = false;
 
-  constructor(
-    public menuService : MenuToolbarService
-  ){}
+  constructor(public menuService: MenuToolbarService) {}
 
-  openPlanilhas(evt : any){
-    this.drawerNovo = true;
+  openPlanilhas() {
+    this.drawerAberto = true;
     this.setorEditando = {
       id: 1,
       nome: '',
@@ -46,35 +56,15 @@ export class AvaliacaoComponent {
     console.log('Botão clicado, abrindo novo drawer.');
   }
 
-  fecharNovoDrawer() {
-    this.drawerNovo = false;
+  onItemDeleting(e: { cancel: boolean }) {
+    if (this.dataSource.length === 1) {
+      e.cancel = true;
+    }
   }
 
-  // ... outros métodos
+  changeState() {}
 
+  salvarAlteracoes() {}
 
-  // openDrawer() {
-  //   this.setorEditando = {
-  //     id: 1,
-  //     nome: '',
-  //     descricao: '',
-  //     ativo: true,
-  //     itens: [],
-  //   };
-  //   this.isNovaPlanilha = true;
-  //   this.drawerAberto = true;
-  //   console.log('click')
-  // }
-
-  changeState(){
-
-  }
-
-  salvarAlteracoes(){
-
-  }
-
-  cancelarAlteracoes(){
-
-  }
+  cancelarAlteracoes() {}
 }
