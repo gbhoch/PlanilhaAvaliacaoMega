@@ -109,7 +109,7 @@ body {
   bottom: 0;
   background-color: #f9f9f9;
   padding-top: 10px;
-  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05); */
   display: flex;
   justify-content: flex-start;
   z-index: 10;

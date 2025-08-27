@@ -40,8 +40,96 @@
       X
     </button>
   </div>
+
   <div class="drawer-top">
-    <dx-data-grid
+    <div *ngFor="let agrupador of dataSource">
+      <dx-drop-down-box
+      >
+        <div *dxTemplate="let data of 'dataSource'">
+          <dx-data-grid
+          [dataSource]="agrup"
+          [columns]="gridColumns"
+          [hoverStateEnabled]="true"
+          [showBorders]="true"
+          height="100%"
+          >
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+          </dx-data-grid>
+        </div>
+      </dx-drop-down-box>
+    </div>
+
+    <div *ngFor="let agrupador of agrup">
+      <!-- Nome do agrupador e botão de adicionar -->
+      <div class="agrupador-header">
+        <strong>{{ agrupador }}</strong>
+        <dx-button
+          icon="plus"
+          (onClick)="abrirSelecaoItens(agrupador)"
+        ></dx-button>
+      </div>
+
+      <!-- Lista de itens selecionados -->
+      <div
+        class="itens-selecionados"
+        *ngIf="agrupadoresExpandidos[agrupador]"
+        style="margin-left: 15px; margin-top: 5px"
+      >
+        <ul
+          *ngIf="
+            (agrupadoresSelecionados[agrupador] ?? []).length > 0;
+            else nenhumItem
+          "
+        >
+          <li *ngFor="let item of agrupadoresSelecionados[agrupador]">
+            {{ item }}
+          </li>
+        </ul>
+        <ng-template #nenhumItem><i>Nenhum item selecionado</i></ng-template>
+      </div>
+    </div>
+
+    <!-- Botão de salvar alterações -->
+    <div class="drawer-footer" style="gap: 15px">
+      <button class="btn-confirmar" (click)="salvarAlteracoes()">
+        Salvar Alterações
+      </button>
+
+      <button class="btn-cancelar" (click)="cancelarAlteracoes()">
+        Cancelar
+      </button>
+    </div>
+
+    <!-- Popup para selecionar itens -->
+    <dx-popup
+      [(visible)]="popupVisivel"
+      [width]="300"
+      [height]="400"
+      title="Selecionar Itens"
+    >
+      <div *dxTemplate="let data of 'content'">
+        <dx-list
+          [dataSource]="itensSelecionaveis"
+          [selectionMode]="'multiple'"
+          [(selectedItems)]="itensSelecionadosTemp"
+          [showSelectionControls]="true"
+        ></dx-list>
+        <div style="margin-top: 15px; text-align: right">
+          <dx-button
+            text="Confirmar"
+            type="success"
+            (onClick)="confirmarSelecaoItens()"
+          ></dx-button>
+        </div>
+      </div>
+    </dx-popup>
+  </div>
+</div>
+
+<!-- <dx-data-grid
       id="dataGridDrawer"
       [dataSource]="agrupadoresList"
       [rowAlternationEnabled]="true"
@@ -51,7 +139,7 @@
       height="100%"
     >
       <dxo-toolbar class="toolbar" id="toolbar">
-        <!-- <dxi-item location="center" id="itemTitulo"> Agrupadores </dxi-item> -->
+        <dxi-item location="center" id="itemTitulo"> Agrupadores </dxi-item>
       </dxo-toolbar>
 
       <dxi-column
@@ -68,17 +156,4 @@
           </dx-list>
         </dx-drop-down-box>
       </dxi-column>
-    </dx-data-grid>
-
-    <!-- Botão de salvar alterações -->
-    <div class="drawer-footer" style="gap: 15px">
-      <button class="btn-confirmar" (click)="salvarAlteracoes()">
-        Salvar Alterações
-      </button>
-
-      <button class="btn-cancelar" (click)="cancelarAlteracoes()">
-        Cancelar
-      </button>
-    </div>
-  </div>
-</div>
+    </dx-data-grid> -->

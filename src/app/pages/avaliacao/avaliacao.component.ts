@@ -8,6 +8,7 @@ import {
   DxTemplateModule,
   DxDropDownBoxModule,
   DxListModule,
+  DxPopupModule,
 } from 'devextreme-angular';
 import { SetorInterface } from '../../models/interfaces/setores.interface';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
@@ -27,6 +28,7 @@ import { MenuToolbarService } from '../../services';
     DxDataGridModule,
     DxDropDownBoxModule,
     DxListModule,
+    DxPopupModule,
   ],
   templateUrl: './avaliacao.component.html',
   styleUrl: './avaliacao.component.css',
@@ -35,14 +37,43 @@ export class AvaliacaoComponent {
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
 
-  dataSource = this.agrupadoresList;
+  agrup = ['Senso de Utilização', 'Senso de Organização', 'Senso de Limpeza'];
+  dataSource = this.agrup;
 
   isNovaPlanilha = false;
   setorEditando?: SetorInterface;
 
   drawerAberto = false;
 
+  popupVisivel = false;
+  agrupadorAtual = '';
+  itensSelecionaveis: string[] = [];
+  itensSelecionadosTemp: string[] = [];
+
+  gridColumns = ['CompanyName'];
+
   constructor(public menuService: MenuToolbarService) {}
+
+
+
+  agrupadoresSelecionados: {
+    [agrupadorNome: string]: string[]; // nome do agrupador → itens selecionados
+  } = {};
+
+  itensPorAgrupador: {
+    [agrupadorNome: string]: string[];
+  } = {
+    'Senso de Utilização': ['Item A', 'Item B', 'Item C'],
+    'Senso de Organização': ['Item D', 'Item E'],
+    'Senso de Limpeza': ['Item F', 'Item G', 'Item H'],
+  };
+
+  agrupadoresExpandidos: {
+    [agrupadorNome: string]: boolean;
+  } = {};
+
+
+
 
   openPlanilhas() {
     this.drawerAberto = true;
@@ -60,6 +91,24 @@ export class AvaliacaoComponent {
     if (this.dataSource.length === 1) {
       e.cancel = true;
     }
+  }
+
+
+
+
+  abrirSelecaoItens(agrupador: string) {
+    this.agrupadorAtual = agrupador;
+    this.itensSelecionaveis = this.itensPorAgrupador[agrupador] || [];
+    this.itensSelecionadosTemp = this.agrupadoresSelecionados[agrupador] || [];
+    this.popupVisivel = true;
+    this.agrupadoresExpandidos[agrupador] = true;
+  }
+
+  confirmarSelecaoItens() {
+    this.agrupadoresSelecionados[this.agrupadorAtual] = [
+      ...this.itensSelecionadosTemp,
+    ];
+    this.popupVisivel = false;
   }
 
   changeState() {}
