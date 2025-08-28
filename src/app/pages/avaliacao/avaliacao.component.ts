@@ -50,8 +50,6 @@ export class AvaliacaoComponent {
   itensSelecionaveis: string[] = [];
   itensSelecionadosTemp: string[] = [];
 
-  gridColumns = ['CompanyName'];
-
   constructor(public menuService: MenuToolbarService) {}
 
 

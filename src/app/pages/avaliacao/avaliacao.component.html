@@ -42,30 +42,24 @@
   </div>
 
   <div class="drawer-top">
-    <div *ngFor="let agrupador of dataSource">
-      <dx-drop-down-box
-      >
-        <div *dxTemplate="let data of 'dataSource'">
-          <dx-data-grid
-          [dataSource]="agrup"
-          [columns]="gridColumns"
-          [hoverStateEnabled]="true"
-          [showBorders]="true"
-          height="100%"
-          >
-            <dxo-selection mode="single"></dxo-selection>
-            <dxo-filter-row [visible]="true"></dxo-filter-row>
-            <dxo-scrolling mode="virtual"></dxo-scrolling>
-            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
-          </dx-data-grid>
-        </div>
-      </dx-drop-down-box>
-    </div>
-
     <div *ngFor="let agrupador of agrup">
       <!-- Nome do agrupador e botão de adicionar -->
       <div class="agrupador-header">
-        <strong>{{ agrupador }}</strong>
+        <dx-drop-down-box placeholder="{{ agrupador }}">
+          <dx-data-grid
+            [dataSource]="agrup"
+            [hoverStateEnabled]="true"
+            [showBorders]="true"
+            height="100%"
+          >
+            <dxi-column alignment="center" dataField="nome" caption="Itens Verificados">
+              <ng-template dxTemplate="cellTemplate" let-data="data">
+                <span class="cursor-pointer">{{ agrup }}</span>
+              </ng-template>
+            </dxi-column>
+          </dx-data-grid>
+        </dx-drop-down-box>
+
         <dx-button
           icon="plus"
           (onClick)="abrirSelecaoItens(agrupador)"
@@ -78,7 +72,7 @@
         *ngIf="agrupadoresExpandidos[agrupador]"
         style="margin-left: 15px; margin-top: 5px"
       >
-        <ul
+        <!-- <ul
           *ngIf="
             (agrupadoresSelecionados[agrupador] ?? []).length > 0;
             else nenhumItem
@@ -88,7 +82,7 @@
             {{ item }}
           </li>
         </ul>
-        <ng-template #nenhumItem><i>Nenhum item selecionado</i></ng-template>
+        <ng-template #nenhumItem><i>Nenhum item selecionado</i></ng-template> -->
       </div>
     </div>
 
@@ -106,8 +100,8 @@
     <!-- Popup para selecionar itens -->
     <dx-popup
       [(visible)]="popupVisivel"
-      [width]="300"
-      [height]="400"
+      width="50%"
+      height="50%"
       title="Selecionar Itens"
     >
       <div *dxTemplate="let data of 'content'">
@@ -128,32 +122,3 @@
     </dx-popup>
   </div>
 </div>
-
-<!-- <dx-data-grid
-      id="dataGridDrawer"
-      [dataSource]="agrupadoresList"
-      [rowAlternationEnabled]="true"
-      [showRowLines]="true"
-      [showBorders]="true"
-      width="100%"
-      height="100%"
-    >
-      <dxo-toolbar class="toolbar" id="toolbar">
-        <dxi-item location="center" id="itemTitulo"> Agrupadores </dxi-item>
-      </dxo-toolbar>
-
-      <dxi-column
-        alignment="center"
-        dataField="nomePlanilha"
-        caption="Agrupadores"
-      >
-        <dx-drop-down-box>
-          <dx-list
-            class="chechbox"
-            [dataSource]="agrupadoresList"
-            [allowItemDeleting]="true"
-          >
-          </dx-list>
-        </dx-drop-down-box>
-      </dxi-column>
-    </dx-data-grid> -->
