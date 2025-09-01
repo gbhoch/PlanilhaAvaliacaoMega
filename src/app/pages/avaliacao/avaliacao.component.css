@@ -134,6 +134,12 @@ body {
   align-items: center;
 }
 
+.drag-icon {
+  cursor: move;
+  font-size: 18px;
+  padding: 0 8px;
+}
+
 /* FOOTER DRAWER */
 .drawer-footer {
   position: sticky;

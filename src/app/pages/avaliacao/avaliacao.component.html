@@ -25,10 +25,16 @@
 
     <dxi-column
       alignment="center"
-      dataField="nomePlanilha"
+      dataField="nome"
       caption="Lista de Setores"
+      cellTemplate="nomeTemplate"
     >
     </dxi-column>
+    <ng-template #nomeTemplate let-data>
+      <span class="cursor-pointer" (click)="abrirDrawerSetor(data)">
+        {{ data.nome }}
+      </span>
+    </ng-template>
   </dx-data-grid>
 </div>
 
@@ -42,47 +48,40 @@
   </div>
 
   <div class="drawer-top">
-    <div *ngFor="let agrupador of agrup">
+    <div *ngFor="let agrupador of agrupadoresList">
       <!-- Nome do agrupador e botão de adicionar -->
       <div class="agrupador-header">
-        <dx-drop-down-box placeholder="{{ agrupador }}">
+        <dx-drop-down-box placeholder="{{ agrupador.nome }}">
           <dx-data-grid
-            [dataSource]="agrup"
-            [hoverStateEnabled]="true"
+            [dataSource]="agrupadoresSelecionados[agrupador.nome]"
             [showBorders]="true"
-            height="100%"
+            [columnAutoWidth]="true"
+            [rowAlternationEnabled]="true"
+            [height]="200"
+            [rowDragging]="rowDraggingConfig(agrupador.nome)"
           >
-            <dxi-column alignment="center" dataField="nome" caption="Itens Verificados">
-              <ng-template dxTemplate="cellTemplate" let-data="data">
-                <span class="cursor-pointer">{{ agrup }}</span>
-              </ng-template>
+            <dxi-column dataField="descricao" caption="Item"></dxi-column>
+            <dxi-column caption="Excluir" type="buttons" [width]="70">
+              <div
+                *dxTemplate="let cell of 'cellTemplate'"
+                class="actions-container"
+              >
+                <span class="drag-icon">☰</span>
+
+                <dx-button
+                  icon="trash"
+                  (onClick)="getBotaoRemover(agrupador.nome)"
+                  hint="Remover item"
+                ></dx-button>
+              </div>
             </dxi-column>
           </dx-data-grid>
         </dx-drop-down-box>
 
         <dx-button
           icon="plus"
-          (onClick)="abrirSelecaoItens(agrupador)"
+          (onClick)="abrirSelecaoItens(agrupador.nome)"
         ></dx-button>
-      </div>
-
-      <!-- Lista de itens selecionados -->
-      <div
-        class="itens-selecionados"
-        *ngIf="agrupadoresExpandidos[agrupador]"
-        style="margin-left: 15px; margin-top: 5px"
-      >
-        <!-- <ul
-          *ngIf="
-            (agrupadoresSelecionados[agrupador] ?? []).length > 0;
-            else nenhumItem
-          "
-        >
-          <li *ngFor="let item of agrupadoresSelecionados[agrupador]">
-            {{ item }}
-          </li>
-        </ul>
-        <ng-template #nenhumItem><i>Nenhum item selecionado</i></ng-template> -->
       </div>
     </div>
 

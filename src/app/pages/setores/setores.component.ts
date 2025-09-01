@@ -39,7 +39,11 @@ export class SetoresComponent {
   selectedSetor: SetorInterface = {} as SetorInterface;
   drawerAberto = false;
 
-  constructor(private SetoresService: SetoresService) {}
+  constructor(private setoresService: SetoresService) {
+    this.setoresService.getSetores().subscribe((setores) => {
+      this.setoresList = setores;
+    });
+  }
 
   openDrawer() {
     this.setorEditando = {
@@ -95,20 +99,11 @@ export class SetoresComponent {
     if (!this.setorEditando) return;
 
     if (this.isNovoSetor) {
-      // Se for um novo setor, adiciona ao DataGrid
-      this.setoresList.push(this.setorEditando);
+      this.setoresService.addSetor(this.setorEditando); // ← Adiciona novo
     } else {
-      // Se for edição, localiza e atualiza
-      const index = this.setoresList.findIndex(
-        (s) => s.id === this.setorEditando!.id
-      );
-
-      if (index !== -1) {
-        this.setoresList[index] = { ...this.setorEditando };
-      }
+      this.setoresService.updateSetor(this.setorEditando); // ← Atualiza existente
     }
 
-    // Fecha drawer e limpa estado
     this.fecharDrawer();
   }
 
