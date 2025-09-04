@@ -27,7 +27,6 @@
       alignment="center"
       dataField="nome"
       caption="Lista de Setores"
-      cellTemplate="nomeTemplate"
     >
     </dxi-column>
     <ng-template #nomeTemplate let-data>
@@ -48,76 +47,69 @@
   </div>
 
   <div class="drawer-top">
-    <div *ngFor="let agrupador of agrupadoresList">
-      <!-- Nome do agrupador e botão de adicionar -->
-      <div class="agrupador-header">
-        <dx-drop-down-box placeholder="{{ agrupador.nome }}">
-          <dx-data-grid
-            [dataSource]="agrupadoresSelecionados[agrupador.nome]"
-            [showBorders]="true"
-            [columnAutoWidth]="true"
-            [rowAlternationEnabled]="true"
-            [height]="200"
-            [rowDragging]="rowDraggingConfig(agrupador.nome)"
-          >
-            <dxi-column dataField="descricao" caption="Item"></dxi-column>
-            <dxi-column caption="Excluir" type="buttons" [width]="70">
-              <div
-                *dxTemplate="let cell of 'cellTemplate'"
-                class="actions-container"
-              >
-                <span class="drag-icon">☰</span>
+    <!-- DATA-GRID lista de agrupadores -->
+    <div class="agrupador-header">
+      <dx-data-grid
+        id="gridContainer"
+        [rowAlternationEnabled]="true"
+        [columnAutoWidth]="true"
+        [dataSource]="agrupadoresList"
+        width="100%"
+        [showBorders]="true"
+      >
+        <dxi-column
+          dataField="nome"
+          [groupIndex]="0"
+          [allowGrouping]="true"
+          [allowSorting]="true"
+          buttons="abrirSelecaoItens()"
+        >
+        </dxi-column>
 
-                <dx-button
-                  icon="trash"
-                  (onClick)="getBotaoRemover(agrupador.nome)"
-                  hint="Remover item"
-                ></dx-button>
-              </div>
-            </dxi-column>
-          </dx-data-grid>
-        </dx-drop-down-box>
+        <dxi-column
+          dataField="itens"
+          caption="Item"
+        ></dxi-column>
 
-        <dx-button
-          icon="plus"
-          (onClick)="abrirSelecaoItens(agrupador.nome)"
-        ></dx-button>
-      </div>
-    </div>
-
-    <!-- Botão de salvar alterações -->
-    <div class="drawer-footer" style="gap: 15px">
-      <button class="btn-confirmar" (click)="salvarAlteracoes()">
-        Salvar Alterações
-      </button>
-
-      <button class="btn-cancelar" (click)="cancelarAlteracoes()">
-        Cancelar
-      </button>
+        <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+      </dx-data-grid>
     </div>
 
     <!-- Popup para selecionar itens -->
     <dx-popup
       [(visible)]="popupVisivel"
       width="50%"
-      height="50%"
+      height="60%"
+      [dragEnabled]="false"
       title="Selecionar Itens"
     >
-      <div *dxTemplate="let data of 'content'">
-        <dx-list
-          [dataSource]="itensSelecionaveis"
-          [selectionMode]="'multiple'"
-          [(selectedItems)]="itensSelecionadosTemp"
-          [showSelectionControls]="true"
-        ></dx-list>
-        <div style="margin-top: 15px; text-align: right">
-          <dx-button
-            text="Confirmar"
-            type="success"
-            (onClick)="confirmarSelecaoItens()"
-          ></dx-button>
+      <div class="popup-wrapper" *dxTemplate="let data of 'content'">
+        <div class="popup-scrollable">
+          <dx-list
+            [dataSource]="itensSelecionaveis"
+            [selectionMode]="'multiple'"
+            [(selectedItems)]="itensSelecionadosTemp"
+            [showSelectionControls]="true"
+          ></dx-list>
+        </div>
+
+        <div class="popup-footer">
+          <button class="btn-confirmar" (click)="confirmarSelecaoItens()">
+            Confirmar
+          </button>
         </div>
       </div>
     </dx-popup>
+  </div>
+
+  <!-- Botão de salvar alterações -->
+  <div class="drawer-footer" style="gap: 15px">
+    <button class="btn-confirmar" (click)="salvarAlteracoes()">
+      Salvar Alterações
+    </button>
+
+    <button class="btn-cancelar" (click)="cancelarAlteracoes()">
+      Cancelar
+    </button>
   </div>
 </div>

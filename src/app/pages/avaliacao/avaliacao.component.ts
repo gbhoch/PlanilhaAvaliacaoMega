@@ -1,3 +1,4 @@
+import { ItensVerificadosService } from './../../services/itens-verificados.service';
 import { SetoresService } from './../../services/setores.service';
 import { planilhaInterface } from '../../models/interfaces/planilha.interface';
 import { Component } from '@angular/core';
@@ -18,6 +19,8 @@ import { FormsModule } from '@angular/forms';
 import { MenuToolbarService } from '../../services';
 import { AgrupadoresComponent } from '../agrupadores/agrupadores.component';
 import { AgrupadoresService } from '../../services/agrupadores.service'; // já deve existir
+import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
+import { ItensVerificados } from '../../models/ItensVerificados';
 
 @Component({
   selector: 'app-avaliacao',
@@ -39,12 +42,13 @@ import { AgrupadoresService } from '../../services/agrupadores.service'; // já 
 export class AvaliacaoComponent {
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
+  itensList: ItensVerificados[] = []; // Interafce de Itens Verificados
+  agrupadoresDataGrid: { agrupador: string; descricao: string }[] = [];
 
   isNovaPlanilha = false;
   setorEditando?: SetorInterface;
 
   drawerAberto = false;
-
   popupVisivel = false;
   agrupadorAtual = '';
   itensSelecionaveis: string[] = [];
@@ -53,12 +57,23 @@ export class AvaliacaoComponent {
   constructor(
     public menuService: MenuToolbarService,
     private agrupadoresService: AgrupadoresService,
-    private setoresService: SetoresService
+    private setoresService: SetoresService,
+    private itensVerifService : ItensVerificadosService
   ) {
     this.setoresService.getSetores().subscribe((setores) => {
-      console.log("Setores carregador:", setores);
+      console.log('Setores carregador:', setores);
       this.setoresList = setores;
     });
+
+    this.agrupadoresService.getAgrupList().subscribe((data) => {
+      this.agrupadoresList = data;
+      console.log("AvaliacaoComponent", data)
+    });
+
+    this.itensVerifService.getItensVerificados().subscribe((itens) => {
+      this.itensList = itens;
+      console.log("ItensVerif", itens)
+    })
   }
 
   agrupadoresSelecionados: {
@@ -72,10 +87,6 @@ export class AvaliacaoComponent {
   abrirDrawerSetor(setor: SetorInterface) {
     this.setorEditando = { ...setor }; // Faz cópia para edição
     this.drawerAberto = true;
-
-    this.agrupadoresService.getAgrupList().subscribe((data) => {
-      this.agrupadoresList = data;
-    });
   }
 
   openPlanilhas() {
@@ -131,7 +142,25 @@ export class AvaliacaoComponent {
     this.agrupadoresSelecionados[this.agrupadorAtual] = [
       ...this.itensSelecionadosTemp,
     ];
+
+    // Atualiza a lista para o data grid com agrupamento
+    this.atualizarAgrupadoresDataGrid();
+
     this.popupVisivel = false;
+  }
+
+  atualizarAgrupadoresDataGrid() {
+    this.agrupadoresDataGrid = [];
+
+    for (const agrupador in this.agrupadoresSelecionados) {
+      const itens = this.agrupadoresSelecionados[agrupador];
+      itens.forEach((item) => {
+        this.agrupadoresDataGrid.push({
+          agrupador: agrupador,
+          descricao: item.descricao,
+        });
+      });
+    }
   }
 
   getBotaoRemover(agrupadorNome: string) {

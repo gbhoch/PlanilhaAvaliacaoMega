@@ -140,6 +140,28 @@ body {
   padding: 0 8px;
 }
 
+/* POPUP SELECT ITENS */
+.popup-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.popup-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.popup-footer {
+  position: sticky;
+  border-top: 1px solid #eee;
+  padding: 10px;
+  text-align: right;
+  background-color: #fff;
+}
+
+
 /* FOOTER DRAWER */
 .drawer-footer {
   position: sticky;
