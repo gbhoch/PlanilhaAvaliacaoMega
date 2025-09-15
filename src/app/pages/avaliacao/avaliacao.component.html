@@ -1,6 +1,7 @@
 <div class="container-lg">
   <dx-data-grid
     id="dataGrid"
+    (onCellDblClick)="onCellDblClick($event)"
     [dataSource]="setoresList"
     [rowAlternationEnabled]="true"
     [showRowLines]="true"
@@ -23,11 +24,7 @@
       </dxi-item>
     </dxo-toolbar>
 
-    <dxi-column
-      alignment="center"
-      dataField="nome"
-      caption="Lista de Setores"
-    >
+    <dxi-column alignment="center" dataField="nome" caption="Lista de Setores">
     </dxi-column>
     <ng-template #nomeTemplate let-data>
       <span class="cursor-pointer" (click)="abrirDrawerSetor(data)">
@@ -58,18 +55,28 @@
         [showBorders]="true"
       >
         <dxi-column
+          caption="Agrupadores"
           dataField="nome"
           [groupIndex]="0"
           [allowGrouping]="true"
           [allowSorting]="true"
-          buttons="abrirSelecaoItens()"
         >
         </dxi-column>
 
-        <dxi-column
-          dataField="itens"
-          caption="Item"
-        ></dxi-column>
+        <dxi-column caption="Selecionar" [width]="120" type="buttons">
+          <dxi-button
+            icon="plus"
+            [onClick]="abrirSelecaoItens"
+            hint="Selecionar itens"
+          ></dxi-button>
+        </dxi-column>
+
+        <dxo-master-detail [enabled]="true" template="itens"></dxo-master-detail>
+
+        <div *dxTemplate="let item of 'itens'">
+          <div class="master-detail-caption">{{itensVerifService.itensverificad}}
+          </div>
+        </div>
 
         <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
       </dx-data-grid>

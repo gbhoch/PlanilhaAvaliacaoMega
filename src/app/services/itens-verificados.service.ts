@@ -6,6 +6,27 @@ import { Observable, of } from 'rxjs';
 import { Response } from '../models/Response';
 
 const itensVerifList: ItensVerificados[] = [
+
+];
+
+@Injectable({
+  providedIn: 'root',
+})
+
+export class ItensVerificadosService {
+
+  itensverificad : ItensVerificados [] = itensVerifList;
+
+  private apiUrl = `${environment.ApiUrl}/Funcionarios`
+
+  constructor( private http: HttpClient ) { }
+
+  getItensVerificados() {
+    return of(this.itensverificad);
+  }
+}
+
+
 //   {
 //   "itemID": 6284,
 //   "descricaoItem": "Há material ou objetos em desuso ou fora de local definido?",
@@ -61,21 +82,3 @@ const itensVerifList: ItensVerificados[] = [
 //   "dataDeCriacao": "03/04/2025",
 //   "dataDeModificacao": "--"
 // }
-];
-
-@Injectable({
-  providedIn: 'root',
-})
-
-export class ItensVerificadosService {
-
-  itensverificad : ItensVerificados [] = itensVerifList;
-
-  private apiUrl = `${environment.ApiUrl}/Funcionarios`
-
-  constructor( private http: HttpClient ) { }
-
-  getItensVerificados() {
-    return of(this.itensverificad);
-  }
-}

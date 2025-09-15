@@ -22,6 +22,7 @@ import { AgrupadoresService } from '../../services/agrupadores.service'; // já 
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { ItensVerificados } from '../../models/ItensVerificados';
 
+
 @Component({
   selector: 'app-avaliacao',
   standalone: true,
@@ -47,6 +48,7 @@ export class AvaliacaoComponent {
 
   isNovaPlanilha = false;
   setorEditando?: SetorInterface;
+  modoEdicao = false;
 
   drawerAberto = false;
   popupVisivel = false;
@@ -58,7 +60,7 @@ export class AvaliacaoComponent {
     public menuService: MenuToolbarService,
     private agrupadoresService: AgrupadoresService,
     private setoresService: SetoresService,
-    private itensVerifService : ItensVerificadosService
+    public itensVerifService: ItensVerificadosService
   ) {
     this.setoresService.getSetores().subscribe((setores) => {
       console.log('Setores carregador:', setores);
@@ -67,13 +69,13 @@ export class AvaliacaoComponent {
 
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
-      console.log("AvaliacaoComponent", data)
+      console.log('AvaliacaoComponent', data);
     });
 
     this.itensVerifService.getItensVerificados().subscribe((itens) => {
       this.itensList = itens;
-      console.log("ItensVerif", itens)
-    })
+      console.log('ItensVerif', itens);
+    });
   }
 
   agrupadoresSelecionados: {
@@ -86,6 +88,20 @@ export class AvaliacaoComponent {
 
   abrirDrawerSetor(setor: SetorInterface) {
     this.setorEditando = { ...setor }; // Faz cópia para edição
+    this.drawerAberto = true;
+  }
+
+  /* CLIQUE 2X CÉLULA */
+  onCellDblClick(evt : any) {
+    const setor = evt.data;
+    if (!setor) return;
+
+    this.setorEditando = {
+      ...setor,
+      itens: [...setor.itens],
+    }
+
+    this.modoEdicao = true;
     this.drawerAberto = true;
   }
 
@@ -143,9 +159,7 @@ export class AvaliacaoComponent {
       ...this.itensSelecionadosTemp,
     ];
 
-    // Atualiza a lista para o data grid com agrupamento
     this.atualizarAgrupadoresDataGrid();
-
     this.popupVisivel = false;
   }
 
@@ -156,7 +170,7 @@ export class AvaliacaoComponent {
       const itens = this.agrupadoresSelecionados[agrupador];
       itens.forEach((item) => {
         this.agrupadoresDataGrid.push({
-          agrupador: agrupador,
+          agrupador,
           descricao: item.descricao,
         });
       });
@@ -193,3 +207,23 @@ export class AvaliacaoComponent {
 
   cancelarAlteracoes() {}
 }
+
+
+
+
+  // handleSelecionarItens = (e: any) => {
+  //   const agrupadorNome = e.row?.data?.agrupador;
+  //   if (!agrupadorNome) return;
+
+  //   this.agrupadorAtual = agrupadorNome;
+
+  //   const agrupador = this.agrupadoresList.find(
+  //     (a) => a.nome === agrupadorNome
+  //   );
+  //   this.itensSelecionaveis = agrupador?.itens?.map((i) => i.descricao) ?? [];
+
+  //   this.itensSelecionadosTemp =
+  //     this.agrupadoresSelecionados[agrupadorNome] || [];
+
+  //   this.popupVisivel = true;
+  // };
