@@ -60,23 +60,58 @@
           [groupIndex]="0"
           [allowGrouping]="true"
           [allowSorting]="true"
+          [width]="500"
         >
-        </dxi-column>
-
-        <dxi-column caption="Selecionar" [width]="120" type="buttons">
           <dxi-button
             icon="plus"
-            [onClick]="abrirSelecaoItens"
+            hint="Selecionar Itens"
+            [onClick]="getBotaoAdicionar()"></dxi-button>
+        </dxi-column>
+
+        <dxi-column caption="Incluir Itens" type="buttons" [width]="100">
+          <dxi-button
+            icon="plus"
             hint="Selecionar itens"
+            [onClick]="abrirSelecaoItens('$event')"
           ></dxi-button>
         </dxi-column>
 
-        <dxo-master-detail [enabled]="true" template="itens"></dxo-master-detail>
+        <!-- <dxo-master-detail
+          [enabled]="true"
+          [template]="detailTemplate"
+        ></dxo-master-detail> -->
 
-        <div *dxTemplate="let item of 'itens'">
-          <div class="master-detail-caption">{{itensVerifService.itensverificad}}
-          </div>
-        </div>
+        <ng-template #detailTemplate let-data>
+          <dx-data-grid
+            [dataSource]="agrupadoresSelecionados[data.data.nome] || []"
+            [showBorders]="true"
+            [columnAutoWidth]="true"
+            [rowAlternationEnabled]="true"
+            [showRowLines]="true"
+            [rowDragging]="rowDraggingConfig(data.data.nome)"
+          >
+            <dxi-column
+              dataField="descricao"
+              caption="Item Selecionado"
+            ></dxi-column>
+
+            <dxi-column
+              caption="Remover"
+              [width]="100"
+              cellTemplate="removerTemplate"
+            ></dxi-column>
+
+            <div *dxTemplate="let itemData of 'removerTemplate'">
+              <dx-button
+                icon="trash"
+                hint="Remover item"
+                (onClick)="
+                  removerItemSelecionado(data.data.nome, itemData.data)
+                "
+              ></dx-button>
+            </div>
+          </dx-data-grid>
+        </ng-template>
 
         <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
       </dx-data-grid>

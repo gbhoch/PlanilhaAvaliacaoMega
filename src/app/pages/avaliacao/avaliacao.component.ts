@@ -22,7 +22,6 @@ import { AgrupadoresService } from '../../services/agrupadores.service'; // já 
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { ItensVerificados } from '../../models/ItensVerificados';
 
-
 @Component({
   selector: 'app-avaliacao',
   standalone: true,
@@ -41,6 +40,7 @@ import { ItensVerificados } from '../../models/ItensVerificados';
   styleUrl: './avaliacao.component.css',
 })
 export class AvaliacaoComponent {
+  [x: string]: any;
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
   itensList: ItensVerificados[] = []; // Interafce de Itens Verificados
@@ -92,14 +92,14 @@ export class AvaliacaoComponent {
   }
 
   /* CLIQUE 2X CÉLULA */
-  onCellDblClick(evt : any) {
+  onCellDblClick(evt: any) {
     const setor = evt.data;
     if (!setor) return;
 
     this.setorEditando = {
       ...setor,
       itens: [...setor.itens],
-    }
+    };
 
     this.modoEdicao = true;
     this.drawerAberto = true;
@@ -136,13 +136,22 @@ export class AvaliacaoComponent {
   abrirSelecaoItens(agrupadorNome: string) {
     this.agrupadorAtual = agrupadorNome;
 
+    // 1. Encontra o agrupador completo
     const agrupador = this.agrupadoresList.find(
       (a) => a.nome === agrupadorNome
     );
-    this.itensSelecionaveis = agrupador?.itens?.map((i) => i.descricao) ?? [];
 
+    // 2. Popula a lista de itens disponíveis para seleção
+    // Nota: Dependendo da estrutura de 'itens', pode ser necessário ajustar o map.
+    this.itensSelecionaveis =
+      agrupador?.itens?.map((i: any) => i.descricao) ?? [];
+
+    // 3. Popula a lista temporária com os itens JÁ SELECIONADOS para o checkbox
+    // Isso garante que os itens previamente selecionados apareçam marcados no popup
     this.itensSelecionadosTemp =
       this.agrupadoresSelecionados[agrupadorNome] || [];
+
+    // 4. Abre o popup
     this.popupVisivel = true;
     this.agrupadoresExpandidos[agrupadorNome] = true;
   }
@@ -155,6 +164,7 @@ export class AvaliacaoComponent {
   }
 
   confirmarSelecaoItens() {
+    // Transfere a lista de itens selecionados para a lista final do agrupador
     this.agrupadoresSelecionados[this.agrupadorAtual] = [
       ...this.itensSelecionadosTemp,
     ];
@@ -177,6 +187,16 @@ export class AvaliacaoComponent {
     }
   }
 
+  getBotaoAdicionar(){
+    return[{
+      hint: 'Selecionar Itens',
+      icon: 'plus',
+      onClick: (e : any) =>{
+        this.abrirSelecaoItens(e.row.data.nome);
+      },
+    }];
+  }
+
   getBotaoRemover(agrupadorNome: string) {
     return [
       {
@@ -196,9 +216,15 @@ export class AvaliacaoComponent {
   }
 
   removerItemSelecionado(agrupadorNome: string, item: { descricao: string }) {
+    console.log(`Tentando remover item: ${item.descricao} do agrupador: ${agrupadorNome}`);
+
+    // Garante que o array exista e filtra o item
     this.agrupadoresSelecionados[agrupadorNome] = this.agrupadoresSelecionados[
       agrupadorNome
     ].filter((i) => i.descricao !== item.descricao);
+
+    // Opcional: Força a atualização da grade, se necessário
+    // this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
   }
 
   changeState() {}
@@ -207,23 +233,3 @@ export class AvaliacaoComponent {
 
   cancelarAlteracoes() {}
 }
-
-
-
-
-  // handleSelecionarItens = (e: any) => {
-  //   const agrupadorNome = e.row?.data?.agrupador;
-  //   if (!agrupadorNome) return;
-
-  //   this.agrupadorAtual = agrupadorNome;
-
-  //   const agrupador = this.agrupadoresList.find(
-  //     (a) => a.nome === agrupadorNome
-  //   );
-  //   this.itensSelecionaveis = agrupador?.itens?.map((i) => i.descricao) ?? [];
-
-  //   this.itensSelecionadosTemp =
-  //     this.agrupadoresSelecionados[agrupadorNome] || [];
-
-  //   this.popupVisivel = true;
-  // };
