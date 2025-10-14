@@ -15,10 +15,11 @@ body {
   background-color: #019443 !important; /* Cor que fica quando a opção está selecionada! */
 }
 
-::ng-deep .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-list-item-selected,
+/* Evita que a opção selecionada fique com a cor preta */
+/* ::ng-deep .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-list-item-selected,
 ::ng-deep .dx-state-hover{
-  color: white !important; /* Evita que a opção selecionada fique com a cor preta */
-}
+  color: white !important;
+}  */
 
 ::ng-deep .dx-overlay-content {
   background-color: lightgray;
@@ -51,5 +52,6 @@ body {
 .drawerList {
   /* width: 35vh; */
   /* background-color: #00843d; */
-  background-color: #00642f;
+  /* background-color: #00642f; */
+  background-color: rgb(208, 208, 208);
 }

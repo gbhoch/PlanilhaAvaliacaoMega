@@ -89,31 +89,38 @@ export class AvaliacaoComponent {
   abrirDrawerSetor(setor: SetorInterface) {
     this.setorEditando = { ...setor }; // Faz cópia para edição
     this.drawerAberto = true;
+
+    // CARREGA o plano de avaliação salvo para a variável de edição
+    this.agrupadoresSelecionados = setor.planoDeAvaliacao
+      ? { ...setor.planoDeAvaliacao }
+      : {};
   }
 
-  /* CLIQUE 2X CÉLULA */
   onCellDblClick(evt: any) {
     const setor = evt.data;
     if (!setor) return;
 
-    this.setorEditando = {
-      ...setor,
-      itens: [...setor.itens],
-    };
-
+    this.setorEditando = { ...setor };
     this.modoEdicao = true;
     this.drawerAberto = true;
+
+    // CARREGA o plano de avaliação salvo aqui também
+    this.agrupadoresSelecionados = setor.planoDeAvaliacao
+      ? { ...setor.planoDeAvaliacao }
+      : {};
   }
 
   openPlanilhas() {
     this.drawerAberto = true;
     this.setorEditando = {
-      id: 1,
+      id: Date.now(),
       nome: '',
       descricao: '',
       ativo: true,
       itens: [],
     };
+
+    this.agrupadoresSelecionados = {};
 
     // Carrega agrupadores cadastrados dinamicamente
     this.agrupadoresService.getAgrupList().subscribe((data) => {
@@ -151,7 +158,6 @@ export class AvaliacaoComponent {
     this.itensSelecionadosTemp =
       this.agrupadoresSelecionados[agrupadorNome] || [];
 
-    // 4. Abre o popup
     this.popupVisivel = true;
     this.agrupadoresExpandidos[agrupadorNome] = true;
   }
@@ -168,6 +174,10 @@ export class AvaliacaoComponent {
     this.agrupadoresSelecionados[this.agrupadorAtual] = [
       ...this.itensSelecionadosTemp,
     ];
+
+    // Força a detecção de mudança para atualizar o Master-Detail
+    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
+    // Copia o objeto para forçar o Angular/DevExtreme a renderizar novamente
 
     this.atualizarAgrupadoresDataGrid();
     this.popupVisivel = false;
@@ -187,14 +197,16 @@ export class AvaliacaoComponent {
     }
   }
 
-  getBotaoAdicionar(){
-    return[{
-      hint: 'Selecionar Itens',
-      icon: 'plus',
-      onClick: (e : any) =>{
-        this.abrirSelecaoItens(e.row.data.nome);
+  getBotaoAdicionar() {
+    return [
+      {
+        hint: 'Selecionar Itens',
+        icon: 'plus',
+        onClick: (e: any) => {
+          this.abrirSelecaoItens(e.row.data.nome);
+        },
       },
-    }];
+    ];
   }
 
   getBotaoRemover(agrupadorNome: string) {
@@ -216,7 +228,9 @@ export class AvaliacaoComponent {
   }
 
   removerItemSelecionado(agrupadorNome: string, item: { descricao: string }) {
-    console.log(`Tentando remover item: ${item.descricao} do agrupador: ${agrupadorNome}`);
+    console.log(
+      `Tentando remover item: ${item.descricao} do agrupador: ${agrupadorNome}`
+    );
 
     // Garante que o array exista e filtra o item
     this.agrupadoresSelecionados[agrupadorNome] = this.agrupadoresSelecionados[
@@ -229,7 +243,44 @@ export class AvaliacaoComponent {
 
   changeState() {}
 
-  salvarAlteracoes() {}
+  salvarAlteracoes() {
+    if (!this.setorEditando) {
+      console.error('Nenhum setor sendo editado.');
+      return;
+    }
 
-  cancelarAlteracoes() {}
+    // ANEXAR o plano de avaliação (com os itens agrupados) ao setor
+    this.setorEditando.planoDeAvaliacao = this.agrupadoresSelecionados;
+
+    // Encontra o setor original na lista principal para atualizá-lo.
+    const index = this.setoresList.findIndex(
+      (s) => s.id === this.setorEditando!.id
+    );
+
+    if (index !== -1) {
+      this.setoresList[index] = { ...this.setorEditando! };
+      this.setoresList = [...this.setoresList];
+
+      console.log('Setor atualizado e salvo:', this.setoresList[index]);
+    } else {
+      // Se for um novo setor, você adicionaria ele à lista aqui.
+      console.warn(
+        'Setor não encontrado para atualização. Isso deveria ser um novo setor?'
+      );
+    }
+
+    this.drawerAberto = false;
+
+    // Limpar o estado de edição
+    this.agrupadoresSelecionados = {};
+    this.setorEditando = undefined;
+  }
+
+  cancelarAlteracoes(): void {
+    this.drawerAberto = false;
+  }
+
+  cancelarAlteracoesItens(): void {
+    this.popupVisivel = false;
+  }
 }

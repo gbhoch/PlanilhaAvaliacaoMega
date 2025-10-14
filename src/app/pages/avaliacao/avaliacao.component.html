@@ -57,29 +57,17 @@
         <dxi-column
           caption="Agrupadores"
           dataField="nome"
-          [groupIndex]="0"
-          [allowGrouping]="true"
+          [allowGrouping]="false"
           [allowSorting]="true"
-          [width]="500"
+          [width]="'100%'"
+          cellTemplate="agrupadorTemplate"
         >
-          <dxi-button
-            icon="plus"
-            hint="Selecionar Itens"
-            [onClick]="getBotaoAdicionar()"></dxi-button>
         </dxi-column>
 
-        <dxi-column caption="Incluir Itens" type="buttons" [width]="100">
-          <dxi-button
-            icon="plus"
-            hint="Selecionar itens"
-            [onClick]="abrirSelecaoItens('$event')"
-          ></dxi-button>
-        </dxi-column>
-
-        <!-- <dxo-master-detail
+        <dxo-master-detail
           [enabled]="true"
           [template]="detailTemplate"
-        ></dxo-master-detail> -->
+        ></dxo-master-detail>
 
         <ng-template #detailTemplate let-data>
           <dx-data-grid
@@ -113,7 +101,29 @@
           </dx-data-grid>
         </ng-template>
 
-        <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+        <div *dxTemplate="let data of 'agrupadorTemplate'">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              height: 100%;
+              width: 100%;
+            "
+          >
+            <span> {{ data.data.nome }} </span>
+
+            <dx-button
+              icon="plus"
+              hint="Adicionar Itens"
+              (onClick)="abrirSelecaoItens(data.data.nome)"
+              type="default"
+              style="margin-left: 10px"
+            ></dx-button>
+          </div>
+        </div>
+
+        <!-- <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping> -->
       </dx-data-grid>
     </div>
 
@@ -125,8 +135,8 @@
       [dragEnabled]="false"
       title="Selecionar Itens"
     >
-      <div class="popup-wrapper" *dxTemplate="let data of 'content'">
-        <div class="popup-scrollable">
+      <div class="popup-wrapper" *dxTemplate="let data of 'content'" style="height: 100%; display: flex; flex-direction: column;">
+        <div class="popup-scrollable" >
           <dx-list
             [dataSource]="itensSelecionaveis"
             [selectionMode]="'multiple'"
@@ -138,6 +148,9 @@
         <div class="popup-footer">
           <button class="btn-confirmar" (click)="confirmarSelecaoItens()">
             Confirmar
+          </button>
+          <button class="btn-cancelar" (click)="cancelarAlteracoesItens()">
+            Cancelar
           </button>
         </div>
       </div>

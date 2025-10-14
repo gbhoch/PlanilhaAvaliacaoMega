@@ -6,4 +6,7 @@ export interface SetorInterface{
   dataDeCriacao?: string;
   dataDeModificacao?: string;
   itens: { descricao: string }[];
+  planoDeAvaliacao?: {
+     [agrupadorNome: string]: { descricao: string }[];
+  }
 }
