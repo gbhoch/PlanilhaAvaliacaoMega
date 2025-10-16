@@ -5,42 +5,42 @@ import { of } from 'rxjs';
 import { SensoInterface } from '../models/interfaces/senso.interface';
 
 const agrupList: SensoInterface[] = [
-  {
-    nome: 'Senso de Utilização',
-    ativo: true,
-    dataDeCriacao: '20/05/2025',
-    itens: [],
-  } as SensoInterface,
-  {
-    nome: 'Senso de Organização',
-    ativo: true,
-    dataDeCriacao: '20/05/2025',
-    itens: [],
-  } as SensoInterface,
-  {
-    nome: 'Senso de Limpeza',
-    ativo: false,
-    dataDeCriacao: '20/05/2025',
-    itens: [],
-  } as SensoInterface,
-  {
-    nome: 'Senso de Asseio',
-    ativo: true,
-    dataDeCriacao: '20/05/2025',
-    itens: [],
-  } as SensoInterface,
-  {
-    nome: 'Senso de Autodisciplina',
-    ativo: true,
-    dataDeCriacao: '20/05/2025',
-    itens: [],
-  } as SensoInterface,
-  {
-    nome: 'Senso de Segurança',
-    ativo: false,
-    dataDeCriacao: '20/05/2025',
-    itens: [],
-  } as SensoInterface,
+  // {
+  //   nome: 'Senso de Utilização',
+  //   ativo: true,
+  //   dataDeCriacao: '20/05/2025',
+  //   itens: [],
+  // } as SensoInterface,
+  // {
+  //   nome: 'Senso de Organização',
+  //   ativo: true,
+  //   dataDeCriacao: '20/05/2025',
+  //   itens: [],
+  // } as SensoInterface,
+  // {
+  //   nome: 'Senso de Limpeza',
+  //   ativo: false,
+  //   dataDeCriacao: '20/05/2025',
+  //   itens: [],
+  // } as SensoInterface,
+  // {
+  //   nome: 'Senso de Asseio',
+  //   ativo: true,
+  //   dataDeCriacao: '20/05/2025',
+  //   itens: [],
+  // } as SensoInterface,
+  // {
+  //   nome: 'Senso de Autodisciplina',
+  //   ativo: true,
+  //   dataDeCriacao: '20/05/2025',
+  //   itens: [],
+  // } as SensoInterface,
+  // {
+  //   nome: 'Senso de Segurança',
+  //   ativo: false,
+  //   dataDeCriacao: '20/05/2025',
+  //   itens: [],
+  // } as SensoInterface,
 ];
 
 @Injectable({

@@ -1,7 +1,7 @@
 import { ItemAvaliacaoInterface } from "./item-avaliacao.interface";
 
 export interface SensoInterface {
-  //id : number,
+  id : number,
   nome : string
   ativo: boolean;
   descricao?: string;

@@ -67,6 +67,7 @@ export class AgrupadoresComponent {
 
   openDrawer(): void {
     this.agrupadorEditando = {
+      id: Date.now(),
       nome: '',
       descricao: '',
       ativo: true,
@@ -81,6 +82,7 @@ export class AgrupadoresComponent {
       this.agrupadoresList = [
         ...this.agrupadoresList,
         {
+          id: Date.now(),
           nome: this.novoAgrupadorNome.trim(),
           itens: [],
           ativo: false,

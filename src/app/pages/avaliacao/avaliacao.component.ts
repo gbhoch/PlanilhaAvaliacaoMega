@@ -170,16 +170,13 @@ export class AvaliacaoComponent {
   }
 
   confirmarSelecaoItens() {
-    // Transfere a lista de itens selecionados para a lista final do agrupador
-    this.agrupadoresSelecionados[this.agrupadorAtual] = [
-      ...this.itensSelecionadosTemp,
-    ];
+    // Cria um novo array com os itens selecionados
+    const novosItensSelecionados = [...this.itensSelecionadosTemp];
+    // Substitui o array antigo
+    this.agrupadoresSelecionados[this.agrupadorAtual] = novosItensSelecionados;
+    // Força a detecção de mudança para atualizar MasterDetail
+    this.agrupadoresSelecionados = {...this.agrupadoresSelecionados};
 
-    // Força a detecção de mudança para atualizar o Master-Detail
-    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
-    // Copia o objeto para forçar o Angular/DevExtreme a renderizar novamente
-
-    this.atualizarAgrupadoresDataGrid();
     this.popupVisivel = false;
   }
 
