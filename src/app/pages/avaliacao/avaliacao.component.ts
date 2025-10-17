@@ -53,7 +53,7 @@ export class AvaliacaoComponent {
   drawerAberto = false;
   popupVisivel = false;
   agrupadorAtual = '';
-  itensSelecionaveis: string[] = [];
+  itensSelecionaveis: { descricao: string }[] = [];
   itensSelecionadosTemp: { descricao: string }[] = [];
 
   constructor(
@@ -151,7 +151,7 @@ export class AvaliacaoComponent {
     // 2. Popula a lista de itens disponíveis para seleção
     // Nota: Dependendo da estrutura de 'itens', pode ser necessário ajustar o map.
     this.itensSelecionaveis =
-      agrupador?.itens?.map((i: any) => i.descricao) ?? [];
+      agrupador?.itens?.map((i: any) => ({ descricao: i.descricao })) ?? [];
 
     // 3. Popula a lista temporária com os itens JÁ SELECIONADOS para o checkbox
     // Isso garante que os itens previamente selecionados apareçam marcados no popup

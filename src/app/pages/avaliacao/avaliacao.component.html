@@ -66,10 +66,10 @@
 
         <dxo-master-detail
           [enabled]="true"
-          [template]="detailTemplate"
+          template="detailTemplate"
         ></dxo-master-detail>
 
-        <ng-template #detailTemplate let-data>
+        <div *dxTemplate="let data of 'detailTemplate'">
           <dx-data-grid
             [dataSource]="agrupadoresSelecionados[data.data.nome] || []"
             [showBorders]="true"
@@ -99,7 +99,7 @@
               ></dx-button>
             </div>
           </dx-data-grid>
-        </ng-template>
+        </div>
 
         <div *dxTemplate="let data of 'agrupadorTemplate'">
           <div
@@ -139,6 +139,7 @@
         <div class="popup-scrollable" >
           <dx-list
             [dataSource]="itensSelecionaveis"
+            [displayExpr]="'descricao'"
             [selectionMode]="'multiple'"
             [(selectedItems)]="itensSelecionadosTemp"
             [showSelectionControls]="true"
