@@ -343,6 +343,10 @@ input[type="number"] {
   font-size: 14px;
 }
 
+::ng-deep .dx-icon-trash:before{    /* Cor botão de Excluir Itens */
+  color: #006f32;
+}
+
 .btn-trash {
   margin-left: 10px;
   background: none;

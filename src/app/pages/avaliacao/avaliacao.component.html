@@ -76,28 +76,39 @@
             [columnAutoWidth]="true"
             [rowAlternationEnabled]="true"
             [showRowLines]="true"
-            [rowDragging]="rowDraggingConfig(data.data.nome)"
           >
+            <dxo-row-dragging
+              [allowReordering]="true"
+              (onReorder)="onReorderItem(data.data.nome, $event)"
+            ></dxo-row-dragging>
+
             <dxi-column
               dataField="descricao"
               caption="Item Selecionado"
+              [visibleIndex]="0"
             ></dxi-column>
+
+            <!-- <dxi-column
+              caption="Remover"
+              [width]="75"
+              cellTemplate="removerTemplate"
+            ></dxi-column> -->
 
             <dxi-column
+              type="buttons"
               caption="Remover"
-              [width]="100"
-              cellTemplate="removerTemplate"
+              [buttons]="botaoRemoverItem"
             ></dxi-column>
-
-            <div *dxTemplate="let itemData of 'removerTemplate'">
+            <!-- <div *dxTemplate="let itemData of 'removerTemplate'">
               <dx-button
                 icon="trash"
                 hint="Remover item"
                 (onClick)="
                   removerItemSelecionado(data.data.nome, itemData.data)
                 "
+                style="margin-left: 14px;"
               ></dx-button>
-            </div>
+            </div> -->
           </dx-data-grid>
         </div>
 
@@ -135,8 +146,12 @@
       [dragEnabled]="false"
       title="Selecionar Itens"
     >
-      <div class="popup-wrapper" *dxTemplate="let data of 'content'" style="height: 100%; display: flex; flex-direction: column;">
-        <div class="popup-scrollable" >
+      <div
+        class="popup-wrapper"
+        *dxTemplate="let data of 'content'"
+        style="height: 100%; display: flex; flex-direction: column"
+      >
+        <div class="popup-scrollable">
           <dx-list
             [dataSource]="itensSelecionaveis"
             [displayExpr]="'descricao'"
@@ -153,6 +168,27 @@
           <button class="btn-cancelar" (click)="cancelarAlteracoesItens()">
             Cancelar
           </button>
+        </div>
+      </div>
+    </dx-popup>
+
+    <!-- PopUp para Confirmar exclusão de Itens -->
+    <dx-popup
+      [(visible)]="popUpExcluirItem"
+      [showTitle]="true"
+      title="Confirmar Exclusão"
+      [width]="400"
+      [height]="200"
+      [dragEnabled]="false"
+      [showCloseButton]="true"
+    >
+      <div class="popup-content">
+        <p>Tem certeza que deseja excluir este item?</p>
+        <div class="popup-actions">
+          <button class="btn-confirmar" (click)="confirmarExclusao()">
+            Confirmar
+          </button>
+          <button class="btn-cancelar" (click)="fecharPopup()">Cancelar</button>
         </div>
       </div>
     </dx-popup>

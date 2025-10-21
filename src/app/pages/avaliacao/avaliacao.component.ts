@@ -21,6 +21,7 @@ import { AgrupadoresComponent } from '../agrupadores/agrupadores.component';
 import { AgrupadoresService } from '../../services/agrupadores.service'; // já deve existir
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { ItensVerificados } from '../../models/ItensVerificados';
+import { DxoRowDraggingModule } from 'devextreme-angular/ui/nested';
 
 @Component({
   selector: 'app-avaliacao',
@@ -35,6 +36,7 @@ import { ItensVerificados } from '../../models/ItensVerificados';
     DxDropDownBoxModule,
     DxListModule,
     DxPopupModule,
+    DxoRowDraggingModule,
   ],
   templateUrl: './avaliacao.component.html',
   styleUrl: './avaliacao.component.css',
@@ -52,9 +54,12 @@ export class AvaliacaoComponent {
 
   drawerAberto = false;
   popupVisivel = false;
+  popUpExcluirItem = false;
+  indexParaExcluir: number | null = null;
   agrupadorAtual = '';
   itensSelecionaveis: { descricao: string }[] = [];
   itensSelecionadosTemp: { descricao: string }[] = [];
+  itemSelecionadoExcluir: any = null;
 
   constructor(
     public menuService: MenuToolbarService,
@@ -162,12 +167,12 @@ export class AvaliacaoComponent {
     this.agrupadoresExpandidos[agrupadorNome] = true;
   }
 
-  rowDraggingConfig(agrupadorNome: string) {
-    return {
-      allowReordering: true,
-      onReorder: (e: any) => this.onReorderItem(agrupadorNome, e),
-    };
-  }
+  // rowDraggingConfig(agrupadorNome: string) {
+  //   return {
+  //     allowReordering: true,
+  //     onReorder: (e: any) => this.onReorderItem(agrupadorNome, e),
+  //   };
+  // }
 
   confirmarSelecaoItens() {
     // Cria um novo array com os itens selecionados
@@ -175,7 +180,7 @@ export class AvaliacaoComponent {
     // Substitui o array antigo
     this.agrupadoresSelecionados[this.agrupadorAtual] = novosItensSelecionados;
     // Força a detecção de mudança para atualizar MasterDetail
-    this.agrupadoresSelecionados = {...this.agrupadoresSelecionados};
+    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
 
     this.popupVisivel = false;
   }
@@ -220,25 +225,59 @@ export class AvaliacaoComponent {
 
   onReorderItem(agrupadorNome: string, e: any) {
     const lista = this.agrupadoresSelecionados[agrupadorNome];
+    if (!lista) return;
+
     const itemMovido = lista.splice(e.fromIndex, 1)[0];
     lista.splice(e.toIndex, 0, itemMovido);
+
+    this.agrupadoresSelecionados[agrupadorNome] = [...lista];
+    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
   }
+
+  botaoRemoverItem = [
+    {
+      hint: 'Remover',
+      icon: 'trash',
+      onClick: (e: any) => {
+        this.removerItemSelecionado(this.itemSelecionadoExcluir, e.row.data);
+        this.popUpExcluirItem = true;
+      },
+    },
+  ];
 
   removerItemSelecionado(agrupadorNome: string, item: { descricao: string }) {
     console.log(
       `Tentando remover item: ${item.descricao} do agrupador: ${agrupadorNome}`
     );
 
-    // Garante que o array exista e filtra o item
-    this.agrupadoresSelecionados[agrupadorNome] = this.agrupadoresSelecionados[
-      agrupadorNome
-    ].filter((i) => i.descricao !== item.descricao);
+    // Cria novo array filtrando item a ser removido
+    const newListAgrup = this.agrupadoresSelecionados[agrupadorNome].filter(
+      (i) => i.descricao !== item.descricao
+    );
 
-    // Opcional: Força a atualização da grade, se necessário
-    // this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
+    // Substitui o array antigo pelo novo
+    this.agrupadoresSelecionados[agrupadorNome] = newListAgrup;
+
+    // Força a detecção de mudança para atualizar a grade detalhe
+    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
   }
 
   changeState() {}
+
+  // Função para Confirmar Exclusão de Itens
+  confirmarExclusao() {
+    if (this.setorEditando) {
+      this.setorEditando.itens = this.setorEditando?.itens.filter(
+        (item: any) => item != this.itemSelecionadoExcluir
+      );
+    }
+    this.popUpExcluirItem = false;
+  }
+
+  fecharPopup(){
+    this.popUpExcluirItem = false;
+    this.indexParaExcluir = null;
+  }
 
   salvarAlteracoes() {
     if (!this.setorEditando) {

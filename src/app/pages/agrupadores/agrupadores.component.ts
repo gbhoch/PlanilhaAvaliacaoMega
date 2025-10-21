@@ -6,7 +6,7 @@ import {
   DxPopupModule,
   DxToolbarModule,
 } from 'devextreme-angular';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxiAlertModule, DxiItemModule } from 'devextreme-angular/ui/nested';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
@@ -135,6 +135,9 @@ export class AgrupadoresComponent {
       // Criação: adiciona ao array
       this.agrupadoresList.push({ ...this.agrupadorEditando });
     }
+
+    // if (this.agrupadorEditando === '')
+    //   alert('Nome do Agrupador não definido!');
 
     this.drawerAberto = false;
   }
