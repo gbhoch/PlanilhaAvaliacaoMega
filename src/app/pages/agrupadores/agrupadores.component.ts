@@ -96,6 +96,7 @@ export class AgrupadoresComponent {
     if (!agrupador) return;
 
     this.itensSelecionados = agrupador.itens || [];
+    this.selectedAgrupador = agrupador;
   }
 
   onCellDblClick(event: any): void {

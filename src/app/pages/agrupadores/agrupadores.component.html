@@ -1,53 +1,49 @@
 <div class="container-lg">
-  <dx-data-grid
-    id="dataGrid"
-    (onCellClick)="onCellClick($event)"
-    (onCellDblClick)="onCellDblClick($event)"
-    [dataSource]="agrupadoresList"
-    [showBorders]="true"
-    [showRowLines]="true"
-    [rowAlternationEnabled]="true"
-    height="100%"
-    width="100%"
-  >
-    <dxo-toolbar class="toolbar" id="toolbar">
-      <dxi-item location="before">
-        <div id="itemTitulo">CADASTRO DE AGRUPADORES</div>
-      </dxi-item>
-      <dxi-item>
-        <dx-button
-          icon="add"
-          class="btn-criar"
-          (click)="openDrawer()"
-          [height]="35"
-          width="35"
-        ></dx-button>
-      </dxi-item>
-    </dxo-toolbar>
-
-    <dxi-column alignment="center" dataField="nome" caption="Agrupadores">
-      <ng-template dxTemplate="cellTemplate" let-data="data">
-        <span class="cursor-pointer">{{ data.nome }}</span>
-      </ng-template>
-    </dxi-column>
-
-    <dxi-column
-      alignment="center"
-      dataField="itens"
-      caption="Itens"
-      [cellTemplate]="itensTemplate"
+  <div style="display: flex; gap: 15px; height: 100%">
+    <dx-data-grid
+      id="dataGrid"
+      height="100%"
+      (onCellClick)="onCellClick($event)"
+      (onCellDblClick)="onCellDblClick($event)"
+      [showBorders]="true"
+      [showRowLines]="true"
+      [dataSource]="agrupadoresList"
+      style="flex-basis: 50%"
     >
-      <ng-template dxTemplate="cellTemplate" let-data="data">
-        <span class="cursor-pointer">{{ data.item }}</span>
-      </ng-template>
-    </dxi-column>
+      <dxo-selection mode="single"></dxo-selection>
+      <dxo-toolbar class="toolbar" id="toolbar">
+        <dxi-item location="before">
+          <div id="itemTitulo">CADASTRO DE AGRUPADORES</div>
+        </dxi-item>
+        <dxi-item>
+          <dx-button
+            icon="add"
+            class="btn-criar"
+            (click)="openDrawer()"
+            [height]="35"
+            width="35"
+          ></dx-button>
+        </dxi-item>
+      </dxo-toolbar>
+      <dxi-column dataField="nome" caption="Agrupadores"></dxi-column>
+    </dx-data-grid>
 
-    <ng-template #itensTemplate let-data="data">
-      <span>{{ data.itens?.length ? data.itens.join(", ") : "-" }}</span>
-    </ng-template>
-
-    <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
-  </dx-data-grid>
+    <dx-data-grid
+      [dataSource]="itensSelecionados"
+      [showBorders]="true"
+      [showRowLines]="true"
+      style="flex-basis: 50%"
+    >
+      <dxo-toolbar>
+        <dxi-item location="before">
+          <div id="itemTitulo">
+            ITENS DO AGRUPADOR: {{ selectedAgrupador?.nome || "Nenhum" }}
+          </div>
+        </dxi-item>
+      </dxo-toolbar>
+      <dxi-column dataField="descricao" caption="Itens Verificados"></dxi-column>
+    </dx-data-grid>
+  </div>
 
   <!-- Drawer Agrupadores -->
   <div class="drawer" [class.open]="drawerAberto">
@@ -75,10 +71,11 @@
               rows="2"
               placeholder="Descrição..."
               style="
-              min-width: 250px;
-              min-height: 50px;
-              max-width: 500px;
-              max-height: 100px"
+                min-width: 250px;
+                min-height: 50px;
+                max-width: 500px;
+                max-height: 100px;
+              "
             ></textarea>
           </div>
 
@@ -121,7 +118,11 @@
               "
             >
               <dxi-column dataField="descricao" caption="Item" />
-              <dxi-column type="buttons" caption="Remover" [buttons]="botaoExcluir"></dxi-column>
+              <dxi-column
+                type="buttons"
+                caption="Remover"
+                [buttons]="botaoExcluir"
+              ></dxi-column>
             </dx-data-grid>
           </div>
         </div>

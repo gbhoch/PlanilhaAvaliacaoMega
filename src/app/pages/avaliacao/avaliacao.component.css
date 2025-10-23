@@ -118,6 +118,7 @@ body {
   border-radius: 4px;
   margin-top: 10px;
   width: 100%;
+  height: 80%;
 }
 
 /* Largura do Input do Agrupadores */
@@ -138,6 +139,10 @@ body {
   cursor: move;
   font-size: 18px;
   padding: 0 8px;
+}
+
+::ng-deep .dx-datagrid .dx-link{
+  color: #006b30; /* Cor botão de Excluir itens */
 }
 
 /* POPUP SELECT ITENS */

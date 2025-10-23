@@ -89,6 +89,10 @@ input[type=number] {
   -moz-appearance:textfield; /* Firefox */
 }
 
+::ng-deep .dx-datagrid .dx-link{
+  color: #006b30;
+}
+
 /* Pai dos botões confirmar / cancelar */
 .buttons-btn{
   margin: 15px;

@@ -25,8 +25,16 @@ export class SetoresService {
     const setores = this.setoresSubject.getValue();
     const index = setores.findIndex((s) => s.id === setor.id);
     if (index !== -1) {
-      setores[index] = { ...setor };
-      this.setoresSubject.next([...setores]);
+      const novaLista = [...setores];
+      novaLista[index] = { ...setor };
+      this.setoresSubject.next(novaLista);
     }
+  }
+
+  removerSetor(setor : SetorInterface){
+    const setores = this.setoresSubject.getValue();
+    const novaLista = setores.filter(s => s.id !== setor.id);
+
+    this.setoresSubject.next(novaLista);
   }
 }

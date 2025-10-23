@@ -401,3 +401,20 @@ input[type="number"] {
   justify-content: flex-start;
   z-index: 10;
 }
+
+
+::ng-deep .dx-datagrid .dx-row-focused {
+    background-color: #fce8cd !important;
+    color: #000;
+}
+
+/* Opcional: para o caso de a linha ainda estar "selecionada" */
+::ng-deep .dx-datagrid .dx-row-selected {
+    /* Cor de fundo para a linha quando selecionada, mas que perdeu o foco */
+    background-color: #ffedda !important; /* Exemplo: um tom ainda mais claro */
+}
+
+/* Opcional: Removendo borda pontilhada que aparece após o foco */
+::ng-deep .dx-datagrid .dx-row-focused.dx-row-selected .dx-data-row {
+    outline: none !important;
+}

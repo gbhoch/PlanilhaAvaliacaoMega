@@ -29,6 +29,9 @@
         <span class="cursor-pointer">{{ data.nome }}</span>
       </ng-template>
     </dxi-column>
+
+    <dxi-column type="buttons" caption="Remover" [buttons]="botaoExcluir">
+    </dxi-column>
   </dx-data-grid>
 
   <!-- Drawer Setores -->
@@ -57,10 +60,11 @@
               rows="4"
               placeholder="Descrição..."
               style="
-              min-width: 250px;
-              min-height: 50px;
-              max-width: 500px;
-              max-height: 100px"
+                min-width: 250px;
+                min-height: 50px;
+                max-width: 500px;
+                max-height: 100px;
+              "
             ></textarea>
           </div>
 
@@ -103,8 +107,7 @@
     </dx-popup>
 
     <!-- Botão de salvar alterações -->
-    <div class="drawer-footer"
-    style="gap: 15px;">
+    <div class="drawer-footer" style="gap: 15px">
       <button class="btn-confirmar" (click)="salvarAlteracoes()">
         Salvar Alterações
       </button>

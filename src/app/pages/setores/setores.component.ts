@@ -35,7 +35,7 @@ export class SetoresComponent {
   popupExcluirVisible = false;
 
   indexParaExcluir: number | null = null;
-
+  setorParaExcluir?: SetorInterface;
   selectedSetor: SetorInterface = {} as SetorInterface;
   drawerAberto = false;
 
@@ -108,7 +108,6 @@ export class SetoresComponent {
   }
 
   cancelarAlteracoes() {
-    // Apenas fecha o drawer e limpa, sem salvar nada
     this.fecharDrawer();
   }
 
@@ -119,10 +118,12 @@ export class SetoresComponent {
   }
 
   confirmarExclusao() {
-    if (this.setorEditando?.itens && this.indexParaExcluir !== null) {
-      this.setorEditando.itens.splice(this.indexParaExcluir, 1);
+    if(this.setorParaExcluir){
+      this.setoresService.removerSetor(this.setorParaExcluir);
+
+      this.setorParaExcluir = undefined;
+      this.fecharPopup();
     }
-    this.fecharPopup();
   }
 
   fecharPopup() {
@@ -139,7 +140,10 @@ export class SetoresComponent {
     {
       hint: 'Excluir',
       icon: 'trash',
-      onClick: (e: any) => this.abrirPopupConfirmacao(e.rowIndex),
+      onClick: (e: any) => {
+        this.setorParaExcluir = e.row.data;
+        this.popupExcluirVisible = true;
+      },
     },
   ];
 }
