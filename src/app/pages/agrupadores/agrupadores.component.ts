@@ -6,11 +6,12 @@ import {
   DxPopupModule,
   DxToolbarModule,
 } from 'devextreme-angular';
-import { DxiAlertModule, DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { Router } from '@angular/router';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-agrupadores',
@@ -122,25 +123,27 @@ export class AgrupadoresComponent {
   }
 
   salvarAlteracoes(): void {
-    if (!this.agrupadorEditando.nome) return;
-
-    if (this.modoEdicao) {
-      // Edição: atualiza no array
-      const index = this.agrupadoresList.findIndex(
-        (a) => a.nome === this.agrupadorEditando.nome
+    if (!this.agrupadorEditando || !this.agrupadorEditando.nome) {
+      notify(
+        {
+          message: 'Nome do Agrupador não definido!',
+          type: 'warning',
+          displayTime: 3000,
+          width: 300
+        },
+        { direction: 'up-stack', position: 'top center' }
       );
-      if (index !== -1) {
-        this.agrupadoresList[index] = { ...this.agrupadorEditando };
-      }
-    } else {
-      // Criação: adiciona ao array
-      this.agrupadoresList.push({ ...this.agrupadorEditando });
+      return;
     }
 
-    // if (this.agrupadorEditando === '')
-    //   alert('Nome do Agrupador não definido!');
+    if (this.modoEdicao) {
+      this.AgrupadoresService.updateAgrupador(this.agrupadorEditando);
+    } else {
+      this.AgrupadoresService.addAgrupador(this.agrupadorEditando);
+    }
 
     this.drawerAberto = false;
+    this.agrupadorEditando = null;
   }
 
   cancelarAlteracoes(): void {
@@ -179,6 +182,14 @@ export class AgrupadoresComponent {
     this.popupExcluirVisible = true;
   }
 
+  abrirEdicao(data: any): void {
+    if (data) {
+      this.agrupadorEditando = JSON.parse(JSON.stringify(data));
+      this.modoEdicao = true;
+      this.drawerAberto = true;
+    }
+  }
+
   botaoExcluir = [
     {
       hint: 'Excluir',
@@ -186,6 +197,16 @@ export class AgrupadoresComponent {
       onClick: (e: any) => {
         this.itemSelecionadoParaExcluir = e.row.data;
         this.popupExcluirVisible = true;
+      },
+    },
+  ];
+
+  botaoEditar = [
+    {
+      hint: 'Editar',
+      icon: 'edit',
+      onClick: (e: any) => {
+        this.abrirEdicao(e.row.data);
       },
     },
   ];

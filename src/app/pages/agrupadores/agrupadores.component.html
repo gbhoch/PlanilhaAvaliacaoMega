@@ -26,6 +26,7 @@
         </dxi-item>
       </dxo-toolbar>
       <dxi-column dataField="nome" caption="Agrupadores"></dxi-column>
+      <dxi-column caption="Editar" type="buttons" [buttons]="botaoEditar"></dxi-column>
     </dx-data-grid>
 
     <dx-data-grid
@@ -41,7 +42,10 @@
           </div>
         </dxi-item>
       </dxo-toolbar>
-      <dxi-column dataField="descricao" caption="Itens Verificados"></dxi-column>
+      <dxi-column
+        dataField="descricao"
+        caption="Itens Verificados"
+      ></dxi-column>
     </dx-data-grid>
   </div>
 

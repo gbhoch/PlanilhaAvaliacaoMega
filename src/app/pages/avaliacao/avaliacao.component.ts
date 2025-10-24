@@ -262,8 +262,6 @@ export class AvaliacaoComponent {
     this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
   }
 
-  changeState() {}
-
   // Função para Confirmar Exclusão de Itens
   confirmarExclusao() {
     if (this.setorEditando) {
@@ -299,7 +297,7 @@ export class AvaliacaoComponent {
 
       console.log('Setor atualizado e salvo:', this.setoresList[index]);
     } else {
-      // Se for um novo setor, você adicionaria ele à lista aqui.
+      // Se for um novo setor, adicionaria ele à lista aqui.
       console.warn(
         'Setor não encontrado para atualização. Isso deveria ser um novo setor?'
       );

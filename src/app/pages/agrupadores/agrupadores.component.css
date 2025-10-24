@@ -347,6 +347,16 @@ input[type="number"] {
   color: #006f32;
 }
 
+::ng-deep .dx-datagrid .dx-link{    /* Cor botão editar */
+  color: #006f32
+}
+
+::ng-deep .dx-toast-warning { /* Cor de Fundo do Warning */
+    background-color: #ffc61a !important;
+    /* Borda para destaque */
+    /* border: 1px solid #ffcc33 !important; */
+}
+
 .btn-trash {
   margin-left: 10px;
   background: none;
