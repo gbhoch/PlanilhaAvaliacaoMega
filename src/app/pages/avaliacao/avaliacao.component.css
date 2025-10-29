@@ -156,6 +156,10 @@ body {
   padding: 10px 0;
 }
 
+::ng-deep .dx-checkbox-checked .dx-checkbox-icon{
+  color:#00843d
+}
+
 .popup-footer {
   display: flex;
   justify-content: flex-end;

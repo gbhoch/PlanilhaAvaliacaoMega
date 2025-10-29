@@ -1,4 +1,4 @@
 export interface ItemAvaliacaoInterface{
-  //id : number,
+  id : number,
   descricao : string
 }

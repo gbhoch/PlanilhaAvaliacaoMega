@@ -1,3 +1,4 @@
+import { Data } from 'devextreme-angular/common';
 import { ItensVerificadosService } from './../../services/itens-verificados.service';
 import { SetoresService } from './../../services/setores.service';
 import { planilhaInterface } from '../../models/interfaces/planilha.interface';
@@ -18,10 +19,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuToolbarService } from '../../services';
 import { AgrupadoresComponent } from '../agrupadores/agrupadores.component';
-import { AgrupadoresService } from '../../services/agrupadores.service'; // já deve existir
+import { AgrupadoresService } from '../../services/agrupadores.service';
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { ItensVerificados } from '../../models/ItensVerificados';
-import { DxoRowDraggingModule } from 'devextreme-angular/ui/nested';
 
 @Component({
   selector: 'app-avaliacao',
@@ -36,12 +36,15 @@ import { DxoRowDraggingModule } from 'devextreme-angular/ui/nested';
     DxDropDownBoxModule,
     DxListModule,
     DxPopupModule,
-    DxoRowDraggingModule,
   ],
   templateUrl: './avaliacao.component.html',
   styleUrl: './avaliacao.component.css',
 })
 export class AvaliacaoComponent {
+  private generateUniqueId(): number {
+    return Date.now() + Math.floor(Math.random() * 100000);
+  }
+
   [x: string]: any;
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
@@ -58,7 +61,7 @@ export class AvaliacaoComponent {
   indexParaExcluir: number | null = null;
   agrupadorAtual = '';
   itensSelecionaveis: { descricao: string }[] = [];
-  itensSelecionadosTemp: { descricao: string }[] = [];
+  itensSelecionadosTemp: { id?: number; descricao: string }[] = [];
   itemSelecionadoExcluir: any = null;
 
   constructor(
@@ -84,7 +87,7 @@ export class AvaliacaoComponent {
   }
 
   agrupadoresSelecionados: {
-    [agrupadorNome: string]: { descricao: string }[]; // nome do agrupador → itens selecionados
+    [agrupadorNome: string]: { id: number; descricao: string }[]; // nome do agrupador → itens selecionados
   } = {};
 
   agrupadoresExpandidos: {
@@ -95,24 +98,65 @@ export class AvaliacaoComponent {
     this.setorEditando = { ...setor }; // Faz cópia para edição
     this.drawerAberto = true;
 
-    // CARREGA o plano de avaliação salvo para a variável de edição
-    this.agrupadoresSelecionados = setor.planoDeAvaliacao
-      ? { ...setor.planoDeAvaliacao }
-      : {};
+    type PlanoBrutoItem = { descricao: string, id?: number };
+
+    const planoProcessado: {
+      [agrupadorNome: string]: ItemAvaliacaoInterface[];
+    } = {};
+
+    const planoBruto: {[key: string]: PlanoBrutoItem[]} = (setor.planoDeAvaliacao as any) || [];
+
+    if (planoBruto) {
+      for (const agrupadorNome in planoBruto) {
+        if (planoBruto.hasOwnProperty(agrupadorNome)) {
+          // Mapeia os itens do agrupador, garantindo que cada um tenha um ID
+          planoProcessado[agrupadorNome] = planoBruto[agrupadorNome].map(
+            (item : PlanoBrutoItem): ItemAvaliacaoInterface => {
+              return {
+                descricao: item.descricao,
+                id: item.id || this.generateUniqueId(),
+              };
+            }
+          );
+        }
+      }
+    }
+    this.agrupadoresSelecionados = planoProcessado;
   }
 
   onCellDblClick(evt: any) {
     const setor = evt.data;
     if (!setor) return;
 
+    type PlanoBrutoItem = {
+      map: any; descricao: string, id?: number
+    };
+
     this.setorEditando = { ...setor };
     this.modoEdicao = true;
     this.drawerAberto = true;
 
-    // CARREGA o plano de avaliação salvo aqui também
-    this.agrupadoresSelecionados = setor.planoDeAvaliacao
-      ? { ...setor.planoDeAvaliacao }
-      : {};
+    const planoProcessado: {
+      [agrupadorNome : string] : ItemAvaliacaoInterface[];
+    } = {};
+
+    const planoBruto: { [key: string]: PlanoBrutoItem} = (setor.planoDeAvaliacao as any) || [];
+
+    if(planoBruto){
+      for (const agrupadorNome in planoBruto){
+        if(planoBruto.hasOwnProperty(agrupadorNome)){
+          planoProcessado[agrupadorNome] = planoBruto[agrupadorNome].map(
+            (item: PlanoBrutoItem): ItemAvaliacaoInterface => {
+              return {
+                descricao : item.descricao,
+                id: item.id || this.generateUniqueId()
+              };
+            }
+          );
+        }
+      }
+    }
+    this.agrupadoresSelecionados = planoProcessado;
   }
 
   openPlanilhas() {
@@ -154,35 +198,46 @@ export class AvaliacaoComponent {
     );
 
     // 2. Popula a lista de itens disponíveis para seleção
-    // Nota: Dependendo da estrutura de 'itens', pode ser necessário ajustar o map.
     this.itensSelecionaveis =
       agrupador?.itens?.map((i: any) => ({ descricao: i.descricao })) ?? [];
 
-    // 3. Popula a lista temporária com os itens JÁ SELECIONADOS para o checkbox
-    // Isso garante que os itens previamente selecionados apareçam marcados no popup
-    this.itensSelecionadosTemp =
-      this.agrupadoresSelecionados[agrupadorNome] || [];
+    const itensSalvos = this.agrupadoresSelecionados[agrupadorNome] || [];
+
+    this.itensSelecionadosTemp = [];
+    const descricoesSalvas = new Set(itensSalvos.map((i) => i.descricao));
+
+    this.itensSelecionadosTemp = this.itensSelecionaveis.filter((item) =>
+      descricoesSalvas.has(item.descricao)
+    );
 
     this.popupVisivel = true;
     this.agrupadoresExpandidos[agrupadorNome] = true;
   }
 
-  // rowDraggingConfig(agrupadorNome: string) {
-  //   return {
-  //     allowReordering: true,
-  //     onReorder: (e: any) => this.onReorderItem(agrupadorNome, e),
-  //   };
-  // }
-
   confirmarSelecaoItens() {
-    // Cria um novo array com os itens selecionados
-    const novosItensSelecionados = [...this.itensSelecionadosTemp];
-    // Substitui o array antigo
-    this.agrupadoresSelecionados[this.agrupadorAtual] = novosItensSelecionados;
-    // Força a detecção de mudança para atualizar MasterDetail
+    const itensAtuaisSalvos =
+      this.agrupadoresSelecionados[this.agrupadorAtual] || [];
+
+    const mapaIdsSalvos = new Map(
+      itensAtuaisSalvos.map((item) => [item.descricao, item.id])
+    );
+
+    const novosItensComId: { id: number; descricao: string }[] =
+      this.itensSelecionadosTemp.map((item) => {
+        const idSalvo = mapaIdsSalvos.get(item.descricao);
+
+        return {
+          descricao: item.descricao,
+          id: idSalvo || this.generateUniqueId(),
+        };
+      });
+
+    // 3. Salva a nova lista no agrupador
+    this.agrupadoresSelecionados[this.agrupadorAtual] = novosItensComId;
     this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
 
     this.popupVisivel = false;
+    this.itensSelecionadosTemp = []; // Limpa a lista temporária
   }
 
   atualizarAgrupadoresDataGrid() {
@@ -211,13 +266,15 @@ export class AvaliacaoComponent {
     ];
   }
 
-  getBotaoRemover(agrupadorNome: string) {
+  getBotaoRemover(agrupadorNome: string) {    /* getDetalhesButtons */
     return [
       {
         hint: 'Remover',
         icon: 'trash',
         onClick: (e: any) => {
-          this.removerItemSelecionado(agrupadorNome, e.row.data);
+          this.itemSelecionadoExcluir = e.row.data;
+          this.agrupadorAtual = agrupadorNome;
+          this.popUpExcluirItem = true;
         },
       },
     ];
@@ -230,29 +287,30 @@ export class AvaliacaoComponent {
     const itemMovido = lista.splice(e.fromIndex, 1)[0];
     lista.splice(e.toIndex, 0, itemMovido);
 
-    this.agrupadoresSelecionados[agrupadorNome] = [...lista];
-    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
+    this.agrupadoresSelecionados[agrupadorNome] = lista;
+    setTimeout(() => {
+      this.agrupadoresSelecionados = {...this.agrupadoresSelecionados};
+    }, 0);
   }
 
-  botaoRemoverItem = [
-    {
-      hint: 'Remover',
-      icon: 'trash',
-      onClick: (e: any) => {
-        this.removerItemSelecionado(this.itemSelecionadoExcluir, e.row.data);
-        this.popUpExcluirItem = true;
-      },
-    },
-  ];
+  // botaoRemoverItem = [
+  //   {
+  //     hint: 'Remover',
+  //     icon: 'trash',
+  //     onClick: (e: any) => {
+  //       this.removerItemSelecionado(this.itemSelecionadoExcluir, e.row.data);
+  //       this.popUpExcluirItem = true;
+  //     },
+  //   },
+  // ];
 
-  removerItemSelecionado(agrupadorNome: string, item: { descricao: string }) {
+  removerItemSelecionado(agrupadorNome: string, item: { id: number, descricao: string }) {
     console.log(
       `Tentando remover item: ${item.descricao} do agrupador: ${agrupadorNome}`
     );
 
-    // Cria novo array filtrando item a ser removido
     const newListAgrup = this.agrupadoresSelecionados[agrupadorNome].filter(
-      (i) => i.descricao !== item.descricao
+      (i) => i.id !== item.id
     );
 
     // Substitui o array antigo pelo novo
@@ -262,17 +320,17 @@ export class AvaliacaoComponent {
     this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
   }
 
-  // Função para Confirmar Exclusão de Itens
   confirmarExclusao() {
-    if (this.setorEditando) {
-      this.setorEditando.itens = this.setorEditando?.itens.filter(
-        (item: any) => item != this.itemSelecionadoExcluir
-      );
+    if (this.agrupadorAtual && this.itemSelecionadoExcluir){
+      this.removerItemSelecionado(this.agrupadorAtual, this.itemSelecionadoExcluir);
+
+      this.agrupadorAtual = '';
+      this.itemSelecionadoExcluir = null;
     }
     this.popUpExcluirItem = false;
   }
 
-  fecharPopup(){
+  fecharPopup() {
     this.popUpExcluirItem = false;
     this.indexParaExcluir = null;
   }

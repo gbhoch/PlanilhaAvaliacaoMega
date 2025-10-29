@@ -1,3 +1,5 @@
+import { ItemAvaliacaoInterface } from "./item-avaliacao.interface";
+
 export interface SetorInterface{
   id : number,
   nome : string
@@ -7,6 +9,6 @@ export interface SetorInterface{
   dataDeModificacao?: string;
   itens: { descricao: string }[];
   planoDeAvaliacao?: {
-     [agrupadorNome: string]: { descricao: string }[];
+     [agrupadorNome: string]: ItemAvaliacaoInterface[];
   }
 }

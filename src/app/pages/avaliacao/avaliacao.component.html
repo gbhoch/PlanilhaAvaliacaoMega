@@ -73,6 +73,7 @@
         <div *dxTemplate="let data of 'detailTemplate'">
           <dx-data-grid
             [dataSource]="agrupadoresSelecionados[data.data.nome] || []"
+            [keyExpr]="'id'"
             [showBorders]="true"
             [columnAutoWidth]="true"
             [rowAlternationEnabled]="true"
@@ -98,7 +99,7 @@
             <dxi-column
               type="buttons"
               caption="Remover"
-              [buttons]="botaoRemoverItem"
+              [buttons]="getBotaoRemover(data.data.nome)"
             ></dxi-column>
             <!-- <div *dxTemplate="let itemData of 'removerTemplate'">
               <dx-button
