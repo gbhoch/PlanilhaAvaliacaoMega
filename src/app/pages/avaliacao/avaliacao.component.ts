@@ -266,18 +266,19 @@ export class AvaliacaoComponent {
     ];
   }
 
-  getBotaoRemover(agrupadorNome: string) {    /* getDetalhesButtons */
-    return [
-      {
-        hint: 'Remover',
-        icon: 'trash',
-        onClick: (e: any) => {
-          this.itemSelecionadoExcluir = e.row.data;
-          this.agrupadorAtual = agrupadorNome;
-          this.popUpExcluirItem = true;
-        },
-      },
-    ];
+  getBotaoRemover(event: any) {    /* getDetalhesButtons */
+    console.log(event)
+    // return [
+    //   {
+    //     hint: 'Remover',
+    //     icon: 'trash',
+    //     onClick: (e: any) => {
+    //       this.itemSelecionadoExcluir = e.row.data;
+    //       this.agrupadorAtual = agrupadorNome;
+    //       this.popUpExcluirItem = true;
+    //     },
+    //   },
+    // ];
   }
 
   onReorderItem(agrupadorNome: string, e: any) {

@@ -82,6 +82,7 @@
             <dxo-row-dragging
               [allowReordering]="true"
               (onReorder)="onReorderItem(data.data.nome, $event)"
+              [showDragIcons]="true"
             ></dxo-row-dragging>
 
             <dxi-column
@@ -99,7 +100,7 @@
             <dxi-column
               type="buttons"
               caption="Remover"
-              [buttons]="getBotaoRemover(data.data.nome)"
+              [buttons]="getBotaoRemover"
             ></dxi-column>
             <!-- <div *dxTemplate="let itemData of 'removerTemplate'">
               <dx-button
