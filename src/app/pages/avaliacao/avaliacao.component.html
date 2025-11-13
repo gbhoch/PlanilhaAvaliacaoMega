@@ -55,6 +55,22 @@
         height="100%"
         [showBorders]="true"
       >
+        <dxo-row-dragging
+          [allowReordering]="true"
+          [showDragIcons]="true"
+          (onReorder)="onReorderAgrupador($event)"
+        ></dxo-row-dragging>
+
+        <dxi-column
+          caption="#"
+          [width]="50"
+          cellTemplate="agrupadorIndexTemplate"
+          [visibleIndex]="0"
+        ></dxi-column>
+        <div *dxTemplate="let data of 'agrupadorIndexTemplate'">
+          {{ getAgrupadorIndex(data.data) }};
+        </div>
+
         <dxi-column
           caption="Agrupadores"
           dataField="nome"
@@ -62,6 +78,7 @@
           [allowSorting]="true"
           [width]="'100%'"
           cellTemplate="agrupadorTemplate"
+          [visibleIndex]="1"
         >
         </dxi-column>
 
@@ -86,9 +103,19 @@
             ></dxo-row-dragging>
 
             <dxi-column
+              caption="#"
+              [width]="70"
+              cellTemplate="itemIndexTemplate"
+              [visibleIndex]="0"
+            ></dxi-column>
+            <div *dxTemplate="let data of 'itemIndexTemplate'">
+              {{ getItemIndex(data.data.nome, 'itemData.data') }};  <!-- Verifiicar se 'itemData.data' é com '' ou sem -->
+            </div>
+
+            <dxi-column
               dataField="descricao"
               caption="Item Selecionado"
-              [visibleIndex]="0"
+              [visibleIndex]="1"
             ></dxi-column>
 
             <!-- <dxi-column
@@ -100,7 +127,7 @@
             <dxi-column
               type="buttons"
               caption="Remover"
-              [buttons]="getBotaoRemover"
+              [buttons]="botaoRemover"
             ></dxi-column>
             <!-- <div *dxTemplate="let itemData of 'removerTemplate'">
               <dx-button

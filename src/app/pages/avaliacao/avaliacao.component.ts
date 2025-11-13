@@ -254,6 +254,24 @@ export class AvaliacaoComponent {
     }
   }
 
+  getAgrupadorIndex(data: any): string{
+    const index = this.agrupadoresList.findIndex(a => a.nome === data.nome);
+    return index !== -1 ? `${index + 1}.` : '';
+  }
+
+  getItemIndex(agrupadorNome : string, itemData: any): string{
+    const agrupadorIndex = this.agrupadoresList.findIndex(a => a.nome === agrupadorNome);
+
+    if(agrupadorIndex === -1){
+      return '';
+    }
+
+    const listaItens = this.agrupadoresSelecionados[agrupadorNome] || [];
+    const itemIndex = listaItens.findIndex(i => i.id === itemData.id);
+
+    return itemIndex !== -1 ? `${agrupadorIndex + 1}.${itemIndex + 1}` : '';
+  }
+
   getBotaoAdicionar() {
     return [
       {
@@ -266,20 +284,33 @@ export class AvaliacaoComponent {
     ];
   }
 
-  getBotaoRemover(event: any) {    /* getDetalhesButtons */
-    console.log(event)
-    // return [
-    //   {
-    //     hint: 'Remover',
-    //     icon: 'trash',
-    //     onClick: (e: any) => {
-    //       this.itemSelecionadoExcluir = e.row.data;
-    //       this.agrupadorAtual = agrupadorNome;
-    //       this.popUpExcluirItem = true;
-    //     },
-    //   },
-    // ];
+  get botaoRemover(): any{
+    return [
+      {
+        hint: 'Remover',
+        icon: 'trash',
+        onClick: (e: any) => {
+          this.itemSelecionadoExcluir = e.row.data;
+          console.error("Não é possível determinar o agrupadorName");
+        }
+      }
+    ]
   }
+
+  // getBotaoRemover(event: any) {    /* getDetalhesButtons */
+  //   console.log(event)
+  //   return [
+  //     {
+  //       hint: 'Remover',
+  //       icon: 'trash',
+  //       onClick: (e: any) => {
+  //         this.itemSelecionadoExcluir = e.row.data;
+  //         this.agrupadorAtual = agrupadorNome;
+  //         this.popUpExcluirItem = true;
+  //       },
+  //     },
+  //   ];
+  // }
 
   onReorderItem(agrupadorNome: string, e: any) {
     const lista = this.agrupadoresSelecionados[agrupadorNome];
@@ -292,6 +323,13 @@ export class AvaliacaoComponent {
     setTimeout(() => {
       this.agrupadoresSelecionados = {...this.agrupadoresSelecionados};
     }, 0);
+  }
+
+  onReorderAgrupador(e: any){
+    const agrupadorMovido = this.agrupadoresList.splice(e.fromIndex, 1) [0];
+    this.agrupadoresList.splice(e.toIndex, 0, agrupadorMovido);
+
+    this.agrupadoresList = [...this.agrupadoresList];
   }
 
   // botaoRemoverItem = [
