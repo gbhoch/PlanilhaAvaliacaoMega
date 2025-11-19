@@ -326,7 +326,7 @@ export class AvaliacaoComponent {
   }
 
   onReorderAgrupador(e: any){
-    const agrupadorMovido = this.agrupadoresList.splice(e.fromIndex, 1) [0];
+    const agrupadorMovido = this.agrupadoresList.splice(e.fromIndex, 1)[0];
     this.agrupadoresList.splice(e.toIndex, 0, agrupadorMovido);
 
     this.agrupadoresList = [...this.agrupadoresList];
