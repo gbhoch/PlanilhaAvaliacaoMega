@@ -58,7 +58,7 @@
         <dxo-row-dragging
           [allowReordering]="true"
           [showDragIcons]="true"
-          (onReorder)="onReorderAgrupador($event)"
+          [onReorder]= "agrupadoresReorderHandler"
         ></dxo-row-dragging>
 
         <dxi-column
@@ -68,7 +68,7 @@
           [visibleIndex]="0"
         ></dxi-column>
         <div *dxTemplate="let data of 'agrupadorIndexTemplate'">
-          {{ getAgrupadorIndex(data.data) }};
+          {{ getAgrupadorIndex(data.data) }}
         </div>
 
         <dxi-column
@@ -98,18 +98,18 @@
           >
             <dxo-row-dragging
               [allowReordering]="true"
-              (onReorder)="onReorderItem(data.data.nome, $event)"
+              [onReorder]="getItemReorderHandler(data.data.nome)"
               [showDragIcons]="true"
             ></dxo-row-dragging>
 
             <dxi-column
               caption="#"
-              [width]="70"
+              [width]="50"
               cellTemplate="itemIndexTemplate"
               [visibleIndex]="0"
             ></dxi-column>
-            <div *dxTemplate="let data of 'itemIndexTemplate'">
-              {{ getItemIndex(data.data.nome, "'itemData.data'") }};  <!-- Verifiicar se 'itemData.data' é com '' ou sem -->
+            <div *dxTemplate="let itemData of 'itemIndexTemplate'">
+              {{ getItemIndex(data.data.nome, itemData.data) }}  <!-- Verifiicar se 'itemData.data' é com '' ou sem -->
             </div>
 
             <dxi-column

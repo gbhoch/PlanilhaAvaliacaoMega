@@ -170,6 +170,20 @@ body {
   gap: 10px;
 }
 
+/* POP-UP EXCLUSÃO */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* padding: 16px; */
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
 
 /* FOOTER DRAWER */
 .drawer-footer {
