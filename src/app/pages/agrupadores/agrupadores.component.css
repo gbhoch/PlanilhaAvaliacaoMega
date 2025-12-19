@@ -15,7 +15,7 @@ body {
 }
 
 #itemTitulo {
-  color: #00843d;
+  color: #087d52;
   font-size: 15px;
   font-weight: 500;
   padding-left: 10px;
@@ -25,7 +25,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #00843d;
+  background-color: #087d52;
   color: white !important;
   border: none;
   border-radius: 8px;
@@ -208,7 +208,7 @@ input[type="number"] {
 
 .agrupador-inputs input:focus,
 .agrupador-inputs textarea:focus {
-  border-color: #00843d;
+  border-color: #087d52;
 }
 
 .agrupador-status {
@@ -229,8 +229,8 @@ input[type="number"] {
 
 .status-indicator .ativo {
   background-color: #d0f0da;
-  color: #00843d;
-  border: 1px solid #00843d;
+  color: #087d52;
+  border: 1px solid #087d52;
 }
 
 .status-indicator .inativo {
@@ -271,7 +271,7 @@ input[type="number"] {
 }
 
 .drawer-body textarea:focus {
-  border-color: /*#0078d4*/ #00843d;
+  border-color: /*#0078d4*/ #087d52;
   outline: none;
 }
 
@@ -293,13 +293,13 @@ input[type="number"] {
 }
 
 .cadastro-itens input:focus {
-  border-color: /*#0078d4*/ #00843d;
+  border-color: /*#0078d4*/ #087d52;
   outline: none;
 }
 
 .btn-add {
   padding: 8px 12px;
-  background-color: #00843d;
+  background-color: #087d52;
   color: white;
   border: none;
   border-radius: 4px;
@@ -344,11 +344,11 @@ input[type="number"] {
 }
 
 ::ng-deep .dx-icon-trash:before{    /* Cor botão de Excluir Itens */
-  color: #006f32;
+  color: #087d52;
 }
 
 ::ng-deep .dx-datagrid .dx-link{    /* Cor botão editar */
-  color: #006f32
+  color: #087d52
 }
 
 ::ng-deep .dx-toast-warning { /* Cor de Fundo do Warning */
@@ -391,7 +391,7 @@ input[type="number"] {
 
 .popup-input:focus {
   outline: none;
-  border-color: #00843d;
+  border-color: #087d52;
 }
 
 .popup-actions {

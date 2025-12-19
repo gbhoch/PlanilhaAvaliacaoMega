@@ -32,7 +32,7 @@
 #dataGrid{
   width: 100%;
   margin-top: 20px;
-  background-color: #00843d;
+  background-color: #087d52;
 }
 
 /* Pai dos campos Input */
@@ -94,7 +94,7 @@ input[type=number] {
   align-items: center;
   justify-content: center;
   background-color: white;
-  color: #00843d;
+  color: #087d52;
   border: none;
   border-radius: 2px;
   font-size: 20px;

@@ -45,7 +45,7 @@ span {
   display: flex;
   flex-direction: column;
   background-color: white;
-  color: #00843d;
+  color: #087d52;
   border: solid 1px #0000012f;
   border-radius: 12px;
   box-sizing: border-box;
@@ -58,7 +58,7 @@ span {
 
 /* Campos de entrada */
 .input-box {
-  border: 1px solid #00843d;
+  border: 1px solid #087d52;
   border-radius: 8px;
   padding: 5px;
   outline: none;
@@ -67,7 +67,8 @@ span {
 }
 
 .input-box:focus {
-  border-color: #006b30;
+  /* border-color: #006b30; */
+  border-color: #087d52;
 }
 
 .dx-button-text{

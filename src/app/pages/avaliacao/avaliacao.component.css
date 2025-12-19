@@ -16,7 +16,7 @@ body {
 }
 
 #itemTitulo {
-  color: #00843d;
+  color: #087d52;
   font-size: 15px;
   font-weight: 500;
   padding-left: 10px;
@@ -26,7 +26,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #00843d;
+  background-color: #087d52;
   color: white !important;
   border: none;
   border-radius: 8px;
@@ -38,7 +38,7 @@ body {
 }
 
 .btn-criar:hover {
-  background-color: #006b30;
+  background-color: #23834e;
 }
 
 .btn-criar:active {
@@ -127,7 +127,7 @@ body {
 
 /* Botão de adicionar Itens no Agrupador */
 .dx-button-mode-contained{
-  background-color: #006b30;
+  background-color: #087d52;
   height: 35px;
   width: 35px;
   justify-content: center;
@@ -135,7 +135,7 @@ body {
 }
 
 .dx-button-mode-contained.dx-button-default.dx-state-hover{
-  background-color: #00843d;
+  background-color: #23834e;
 }
 
 .drag-icon {
@@ -145,7 +145,8 @@ body {
 }
 
 ::ng-deep .dx-datagrid .dx-link{
-  color: #006b30; /* Cor botão de Excluir itens */
+  /* color: #006b30; Cor botão de Excluir itens */
+  color: #087d52;
 }
 
 /* POPUP SELECT ITENS */
@@ -157,7 +158,7 @@ body {
 }
 
 ::ng-deep .dx-checkbox-checked .dx-checkbox-icon{
-  color:#00843d
+  color:#087d52
 }
 
 .popup-footer {

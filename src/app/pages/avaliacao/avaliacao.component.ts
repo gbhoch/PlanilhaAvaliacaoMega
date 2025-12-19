@@ -1,11 +1,8 @@
-import { Data } from 'devextreme-angular/common';
 import { ItensVerificadosService } from './../../services/itens-verificados.service';
 import { SetoresService } from './../../services/setores.service';
-import { planilhaInterface } from '../../models/interfaces/planilha.interface';
 import { Component } from '@angular/core';
 import {
   DxDataGridModule,
-  DxToolbarModule,
   DxButtonModule,
   DxDrawerModule,
   DxTemplateModule,
@@ -18,7 +15,6 @@ import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuToolbarService } from '../../services';
-import { AgrupadoresComponent } from '../agrupadores/agrupadores.component';
 import { AgrupadoresService } from '../../services/agrupadores.service';
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { ItensVerificados } from '../../models/ItensVerificados';
@@ -69,7 +65,7 @@ export class AvaliacaoComponent {
   itemSelecionadoExcluir: any = null;
 
   agrupadoresReorderHandler = this.onReorderFactory({ layer: 'agrupadores'});
-  private itemReoderHandlers = new Map<string, (e: any) => void>();
+  private itemReorderHandlers = new Map<string, (e: any) => void>();
 
 
   constructor(
@@ -78,9 +74,6 @@ export class AvaliacaoComponent {
     private setoresService: SetoresService,
     public itensVerifService: ItensVerificadosService
   ) {
-    // this.onReorderAgrupador = this.onReorderAgrupador.bind(this);
-    // this.onReorderItem = this.onReorderItem.bind(this);
-
     this.setoresService.getSetores().subscribe((setores) => {
       console.log('Setores carregador:', setores);
       this.setoresList = setores;
@@ -314,30 +307,16 @@ export class AvaliacaoComponent {
     ];
   }
 
-  // getBotaoRemover(event: any) {    /* getDetalhesButtons */
-  //   console.log(event)
-  //   return [
-  //     {
-  //       hint: 'Remover',
-  //       icon: 'trash',
-  //       onClick: (e: any) => {
-  //         this.itemSelecionadoExcluir = e.row.data;
-  //         this.agrupadorAtual = agrupadorNome;
-  //         this.popUpExcluirItem = true;
-  //       },
-  //     },
-  //   ];
-  // }
-
   getItemReorderHandler(agrupadorNome: string){
-    let h = this.itemReoderHandlers.get(agrupadorNome);
+    let h = this.itemReorderHandlers.get(agrupadorNome);
     if (!h) {
       h = this.onReorderFactory({ layer: 'itens', agrupadorNome});
-      this.itemReoderHandlers.set(agrupadorNome, h);
+      this.itemReorderHandlers.set(agrupadorNome, h);
     }
     return h;
   }
 
+  /* Função para reordernar Agrupadores e Itens */
   onReorderFactory(ctx: ReorderCtx) {
     return (e: any) => {
       if (ctx.layer === 'agrupadores') {
@@ -360,47 +339,6 @@ export class AvaliacaoComponent {
       this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
     };
   }
-
-  // onReorderItem(agrupadorNome: string) {
-  //   console.log(this.agrupadoresSelecionados);
-  //   const lista = this.agrupadoresSelecionados[agrupadorNome];
-  //   if (!lista) return;
-
-  //   return (e: any) => {
-  //     const itemMovido = lista.splice(e.fromIndex, 1)[0];
-  //     lista.splice(e.toIndex, 0, itemMovido);
-
-  //     this.agrupadoresSelecionados[agrupadorNome] = [...lista];
-
-  //     this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
-  //     console.log(this.agrupadoresSelecionados);
-
-  //     return this.agrupadoresSelecionados
-  //   };
-  // setTimeout(() => {
-  //   this.agrupadoresSelecionados = {...this.agrupadoresSelecionados};
-  // }, 0);
-  // }
-
-  // onReorderAgrupador(e: any) {
-  //   console.log(this.agrupadoresList);
-  //   const agrupadorMovido = this.agrupadoresList.splice(e.fromIndex, 1)[0];
-  //   this.agrupadoresList.splice(e.toIndex, 0, agrupadorMovido);
-
-  //   this.agrupadoresList = [...this.agrupadoresList];
-  //   console.log(this.agrupadoresList);
-  // }
-
-  // botaoRemoverItem = [
-  //   {
-  //     hint: 'Remover',
-  //     icon: 'trash',
-  //     onClick: (e: any) => {
-  //       this.removerItemSelecionado(this.itemSelecionadoExcluir, e.row.data);
-  //       this.popUpExcluirItem = true;
-  //     },
-  //   },
-  // ];
 
   removerItemSelecionado(
     agrupadorNome: string,

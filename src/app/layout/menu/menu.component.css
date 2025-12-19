@@ -12,7 +12,8 @@ body {
 }
 
 ::ng-deep .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-state-focused{
-  background-color: #019443 !important; /* Cor que fica quando a opção está selecionada! */
+  /* background-color: #019443 !important; Cor que fica quando a opção está selecionada! */
+  background-color: #087d52 !important;
 }
 
 /* Evita que a opção selecionada fique com a cor preta */
