@@ -6,6 +6,7 @@ import { AgrupadoresComponent } from './pages/agrupadores/agrupadores.component'
 import { LayoutComponent } from './layout/layout.component';
 import { SetoresComponent } from './pages/setores/setores.component';
 import { AvaliacaoComponent } from './pages/avaliacao/avaliacao.component';
+import { AvaliarPlanilhaComponent } from './pages/avaliar-planilha/avaliar-planilha.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,10 @@ export const routes: Routes = [
     {
       path : 'planilha',
       component : AvaliacaoComponent //Tela da Planilha com Agrupadores e Itens
+    },
+    {
+     path : 'avaliar',
+     component : AvaliarPlanilhaComponent //Tela de Avaliar Planilha - Planilha Montada
     }]
   },
 ];

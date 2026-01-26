@@ -1,0 +1,36 @@
+<div class="container-lg">
+  <header style="display: flex; gap: 10px;">
+    <h3 class="titulo" style="display:flex; align-items:center">PLANILHAS DOS SETORES</h3>
+    <div class="input-box" style="display: flex">
+      <input class="input-text" type="text" placeholder="Nome do Avaliador" />
+      <input class="input-text" type="datetime" name="Data" id="Data" />
+      <dx-drop-down-box>
+        <dx-list></dx-list>
+      </dx-drop-down-box>
+    </div>
+    <div class="header-buttons">
+      <dx-button
+        icon="check"
+        class="start-button"
+        height="30"
+        width="30"
+      ></dx-button>
+      <dx-button
+        icon="close"
+        class="close-button"
+        height="30"
+        width="30"
+      ></dx-button>
+      <dx-button
+        icon="cursorprohibition"
+        class="cancel-button"
+        height="30"
+        width="30"
+      ></dx-button>
+    </div>
+  </header>
+
+  <body>
+    <dx-data-grid></dx-data-grid>
+  </body>
+</div>

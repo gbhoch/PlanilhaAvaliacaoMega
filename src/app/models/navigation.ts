@@ -24,5 +24,11 @@ export const navigation : MenuItem[] = [
     text: "Planilha de Avaliação",
     icon: "",
     path: "planilha" //Tela da Planilha com Agrupadores e Itens
+  },
+  {
+    id: 5,
+    text: "TEST",
+    icon: "",
+    path: "avaliar" //Tela de Avaliação da Planilha Completa
   }
 ]
