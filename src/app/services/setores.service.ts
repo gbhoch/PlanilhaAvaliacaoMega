@@ -1,6 +1,6 @@
+import { SetorInterface } from './../models/interfaces/setores.interface';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { SetorInterface } from '../models/interfaces/setores.interface';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -31,9 +31,11 @@ export class SetoresService {
       setores.length > 0 ? Math.max(...setores.map((s) => s.id)) + 1 : 1;
     const setorComId = { ...setor, id: novoId };
 
-    this.storage.SetItem(this.storageKey, [...setores, setorComId]).subscribe((rst : any) => {
-      this.setoresSubject.next(rst)
-    });
+    return this.storage.SetItem(this.storageKey, [...setores, setorComId])
+    .pipe(map((rst => {
+      this.setoresSubject.next(rst);
+      return rst
+    })));
   }
 
   updateSetor(setor: SetorInterface) {

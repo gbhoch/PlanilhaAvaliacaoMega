@@ -9,7 +9,7 @@ export class StorageService {
 
   constructor() { }
 
-  public SetItem(key: string, value : object) : Observable<object>{
+  public SetItem<T>(key: string, value : T) : Observable<T>{
     window.localStorage.setItem(key, JSON.stringify(value));
     return of(value);
   }

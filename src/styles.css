@@ -40,7 +40,14 @@ button:hover{
   opacity: 1;
 }
 
-/* PRIMARY COLOR = 087d52 || outras oções -> #34855b, rgb(0, 135, 81)
+/*
+  Principal fonte VSCode = Cascadia Code PL, Consolas, 'Courier New', monospace // Consolas, 'Courier New', monospace
+  Sugestão = Twilio Sans Mono / Space MOno (Google) / https://www.programmingfonts.org/#twilio-sans-mono
+  Usando = JetBrainsMono NF Regular
+
+
+
+  PRIMARY COLOR = 087d52 || outras oções -> #34855b, rgb(0, 135, 81)
   SECUNDARY =
   HOVER = 23834e
 */

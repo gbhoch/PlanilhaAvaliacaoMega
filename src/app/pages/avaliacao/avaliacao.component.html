@@ -58,7 +58,7 @@
         <dxo-row-dragging
           [allowReordering]="true"
           [showDragIcons]="true"
-          [onReorder]= "agrupadoresReorderHandler"
+          [onReorder]="agrupadoresReorderHandler"
         ></dxo-row-dragging>
 
         <dxi-column
@@ -89,8 +89,8 @@
 
         <div *dxTemplate="let data of 'detailTemplate'">
           <dx-data-grid
-            [dataSource]="agrupadoresSelecionados[data.data.nome] || []"
-            [keyExpr]="'id'"
+            [dataSource] = "data.data.itens"
+            keyExpr="id"
             [showBorders]="true"
             [columnAutoWidth]="true"
             [rowAlternationEnabled]="true"
@@ -98,7 +98,7 @@
           >
             <dxo-row-dragging
               [allowReordering]="true"
-              [onReorder]="getItemReorderHandler(data.data.nome)"
+              (onReorder)="onReorderItens($event, data.data)"
               [showDragIcons]="true"
             ></dxo-row-dragging>
 
@@ -109,7 +109,8 @@
               [visibleIndex]="0"
             ></dxi-column>
             <div *dxTemplate="let itemData of 'itemIndexTemplate'">
-              {{ getItemIndex(data.data.nome, itemData.data) }}  <!-- Verifiicar se 'itemData.data' é com '' ou sem -->
+              {{ getItemIndex(data.data.nome, itemData.data) }}
+              <!-- Verifiicar se 'itemData.data' é com '' ou sem -->
             </div>
 
             <dxi-column
@@ -136,9 +137,9 @@
                 (onClick)="
                   itemSelecionadoExcluir = itemData.data;
                   agrupadorAtual = data.data.nome;
-                  popUpExcluirItem = true;
+                  popUpExcluirItem = true
                 "
-                style="margin-left: 14px;"
+                style="margin-left: 14px"
               ></dx-button>
             </div>
           </dx-data-grid>
@@ -171,6 +172,18 @@
     </div>
 
     <!-- Popup para selecionar itens -->
+
+    <!-- <dx-data-grid
+      [dataSource]="itensSelecionaveis"
+      keyExpr="id"
+      [selectedRowKeys]="itensSelecionadosTemp.map(i => i.id)"
+      (onSelectionChanged)="onItensSelectionChanged($event)"
+    >
+      <dxo-selection mode="multiple"></dxo-selection>
+
+      <dxi-column dataField="descricao" caption="Item"></dxi-column>
+    </dx-data-grid> -->
+
     <dx-popup
       [(visible)]="popupVisivel"
       width="50%"

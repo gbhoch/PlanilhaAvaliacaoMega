@@ -16,6 +16,13 @@
     background-color: #087d52;
   }
 
+  .dx-toolbar-before{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+  }
+
   .dx-button-mode-contained {
     .dx-icon {
       margin: 5px;

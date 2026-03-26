@@ -1,5 +1,5 @@
 import { SetoresService } from './../../services/setores.service';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   DxButtonModule,
@@ -8,6 +8,7 @@ import {
 } from 'devextreme-angular';
 import { SetorInterface } from '../../models/interfaces/setores.interface';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-setores',
@@ -22,9 +23,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './setores.component.html',
   styleUrl: './setores.component.css',
 })
-export class SetoresComponent {
+export class SetoresComponent implements OnDestroy {
   setoresList: SetorInterface[] = [];
   listaDataSource: any;
+  subs: Subscription[] = [];
 
   novoSetor: string = '';
   novoSetorNome: string = '';
@@ -44,14 +46,18 @@ export class SetoresComponent {
       this.setoresList = setores;
     });
   }
+  ngOnDestroy(): void {
+    this.subs.forEach((s) => s.unsubscribe());
+  }
 
   openDrawer() {
     this.setorEditando = {
-      id: 1,
+      id: Date.now(),
       nome: '',
       descricao: '',
       ativo: true,
       itens: [],
+      planoDeAvaliacao: [],
     };
     this.isNovoSetor = true;
     this.drawerAberto = true;
@@ -81,10 +87,11 @@ export class SetoresComponent {
       this.setoresList = [
         ...this.setoresList,
         {
-          id: 1,
+          id: Date.now(),
           nome: this.novoSetorNome.trim(),
           itens: [],
           ativo: false,
+          planoDeAvaliacao: []
         },
       ];
     }
@@ -99,7 +106,12 @@ export class SetoresComponent {
     if (!this.setorEditando) return;
 
     if (this.isNovoSetor) {
-      this.setoresService.addSetor(this.setorEditando); // ← Adiciona novo
+      this.subs.push(
+        this.setoresService
+          .addSetor(this.setorEditando)
+          .subscribe((rst: any) => {
+          }),
+      ); // ← Adiciona novo
     } else {
       this.setoresService.updateSetor(this.setorEditando); // ← Atualiza existente
     }
@@ -118,7 +130,7 @@ export class SetoresComponent {
   }
 
   confirmarExclusao() {
-    if(this.setorParaExcluir){
+    if (this.setorParaExcluir) {
       this.setoresService.removerSetor(this.setorParaExcluir);
 
       this.setorParaExcluir = undefined;

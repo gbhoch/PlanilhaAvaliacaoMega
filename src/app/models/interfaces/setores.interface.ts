@@ -1,4 +1,4 @@
-import { ItemAvaliacaoInterface } from "./item-avaliacao.interface";
+import { SensoInterface } from "./senso.interface";
 
 export interface SetorInterface{
   id : number,
@@ -8,7 +8,5 @@ export interface SetorInterface{
   dataDeCriacao?: string;
   dataDeModificacao?: string;
   itens: { descricao: string }[];
-  planoDeAvaliacao?: {
-     [agrupadorNome: string]: ItemAvaliacaoInterface[];
-  }
+  planoDeAvaliacao: SensoInterface [];
 }

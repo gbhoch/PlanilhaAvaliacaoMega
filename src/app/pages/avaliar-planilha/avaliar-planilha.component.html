@@ -1,29 +1,33 @@
 <div class="container-lg">
-  <header style="display: flex; gap: 10px;">
-    <h3 class="titulo" style="display:flex; align-items:center">PLANILHAS DOS SETORES</h3>
+  <header style="display: flex; gap: 10px; justify-content: space-between">
+    <h3 class="titulo" style="display: flex; align-items: center">
+      PLANILHAS SETORES
+    </h3>
     <div class="input-box" style="display: flex">
       <input class="input-text" type="text" placeholder="Nome do Avaliador" />
       <input class="input-text" type="datetime" name="Data" id="Data" />
-      <dx-drop-down-box>
-        <dx-list></dx-list>
-      </dx-drop-down-box>
+      <dx-select-box displayExpr="nome" valueExpr="id" [items]="planilhasList">
+      </dx-select-box>
     </div>
     <div class="header-buttons">
       <dx-button
         icon="check"
         class="start-button"
+        id="options-buttons"
         height="30"
         width="30"
       ></dx-button>
-      <dx-button
+      <!-- <dx-button
         icon="close"
         class="close-button"
+        id="options-buttons"
         height="30"
         width="30"
-      ></dx-button>
+      ></dx-button> -->
       <dx-button
         icon="cursorprohibition"
         class="cancel-button"
+        id="options-buttons"
         height="30"
         width="30"
       ></dx-button>
@@ -31,6 +35,19 @@
   </header>
 
   <body>
-    <dx-data-grid></dx-data-grid>
+    <dx-data-grid
+      [showBorders]="true"
+      [rowAlternationEnabled]="true"
+      height="90%"
+      width="100%"
+    >
+      <dxi-data-grid-column
+      dataField="planilhasList"
+      [groupIndex]="0">
+
+      </dxi-data-grid-column>
+      <!-- <dxi-column dataField="Senso" groupIndex="0">
+      </dxi-column -->
+    ></dx-data-grid>
   </body>
 </div>

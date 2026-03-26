@@ -1,18 +1,26 @@
+import { SetorInterface } from './../../models/interfaces/setores.interface';
 import { Component } from '@angular/core';
-import { DxButtonGroupModule, DxButtonModule, DxDataGridModule, DxDropDownBoxModule, DxListModule } from 'devextreme-angular';
-import { AgrupadoresService } from '../../services/agrupadores.service';
+import { DxButtonModule, DxDataGridModule, DxDropDownBoxModule, DxListModule, DxSelectBoxModule } from 'devextreme-angular';
+import { SetoresService } from '../../services/setores.service';
 
 @Component({
   selector: 'avaliar-planilha',
   standalone: true,
-  imports: [DxDropDownBoxModule, DxListModule, DxDataGridModule, DxButtonModule],
+  imports: [ DxListModule, DxDataGridModule, DxButtonModule, DxSelectBoxModule],
   templateUrl: './avaliar-planilha.component.html',
   styleUrl: './avaliar-planilha.component.css'
 })
 export class AvaliarPlanilhaComponent {
 
+  planilhasList : SetorInterface[] = [];
+
   constructor(
-    private listaAgrup : AgrupadoresService
-  ) {}
+    private setoresService : SetoresService
+  ) {
+    this.setoresService.getSetores().subscribe((planilhas) => {
+      console.log("Planilhas", planilhas);
+      this.planilhasList = planilhas
+    })
+  }
 
 }

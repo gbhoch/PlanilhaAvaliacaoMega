@@ -1,3 +1,5 @@
+import { SensoInterface } from './../../models/interfaces/senso.interface';
+import { AgrupadoresService } from './../../services/agrupadores.service';
 import { ItensVerificadosService } from './../../services/itens-verificados.service';
 import { SetoresService } from './../../services/setores.service';
 import { Component } from '@angular/core';
@@ -11,13 +13,11 @@ import {
   DxPopupModule,
 } from 'devextreme-angular';
 import { SetorInterface } from '../../models/interfaces/setores.interface';
-import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuToolbarService } from '../../services';
-import { AgrupadoresService } from '../../services/agrupadores.service';
-import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { ItensVerificados } from '../../models/ItensVerificados';
+import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 
 type ReorderCtx =
   | { layer: 'agrupadores' }
@@ -49,7 +49,8 @@ export class AvaliacaoComponent {
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
   itensList: ItensVerificados[] = []; // Interafce de Itens Verificados
-  agrupadoresDataGrid: { agrupador: string; descricao: string }[] = [];
+
+  agrupadoresMap = new Map<string, SensoInterface>();
 
   isNovaPlanilha = false;
   setorEditando?: SetorInterface;
@@ -60,19 +61,15 @@ export class AvaliacaoComponent {
   popUpExcluirItem = false;
   indexParaExcluir: number | null = null;
   agrupadorAtual = '';
-  itensSelecionaveis: { descricao: string }[] = [];
-  itensSelecionadosTemp: { id?: number; descricao: string }[] = [];
+  itensSelecionaveis: ItemAvaliacaoInterface[] = [];
+  itensSelecionadosTemp: ItemAvaliacaoInterface[] = [];
   itemSelecionadoExcluir: any = null;
-
-  agrupadoresReorderHandler = this.onReorderFactory({ layer: 'agrupadores'});
-  private itemReorderHandlers = new Map<string, (e: any) => void>();
-
 
   constructor(
     public menuService: MenuToolbarService,
     private agrupadoresService: AgrupadoresService,
     private setoresService: SetoresService,
-    public itensVerifService: ItensVerificadosService
+    public itensVerifService: ItensVerificadosService,
   ) {
     this.setoresService.getSetores().subscribe((setores) => {
       console.log('Setores carregador:', setores);
@@ -90,81 +87,44 @@ export class AvaliacaoComponent {
     });
   }
 
-  agrupadoresSelecionados: {
-    [agrupadorNome: string]: { id: number; descricao: string }[]; // nome do agrupador → itens selecionados
-  } = {};
+  private atualizarMapaAgrupadores() {
+    this.agrupadoresMap.clear();
 
-  agrupadoresExpandidos: {
-    [agrupadorNome: string]: boolean;
-  } = {};
+    this.agrupadoresSelecionados.forEach((agrupador) => {
+      this.agrupadoresMap.set(agrupador.nome, agrupador);
+    })
+  }
+
+  agrupadoresSelecionados: SensoInterface[] = []; // nome do agrupador → itens selecionados
+
+  agrupadoresExpandidos: Record<string, boolean> = {};
 
   abrirDrawerSetor(setor: SetorInterface) {
     this.setorEditando = { ...setor }; // Faz cópia para edição
     this.drawerAberto = true;
 
-    type PlanoBrutoItem = { descricao: string; id?: number };
+    const planoProcessado: SensoInterface[] = setor.planoDeAvaliacao.map(
+      (agrupador) => ({
+        ...agrupador,
+        itens: (agrupador.itens || []).map((item) => ({
+          descricao: item.descricao,
+          id: item.id || this.generateUniqueId(),
+          ativo: item.ativo ?? false
+        }))
+      })
+    )
 
-    const planoProcessado: {
-      [agrupadorNome: string]: ItemAvaliacaoInterface[];
-    } = {};
-
-    const planoBruto: { [key: string]: PlanoBrutoItem[] } =
-      (setor.planoDeAvaliacao as any) || [];
-
-    if (planoBruto) {
-      for (const agrupadorNome in planoBruto) {
-        if (planoBruto.hasOwnProperty(agrupadorNome)) {
-          // Mapeia os itens do agrupador, garantindo que cada um tenha um ID
-          planoProcessado[agrupadorNome] = planoBruto[agrupadorNome].map(
-            (item: PlanoBrutoItem): ItemAvaliacaoInterface => {
-              return {
-                descricao: item.descricao,
-                id: item.id || this.generateUniqueId(),
-              };
-            }
-          );
-        }
-      }
-    }
     this.agrupadoresSelecionados = planoProcessado;
+    this.atualizarMapaAgrupadores();
   }
 
   onCellDblClick(evt: any) {
     const setor = evt.data;
     if (!setor) return;
 
-    type PlanoBrutoItem = {
-      map: any;
-      descricao: string;
-      id?: number;
-    };
-
-    this.setorEditando = { ...setor };
+    this.setorEditando = structuredClone(setor);
     this.modoEdicao = true;
     this.drawerAberto = true;
-
-    const planoProcessado: {
-      [agrupadorNome: string]: ItemAvaliacaoInterface[];
-    } = {};
-
-    const planoBruto: { [key: string]: PlanoBrutoItem } =
-      (setor.planoDeAvaliacao as any) || [];
-
-    if (planoBruto) {
-      for (const agrupadorNome in planoBruto) {
-        if (planoBruto.hasOwnProperty(agrupadorNome)) {
-          planoProcessado[agrupadorNome] = planoBruto[agrupadorNome].map(
-            (item: PlanoBrutoItem): ItemAvaliacaoInterface => {
-              return {
-                descricao: item.descricao,
-                id: item.id || this.generateUniqueId(),
-              };
-            }
-          );
-        }
-      }
-    }
-    this.agrupadoresSelecionados = planoProcessado;
   }
 
   openPlanilhas() {
@@ -175,16 +135,17 @@ export class AvaliacaoComponent {
       descricao: '',
       ativo: true,
       itens: [],
+      planoDeAvaliacao: []
     };
 
-    this.agrupadoresSelecionados = {};
+    this.agrupadoresSelecionados = []; /* ******************* */
 
     // Carrega agrupadores cadastrados dinamicamente
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
       console.log(
         'Agrupadores carregados na tela de avaliação:',
-        this.agrupadoresList
+        this.agrupadoresList,
       );
     });
 
@@ -197,69 +158,42 @@ export class AvaliacaoComponent {
     }
   }
 
+  onItemSelectionChanged(e: any) {
+    this.itensSelecionadosTemp = e.selectedRowsData;
+  }
+
   abrirSelecaoItens(agrupadorNome: string) {
     this.agrupadorAtual = agrupadorNome;
 
     // 1. Encontra o agrupador completo
     const agrupador = this.agrupadoresList.find(
-      (a) => a.nome === agrupadorNome
+      (a) => a.nome === agrupadorNome,
     );
 
-    // 2. Popula a lista de itens disponíveis para seleção
-    this.itensSelecionaveis =
-      agrupador?.itens?.map((i: any) => ({ descricao: i.descricao })) ?? [];
+    this.itensSelecionaveis = (agrupador?.itens ?? []).map(item => ({
+      ...item,
+      id: item.id || this.generateUniqueId()
+    }));
 
-    const itensSalvos = this.agrupadoresSelecionados[agrupadorNome] || [];
+    const agrupadoresSelecionados = this.agrupadoresMap.get(agrupadorNome);
 
-    this.itensSelecionadosTemp = [];
-    const descricoesSalvas = new Set(itensSalvos.map((i) => i.descricao));
-
-    this.itensSelecionadosTemp = this.itensSelecionaveis.filter((item) =>
-      descricoesSalvas.has(item.descricao)
-    );
-
+    this.itensSelecionadosTemp = agrupadoresSelecionados?.itens ?? [];
     this.popupVisivel = true;
-    this.agrupadoresExpandidos[agrupadorNome] = true;
   }
 
   confirmarSelecaoItens() {
-    const itensAtuaisSalvos =
-      this.agrupadoresSelecionados[this.agrupadorAtual] || [];
+    const agrupador = this.agrupadoresMap.get(this.agrupadorAtual);
 
-    const mapaIdsSalvos = new Map(
-      itensAtuaisSalvos.map((item) => [item.descricao, item.id])
-    );
-
-    const novosItensComId: { id: number; descricao: string }[] =
-      this.itensSelecionadosTemp.map((item) => {
-        const idSalvo = mapaIdsSalvos.get(item.descricao);
-
-        return {
-          descricao: item.descricao,
-          id: idSalvo || this.generateUniqueId(),
-        };
-      });
-
-    // 3. Salva a nova lista no agrupador
-    this.agrupadoresSelecionados[this.agrupadorAtual] = novosItensComId;
-    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
+    if (agrupador) {
+      agrupador.itens = this.itensSelecionadosTemp.map(item => ({
+        ...item,
+        id: item.id || this.generateUniqueId(),
+        ativo: true
+      }));
+    }
 
     this.popupVisivel = false;
-    this.itensSelecionadosTemp = []; // Limpa a lista temporária
-  }
-
-  atualizarAgrupadoresDataGrid() {
-    this.agrupadoresDataGrid = [];
-
-    for (const agrupador in this.agrupadoresSelecionados) {
-      const itens = this.agrupadoresSelecionados[agrupador];
-      itens.forEach((item) => {
-        this.agrupadoresDataGrid.push({
-          agrupador,
-          descricao: item.descricao,
-        });
-      });
-    }
+    this.itensSelecionadosTemp = []; /* Limpa a lista temporária */
   }
 
   getAgrupadorIndex(data: any): string {
@@ -267,17 +201,22 @@ export class AvaliacaoComponent {
     return index !== -1 ? `${index + 1}.` : '';
   }
 
-  getItemIndex(agrupadorNome: string, itemData: any): string {
+  getItemIndex(
+    agrupadorNome: string,
+    itemData: any
+  ): string {
+
     const agrupadorIndex = this.agrupadoresList.findIndex(
-      (a) => a.nome === agrupadorNome
+      a => a.nome === agrupadorNome,
     );
 
-    if (agrupadorIndex === -1) {
-      return '';
-    }
+    if (agrupadorIndex === -1) return '';
 
-    const listaItens = this.agrupadoresSelecionados[agrupadorNome] || [];
-    const itemIndex = listaItens.findIndex((i) => i.id === itemData.id);
+    const listaItens = this.agrupadoresMap.get(agrupadorNome)?.itens || [];
+
+    const itemIndex = listaItens.findIndex(
+      i => i.id === itemData.id
+    );
 
     return itemIndex !== -1 ? `${agrupadorIndex + 1}.${itemIndex + 1}` : '';
   }
@@ -307,63 +246,50 @@ export class AvaliacaoComponent {
     ];
   }
 
-  getItemReorderHandler(agrupadorNome: string){
-    let h = this.itemReorderHandlers.get(agrupadorNome);
-    if (!h) {
-      h = this.onReorderFactory({ layer: 'itens', agrupadorNome});
-      this.itemReorderHandlers.set(agrupadorNome, h);
-    }
-    return h;
+  agrupadoresReorderHandler = (e: any) => {
+    const lista = [...this.agrupadoresSelecionados];
+
+    const movido = lista.splice(e.toIndex, 1)[0];
+    lista.splice(e.toIndex, 0, movido);
+
+    this.agrupadoresSelecionados = lista;
+    this.atualizarMapaAgrupadores();
   }
 
-  /* Função para reordernar Agrupadores e Itens */
-  onReorderFactory(ctx: ReorderCtx) {
-    return (e: any) => {
-      if (ctx.layer === 'agrupadores') {
-        const arr = this.agrupadoresList;
-        const mov = arr.splice(e.fromIndex, 1)[0];
-        arr.splice(e.toIndex, 0, mov);
+  onReorderItens(e: any, agrupador: SensoInterface){
+    if (!agrupador.itens) return;
 
-        this.agrupadoresList = [...arr];
-        return;
-      }
+    const lista = [...agrupador.itens];
 
-      const nome = ctx.agrupadorNome;
-      const lista = this.agrupadoresSelecionados[nome];
-      if (!lista) return;
+    const movido = lista.splice(e.fromIndex, 1)[0];
+    lista.splice(e.toIndex, 0, movido);
 
-      const movido = lista.splice(e.fromIndex, 1)[0];
-      lista.splice(e.toIndex, 0, movido);
-
-      this.agrupadoresSelecionados[nome] = [...lista];
-      this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
-    };
+    agrupador.itens = lista;
   }
 
   removerItemSelecionado(
     agrupadorNome: string,
-    item: { id: number; descricao: string }
+    item: { id: number; descricao: string },
   ) {
-    console.log(
-      `Tentando remover item: ${item.descricao} do agrupador: ${agrupadorNome}`
-    );
 
-    const newListAgrup = this.agrupadoresSelecionados[agrupadorNome].filter(
+    const agrupador = this.agrupadoresMap.get(agrupadorNome);
+
+    if(!agrupador?.itens) return;
+
+    agrupador.itens = agrupador.itens.filter(
       (i) => i.id !== item.id
     );
 
-    // Substitui o array antigo pelo novo
-    this.agrupadoresSelecionados[agrupadorNome] = newListAgrup;
-
     // Força a detecção de mudança para atualizar a grade detalhe
-    this.agrupadoresSelecionados = { ...this.agrupadoresSelecionados };
+    this.agrupadoresSelecionados = [...this.agrupadoresSelecionados];
+    this.atualizarMapaAgrupadores();
   }
 
   confirmarExclusao() {
     if (this.agrupadorAtual && this.itemSelecionadoExcluir) {
       this.removerItemSelecionado(
         this.agrupadorAtual,
-        this.itemSelecionadoExcluir
+        this.itemSelecionadoExcluir,
       );
 
       this.agrupadorAtual = '';
@@ -388,7 +314,7 @@ export class AvaliacaoComponent {
 
     // Encontra o setor original na lista principal para atualizá-lo.
     const index = this.setoresList.findIndex(
-      (s) => s.id === this.setorEditando!.id
+      (s) => s.id === this.setorEditando!.id,
     );
 
     if (index !== -1) {
@@ -399,14 +325,15 @@ export class AvaliacaoComponent {
     } else {
       // Se for um novo setor, adicionaria ele à lista aqui.
       console.warn(
-        'Setor não encontrado para atualização. Isso deveria ser um novo setor?'
+        'Setor não encontrado para atualização. Isso deveria ser um novo setor?',
       );
     }
 
     this.drawerAberto = false;
 
     // Limpar o estado de edição
-    this.agrupadoresSelecionados = {};
+    this.agrupadoresSelecionados = [];
+    this.atualizarMapaAgrupadores();
     this.setorEditando = undefined;
   }
 

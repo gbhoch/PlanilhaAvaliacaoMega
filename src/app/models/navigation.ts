@@ -27,8 +27,8 @@ export const navigation : MenuItem[] = [
   },
   {
     id: 5,
-    text: "TEST",
+    text: "Avaliar",
     icon: "",
     path: "avaliar" //Tela de Avaliação da Planilha Completa
-  }
+  },
 ]
