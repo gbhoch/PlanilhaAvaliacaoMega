@@ -64,6 +64,7 @@ export class AvaliacaoComponent {
   itensSelecionaveis: ItemAvaliacaoInterface[] = [];
   itensSelecionadosTemp: ItemAvaliacaoInterface[] = [];
   itemSelecionadoExcluir: any = null;
+  itensDoAgrupadorMap: Record<string, ItemAvaliacaoInterface[]> = {};
 
   constructor(
     public menuService: MenuToolbarService,
@@ -89,9 +90,11 @@ export class AvaliacaoComponent {
 
   private atualizarMapaAgrupadores() {
     this.agrupadoresMap.clear();
+    this.itensDoAgrupadorMap = {};
 
     this.agrupadoresSelecionados.forEach((agrupador) => {
       this.agrupadoresMap.set(agrupador.nome, agrupador);
+      this.itensDoAgrupadorMap[agrupador.nome] = agrupador.itens ?? [];
     })
   }
 
@@ -192,8 +195,13 @@ export class AvaliacaoComponent {
       }));
     }
 
+    console.log("item");
+
     this.popupVisivel = false;
     this.itensSelecionadosTemp = []; /* Limpa a lista temporária */
+
+    this.agrupadoresSelecionados = [...this.agrupadoresSelecionados];
+    // this.atualizarMapaAgrupadores();
   }
 
   getAgrupadorIndex(data: any): string {
@@ -219,6 +227,10 @@ export class AvaliacaoComponent {
     );
 
     return itemIndex !== -1 ? `${agrupadorIndex + 1}.${itemIndex + 1}` : '';
+  }
+
+  getItensDoAgrupador(agrupadorNome : string): ItemAvaliacaoInterface[]{
+    return this.agrupadoresMap.get(agrupadorNome)?.itens ?? [];
   }
 
   getBotaoAdicionar() {

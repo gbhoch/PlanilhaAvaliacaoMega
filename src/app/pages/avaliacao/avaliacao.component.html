@@ -89,7 +89,7 @@
 
         <div *dxTemplate="let data of 'detailTemplate'">
           <dx-data-grid
-            [dataSource] = "data.data.itens"
+            [dataSource] = "itensDoAgrupadorMap[data.data.nome] || []"
             keyExpr="id"
             [showBorders]="true"
             [columnAutoWidth]="true"
