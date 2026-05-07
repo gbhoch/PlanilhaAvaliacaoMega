@@ -1,10 +1,14 @@
 <div class="container-lg">
-  <header style="display: flex; gap: 10px; justify-content: space-between">
-    <h3 class="titulo" style="display: flex; align-items: center">
-      PLANILHAS SETORES
-    </h3>
-    <div class="input-box" style="display: flex">
-      <input class="input-text" type="text" placeholder="Nome do Avaliador" />
+  <header style="display: flex; gap: 10px; justify-content: space-between; align-items: center;">
+    <h3 class="titulo">AVALIAR PLANILHA</h3>
+
+    <div class="input-box" style="display: flex; gap: 8px; align-items: center;">
+      <input
+        class="input-text"
+        type="text"
+        placeholder="Nome do Avaliador"
+        [(ngModel)]="nomeAvaliador"
+      />
       <dx-date-box
         [(value)]="dataAvaliacao"
         type="date"
@@ -12,30 +16,46 @@
         placeholder="Data da Avaliação"
         [showClearButton]="true"
         width="180"
-        ></dx-date-box>
+      ></dx-date-box>
       <dx-select-box
-      displayExpr="nome"
-      valueExpr="id"
-      [items]="planilhasList"
-      [(value)]="setorSelecionadoId"
-      (onValueChanged)="onSetorSelecionado($event)"
-      placeholder="Selecione um setor">
-      </dx-select-box>
+        displayExpr="nome"
+        valueExpr="id"
+        [items]="planilhasList"
+        [(value)]="setorSelecionadoId"
+        (onValueChanged)="onSetorSelecionado($event)"
+        placeholder="Selecione um setor"
+        width="200"
+      ></dx-select-box>
     </div>
-    <div class="header-buttons">
+
+    <div class="header-buttons" style="display: flex; gap: 8px;">
+      <!-- Histórico -->
       <dx-button
+        id="operator-btts"
+        icon="folder"
+        class="folder-button"
+        hint="Ver Avaliações Realizadas"
+        (onClick)="abrirHistorico()"
+        height="35" width="35"
+      ></dx-button>
+      <!-- Finalizar -->
+      <dx-button
+        id="operator-btts"
         icon="check"
         class="start-button"
-        id="options-buttons"
-        height="30"
-        width="30"
+        hint="Finalizar Avaliação"
+        (onClick)="abrirConfirmacao()"
+        [disabled]="!podeFinalizar()"
+        height="35" width="35"
       ></dx-button>
+      <!-- Cancelar -->
       <dx-button
+        id="operator-btts"
         icon="cursorprohibition"
         class="cancel-button"
-        id="options-buttons"
-        height="30"
-        width="30"
+        hint="Cancelar"
+        (onClick)="resetarFormulario()"
+        height="35" width="35"
       ></dx-button>
     </div>
   </header>
@@ -48,9 +68,164 @@
       height="90%"
       width="100%"
     >
-      <dxi-column dataField="agrupador" caption="Agrupador" [groupIndex]="0"></dxi-column>
-      <dxi-column dataField="item" caption="Item de Avaliação"></dxi-column
-      ></dx-data-grid
-    >
+      <!-- Agrupador com média -->
+      <dxi-column
+        dataField="agrupador"
+        caption="Agrupador"
+        [groupIndex]="0"
+        [groupCellTemplate]="'agrupadorTemplate'"
+      ></dxi-column>
+      <div *dxTemplate="let group of 'agrupadorTemplate'">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-right: 16px;">
+          <strong>{{ group.displayValue }}</strong>
+          <span style="color: #555; font-size: 13px;">
+            {{ getMediaAgrupador(group.displayValue) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Item -->
+      <dxi-column dataField="item" caption="Item de Avaliação"></dxi-column>
+
+      <!-- Nota -->
+      <dxi-column caption="Nota (0-5)" [width]="120" cellTemplate="notaTemplate" alignment="center"></dxi-column>
+      <div *dxTemplate="let cell of 'notaTemplate'">
+        <dx-number-box
+          [(value)]="cell.data.nota"
+          [min]="0"
+          [max]="5"
+          [showSpinButtons]="true"
+          width="90"
+        ></dx-number-box>
+      </div>
+
+      <!-- Anotação -->
+      <dxi-column caption="Anotação" [width]="80" cellTemplate="anotacaoTemplate" alignment="center"></dxi-column>
+      <div *dxTemplate="let cell of 'anotacaoTemplate'">
+        <dx-button
+          id="operator-btts"
+          icon="comment"
+          hint="Adicionar anotação"
+          [type]="cell.data.anotacao ? 'default' : 'normal'"
+          (onClick)="abrirAnotacao(cell.data)"
+          height="30" width="30"
+        ></dx-button>
+      </div>
+    </dx-data-grid>
   </body>
 </div>
+
+<!-- Popup: Anotação -->
+<dx-popup
+  [(visible)]="popupAnotacaoVisivel"
+  title="Anotação do Item"
+  [width]="500"
+  [height]="280"
+  [dragEnabled]="false"
+  [showCloseButton]="true"
+>
+  <div *dxTemplate="let d of 'content'" style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+    <p style="margin: 0; font-weight: 500;">{{ itemEditando?.item }}</p>
+    <dx-text-area
+      [(value)]="anotacaoTemp"
+      placeholder="Digite sua anotação aqui..."
+      [height]="120"
+    ></dx-text-area>
+    <div style="display: flex; gap: 8px; justify-content: flex-end;">
+      <dx-button class="btn-confirmar" text="Confirmar" type="default" (onClick)="confirmarAnotacao()"></dx-button>
+      <dx-button class="btn-cancelar" text="Cancelar" (onClick)="popupAnotacaoVisivel = false"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- Popup: Confirmação de finalização -->
+<dx-popup
+  [(visible)]="popupConfirmarVisivel"
+  title="Confirmar Avaliação"
+  [width]="420"
+  [height]="220"
+  [dragEnabled]="false"
+  [showCloseButton]="true"
+>
+  <div *dxTemplate="let d of 'content'" style="display: flex; flex-direction: column; gap: 16px;">
+    <p>Deseja finalizar e salvar a avaliação?</p>
+    <p style="margin: 0;"><strong>Avaliador:</strong> {{ nomeAvaliador }}</p>
+    <p style="margin: 0;"><strong>Setor:</strong> {{ setorSelecionado?.nome }}</p>
+    <p style="margin: 0;"><strong>Média Geral:</strong> {{ calcularMediaGeral().toFixed(1) }}</p>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px;">
+      <dx-button class="btn-confirmar" text="Confirmar" type="default" (onClick)="confirmarAvaliacao()"></dx-button>
+      <dx-button class="btn-cancelar" text="Cancelar" (onClick)="popupConfirmarVisivel = false"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- Popup: Histórico de avaliações -->
+<dx-popup
+  [(visible)]="popupHistoricoVisivel"
+  title="Avaliações Realizadas"
+  [width]="700"
+  [height]="500"
+  [dragEnabled]="false"
+  [showCloseButton]="true"
+>
+  <div *dxTemplate="let d of 'content'" style="height: 100%;">
+    <dx-data-grid
+      [dataSource]="avaliacoesSalvas"
+      [showBorders]="true"
+      [rowAlternationEnabled]="true"
+      height="100%"
+    >
+      <dxi-column dataField="nomeAvaliador" caption="Avaliador"></dxi-column>
+      <dxi-column dataField="setor" caption="Setor"></dxi-column>
+      <dxi-column dataField="data" caption="Data" dataType="date" format="dd/MM/yyyy"></dxi-column>
+      <dxi-column dataField="mediaGeral" caption="Média Geral" [width]="110"
+        cellTemplate="mediaTemplate" alignment="center"></dxi-column>
+      <div *dxTemplate="let cell of 'mediaTemplate'">
+        <span>{{ cell.data.mediaGeral.toFixed(1) }}</span>
+      </div>
+      <dxi-column caption="Detalhes" [width]="90" cellTemplate="detalheTemplate" alignment="center"></dxi-column>
+      <div *dxTemplate="let cell of 'detalheTemplate'">
+        <dx-button class="operator-btts" icon="search" hint="Ver detalhes" (onClick)="verDetalhe(cell.data)" height="28" width="28"></dx-button>
+      </div>
+    </dx-data-grid>
+  </div>
+</dx-popup>
+
+<!-- Popup: Detalhe de avaliação -->
+<dx-popup
+  [(visible)]="popupDetalheVisivel"
+  title="Detalhe da Avaliação"
+  [width]="700"
+  [height]="560"
+  [dragEnabled]="false"
+  [showCloseButton]="true"
+>
+  <div *dxTemplate="let d of 'content'" style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+    <div style="display: flex; gap: 24px; font-size: 14px;">
+      <span><strong>Avaliador:</strong> {{ avaliacaoDetalhe?.nomeAvaliador }}</span>
+      <span><strong>Setor:</strong> {{ avaliacaoDetalhe?.setor }}</span>
+      <span><strong>Data:</strong> {{ avaliacaoDetalhe?.data | date:'dd/MM/yyyy' }}</span>
+      <span><strong>Média Geral:</strong> {{ avaliacaoDetalhe?.mediaGeral?.toFixed(1) }}</span>
+    </div>
+
+    <dx-scroll-view height="100%">
+      <div *ngFor="let agrupador of getAgrupadoresDetalhe()" style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; background: #f0f0f0;
+             padding: 6px 12px; border-radius: 4px; margin-bottom: 6px;">
+          <strong>{{ agrupador }}</strong>
+          <span style="color: #555; font-size: 13px;">{{ getMediaAgrupadorDetalhe(agrupador) }}</span>
+        </div>
+        <dx-data-grid
+          [dataSource]="getItensPorAgrupador(agrupador)"
+          [showBorders]="true"
+          [showColumnHeaders]="true"
+          [rowAlternationEnabled]="true"
+        >
+          <dxi-column dataField="item" caption="Item"></dxi-column>
+          <dxi-column dataField="nota" caption="Nota" [width]="80" alignment="center"></dxi-column>
+          <dxi-column dataField="anotacao" caption="Anotação"></dxi-column>
+        </dx-data-grid>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

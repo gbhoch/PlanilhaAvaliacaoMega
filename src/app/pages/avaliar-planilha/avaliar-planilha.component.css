@@ -5,6 +5,11 @@
   margin-bottom: 10px;
 }
 
+/* Alinha os itens no meio da Linha */
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td{
+  vertical-align: middle;
+}
+
 .titulo{
   color: #087d52;
   font-size: 15px;
@@ -34,10 +39,14 @@
   gap: 5px;
 }
 
-#options-buttons{
+#operator-btts{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.folder-button{
+  background-color: #087d52;
 }
 
 .start-button{
