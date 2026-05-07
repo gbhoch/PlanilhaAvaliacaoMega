@@ -60,7 +60,7 @@ export class AgrupadoresComponent {
     private AgrupadoresService: AgrupadoresService,
     private router: Router
   ) {
-    console.log('AgrupadoresComponent');
+    // console.log('AgrupadoresComponent');
     this.AgrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
     });

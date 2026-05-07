@@ -47,6 +47,7 @@
     <!-- DATA-GRID lista de agrupadores -->
     <div class="agrupador-header">
       <dx-data-grid
+        Caption="Agrupadores"
         id="gridContainer"
         [rowAlternationEnabled]="true"
         [columnAutoWidth]="true"
@@ -89,7 +90,7 @@
 
         <div *dxTemplate="let data of 'detailTemplate'">
           <dx-data-grid
-            [dataSource] = "itensDoAgrupadorMap[data.data.nome] || []"
+            [dataSource]="itensDoAgrupadorMap[data.data.nome] || []"
             keyExpr="id"
             [showBorders]="true"
             [columnAutoWidth]="true"
@@ -110,7 +111,7 @@
             ></dxi-column>
             <div *dxTemplate="let itemData of 'itemIndexTemplate'">
               {{ getItemIndex(data.data.nome, itemData.data) }}
-              <!-- Verifiicar se 'itemData.data' é com '' ou sem -->
+              <!-- Verificar se 'itemData.data' é com '' ou sem -->
             </div>
 
             <dxi-column
@@ -169,19 +170,6 @@
         <!-- <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping> -->
       </dx-data-grid>
     </div>
-
-    <!-- Popup para selecionar itens -->
-
-    <!-- <dx-data-grid
-      [dataSource]="itensSelecionaveis"
-      keyExpr="id"
-      [selectedRowKeys]="itensSelecionadosTemp.map(i => i.id)"
-      (onSelectionChanged)="onItensSelectionChanged($event)"
-    >
-      <dxo-selection mode="multiple"></dxo-selection>
-
-      <dxi-column dataField="descricao" caption="Item"></dxi-column>
-    </dx-data-grid> -->
 
     <dx-popup
       [(visible)]="popupVisivel"

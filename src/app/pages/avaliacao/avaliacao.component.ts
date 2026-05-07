@@ -73,29 +73,31 @@ export class AvaliacaoComponent {
     public itensVerifService: ItensVerificadosService,
   ) {
     this.setoresService.getSetores().subscribe((setores) => {
-      console.log('Setores carregador:', setores);
+      // console.log('Setores carregador:', setores);
       this.setoresList = setores;
     });
 
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
-      console.log('AvaliacaoComponent', data);
+      // console.log('AvaliacaoComponent', data);
     });
 
     this.itensVerifService.getItensVerificados().subscribe((itens) => {
       this.itensList = itens;
-      console.log('ItensVerif', itens);
+      // console.log('ItensVerif', itens);
     });
   }
 
   private atualizarMapaAgrupadores() {
     this.agrupadoresMap.clear();
-    this.itensDoAgrupadorMap = {};
+    const novoMap: Record<string, ItemAvaliacaoInterface[]> = {};
 
     this.agrupadoresSelecionados.forEach((agrupador) => {
       this.agrupadoresMap.set(agrupador.nome, agrupador);
-      this.itensDoAgrupadorMap[agrupador.nome] = agrupador.itens ?? [];
-    })
+      novoMap[agrupador.nome] = [...(agrupador.itens ?? [])];
+    });
+
+    this.itensDoAgrupadorMap = {...novoMap};
   }
 
   agrupadoresSelecionados: SensoInterface[] = []; // nome do agrupador → itens selecionados
@@ -103,10 +105,10 @@ export class AvaliacaoComponent {
   agrupadoresExpandidos: Record<string, boolean> = {};
 
   abrirDrawerSetor(setor: SetorInterface) {
-    this.setorEditando = { ...setor }; // Faz cópia para edição
+    this.setorEditando = structuredClone(setor); // Faz cópia para edição
     this.drawerAberto = true;
 
-    const planoProcessado: SensoInterface[] = setor.planoDeAvaliacao.map(
+    const planoProcessado: SensoInterface[] = (setor.planoDeAvaliacao ?? []).map(
       (agrupador) => ({
         ...agrupador,
         itens: (agrupador.itens || []).map((item) => ({
@@ -125,9 +127,8 @@ export class AvaliacaoComponent {
     const setor = evt.data;
     if (!setor) return;
 
-    this.setorEditando = structuredClone(setor);
     this.modoEdicao = true;
-    this.drawerAberto = true;
+    this.abrirDrawerSetor(setor);
   }
 
   openPlanilhas() {
@@ -146,13 +147,13 @@ export class AvaliacaoComponent {
     // Carrega agrupadores cadastrados dinamicamente
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
-      console.log(
-        'Agrupadores carregados na tela de avaliação:',
-        this.agrupadoresList,
-      );
+      // console.log(
+      //   'Agrupadores carregados na tela de avaliação:',
+      //   this.agrupadoresList,
+      // );
     });
 
-    console.log('Botão clicado, abrindo novo drawer.');
+    // console.log('Botão clicado, abrindo novo drawer.');
   }
 
   onItemDeleting(e: { cancel: boolean }) {
@@ -166,23 +167,33 @@ export class AvaliacaoComponent {
   }
 
   abrirSelecaoItens(agrupadorNome: string) {
-    this.agrupadorAtual = agrupadorNome;
+  this.agrupadorAtual = agrupadorNome;
 
-    // 1. Encontra o agrupador completo
-    const agrupador = this.agrupadoresList.find(
-      (a) => a.nome === agrupadorNome,
-    );
+  // Busca itens disponíveis no agrupadoresList (fonte do serviço)
+  const agrupadorCadastrado = this.agrupadoresList.find(a => a.nome === agrupadorNome);
+  this.itensSelecionaveis = (agrupadorCadastrado?.itens ?? []).map(item => ({
+    ...item,
+    id: item.id || this.generateUniqueId()
+  }));
 
-    this.itensSelecionaveis = (agrupador?.itens ?? []).map(item => ({
-      ...item,
-      id: item.id || this.generateUniqueId()
-    }));
-
-    const agrupadoresSelecionados = this.agrupadoresMap.get(agrupadorNome);
-
-    this.itensSelecionadosTemp = agrupadoresSelecionados?.itens ?? [];
-    this.popupVisivel = true;
+  // Se o agrupador ainda não existe no Map, cria e adiciona aos selecionados
+  if (!this.agrupadoresMap.has(agrupadorNome)) {
+    const novoAgrupador: SensoInterface = {
+      ...(agrupadorCadastrado!),
+      itens: []
+    };
+    this.agrupadoresSelecionados = [...this.agrupadoresSelecionados, novoAgrupador];
+    this.atualizarMapaAgrupadores();
   }
+
+  // Marca como selecionados os itens que já estão no agrupador
+  const jaAdicionados = this.itensDoAgrupadorMap[agrupadorNome] ?? [];
+  this.itensSelecionadosTemp = this.itensSelecionaveis.filter(
+    disponivel => jaAdicionados.some(ja => ja.id === disponivel.id)
+  );
+
+  this.popupVisivel = true;
+}
 
   confirmarSelecaoItens() {
     const agrupador = this.agrupadoresMap.get(this.agrupadorAtual);
@@ -193,15 +204,15 @@ export class AvaliacaoComponent {
         id: item.id || this.generateUniqueId(),
         ativo: true
       }));
-    }
 
-    console.log("item");
+      // this.itensDoAgrupadorMap[this.agrupadorAtual] = [...agrupador.itens];
+    }
 
     this.popupVisivel = false;
     this.itensSelecionadosTemp = []; /* Limpa a lista temporária */
 
     this.agrupadoresSelecionados = [...this.agrupadoresSelecionados];
-    // this.atualizarMapaAgrupadores();
+    this.atualizarMapaAgrupadores();
   }
 
   getAgrupadorIndex(data: any): string {
@@ -259,12 +270,17 @@ export class AvaliacaoComponent {
   }
 
   agrupadoresReorderHandler = (e: any) => {
-    const lista = [...this.agrupadoresSelecionados];
+    const lista = [...this.agrupadoresList];
 
-    const movido = lista.splice(e.toIndex, 1)[0];
+    const movido = lista.splice(e.fromIndex, 1)[0];
     lista.splice(e.toIndex, 0, movido);
+    this.agrupadoresList = lista;
 
-    this.agrupadoresSelecionados = lista;
+    this.agrupadoresSelecionados = lista.map(agrupadoresDaLista => {
+      const jaExiste = this.agrupadoresMap.get(agrupadoresDaLista.nome)
+      return jaExiste ??{...agrupadoresDaLista, itens: []};
+    });
+
     this.atualizarMapaAgrupadores();
   }
 
@@ -277,6 +293,7 @@ export class AvaliacaoComponent {
     lista.splice(e.toIndex, 0, movido);
 
     agrupador.itens = lista;
+    this.itensDoAgrupadorMap[agrupador.nome] = [...lista];
   }
 
   removerItemSelecionado(
@@ -332,6 +349,8 @@ export class AvaliacaoComponent {
     if (index !== -1) {
       this.setoresList[index] = { ...this.setorEditando! };
       this.setoresList = [...this.setoresList];
+
+      this.setoresService.updateSetor(this.setorEditando);
 
       console.log('Setor atualizado e salvo:', this.setoresList[index]);
     } else {

@@ -175,6 +175,17 @@ body {
   color:#087d52
 }
 
+/* Remove cor azul do checkbox dos Itens */
+::ng-deep .dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-hover .dx-checkbox-icon, .dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-hover .dx-radiobutton-icon, .dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-hover .dx-checkbox-icon, .dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-hover .dx-radiobutton-icon{
+  border-color: #087d52;
+}
+
+/* Remove cor azul do checkbox dos Itens */
+::ng-deep .dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-focused .dx-checkbox-icon, .dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-focused .dx-radiobutton-icon, .dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-focused .dx-checkbox-icon, .dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-focused .dx-radiobutton-icon{
+  border: #087d52;
+}
+
+
 .popup-footer {
   display: flex;
   justify-content: flex-end;

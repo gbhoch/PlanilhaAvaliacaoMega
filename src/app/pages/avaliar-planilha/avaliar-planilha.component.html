@@ -5,8 +5,21 @@
     </h3>
     <div class="input-box" style="display: flex">
       <input class="input-text" type="text" placeholder="Nome do Avaliador" />
-      <input class="input-text" type="datetime" name="Data" id="Data" />
-      <dx-select-box displayExpr="nome" valueExpr="id" [items]="planilhasList">
+      <dx-date-box
+        [(value)]="dataAvaliacao"
+        type="date"
+        displayFormat="dd/MM/yyyy"
+        placeholder="Data da Avaliação"
+        [showClearButton]="true"
+        width="180"
+        ></dx-date-box>
+      <dx-select-box
+      displayExpr="nome"
+      valueExpr="id"
+      [items]="planilhasList"
+      [(value)]="setorSelecionadoId"
+      (onValueChanged)="onSetorSelecionado($event)"
+      placeholder="Selecione um setor">
       </dx-select-box>
     </div>
     <div class="header-buttons">
@@ -29,18 +42,15 @@
 
   <body>
     <dx-data-grid
+      [dataSource]="gridData"
       [showBorders]="true"
       [rowAlternationEnabled]="true"
       height="90%"
       width="100%"
     >
-      <dxi-data-grid-column
-      dataField="planilhasList"
-      [groupIndex]="0">
-
-      </dxi-data-grid-column>
-      <!-- <dxi-column dataField="Senso" groupIndex="0">
-      </dxi-column -->
-    ></dx-data-grid>
+      <dxi-column dataField="agrupador" caption="Agrupador" [groupIndex]="0"></dxi-column>
+      <dxi-column dataField="item" caption="Item de Avaliação"></dxi-column
+      ></dx-data-grid
+    >
   </body>
 </div>
