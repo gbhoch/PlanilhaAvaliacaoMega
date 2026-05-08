@@ -40,6 +40,25 @@ button:hover{
   opacity: 1;
 }
 
+.btn-confirmar{
+  background-color: rgb(35, 219, 35);
+  border: none;
+  border-radius: 2px;
+  font-family: "Outfit", serif;
+  font-style: normal;
+  height: 35px;
+}
+
+.btn-cancelar{
+  background-color: red;
+  border: none;
+  border-radius: 2px;
+  font-family: "Outfit", serif;
+  font-style: normal;
+  height: 35px;
+}
+
+
 /*
   Principal fonte VSCode = Cascadia Code PL, Consolas, 'Courier New', monospace // Consolas, 'Courier New', monospace
   Sugestão = Twilio Sans Mono / Space MOno (Google) / https://www.programmingfonts.org/#twilio-sans-mono

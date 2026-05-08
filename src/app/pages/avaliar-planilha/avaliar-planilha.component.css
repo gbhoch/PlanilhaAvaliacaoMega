@@ -1,4 +1,4 @@
-.container-lg{
+.container-lg {
   height: 100%;
   width: 100%;
   padding: 10px;
@@ -6,18 +6,19 @@
 }
 
 /* Alinha os itens no meio da Linha */
-::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td{
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td,
+.dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
   vertical-align: middle;
 }
 
-.titulo{
+.titulo {
   color: #087d52;
   font-size: 15px;
   font-weight: 500;
   padding-left: 10px;
 }
 
-.input-box{
+.input-box {
   padding: 10px;
   width: 70%;
   display: grid;
@@ -25,38 +26,48 @@
 }
 
 /* Todos Inputs respectivamente */
-.input-text{
+.input-text {
   font-family: "Outfit", serif;
   border: none;
   border-bottom-style: groove;
   outline: none;
 }
 
-.header-buttons{
+.header-buttons {
   padding: 10px;
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-#operator-btts{
-  display: flex;
+#operator-btts {
   justify-content: center;
   align-items: center;
 }
 
-.folder-button{
+.dx-button-mode-contained {
+  background-color: #087d52;
+  border-color: #ddd;
+  justify-content: center;
+  align-items: center;
+}
+
+.folder-button {
+  background-color: rgb(65, 124, 235);
+}
+
+.start-button {
   background-color: #087d52;
 }
 
-.start-button{
-  background-color: #087d52;
+.cancel-button {
+  background-color: red;
 }
 
-.close-button{
-  background-color: rgb(255, 59, 59);
+.btn-confirmar{
+  background-color: rgb(35, 219, 35);
 }
 
-.cancel-button{
+.btn-cancelar {
   background-color: red;
 }

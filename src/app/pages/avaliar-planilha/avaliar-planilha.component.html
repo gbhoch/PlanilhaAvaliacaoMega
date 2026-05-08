@@ -108,7 +108,7 @@
           hint="Adicionar anotação"
           [type]="cell.data.anotacao ? 'default' : 'normal'"
           (onClick)="abrirAnotacao(cell.data)"
-          height="30" width="30"
+          height="35" width="35"
         ></dx-button>
       </div>
     </dx-data-grid>
@@ -132,7 +132,7 @@
       [height]="120"
     ></dx-text-area>
     <div style="display: flex; gap: 8px; justify-content: flex-end;">
-      <dx-button class="btn-confirmar" text="Confirmar" type="default" (onClick)="confirmarAnotacao()"></dx-button>
+      <dx-button class="btn-confirmar" text="Confirmar" (onClick)="confirmarAnotacao()"></dx-button>
       <dx-button class="btn-cancelar" text="Cancelar" (onClick)="popupAnotacaoVisivel = false"></dx-button>
     </div>
   </div>
@@ -142,18 +142,18 @@
 <dx-popup
   [(visible)]="popupConfirmarVisivel"
   title="Confirmar Avaliação"
-  [width]="420"
-  [height]="220"
+  [width]="500"
+  [height]="320"
   [dragEnabled]="false"
   [showCloseButton]="true"
 >
   <div *dxTemplate="let d of 'content'" style="display: flex; flex-direction: column; gap: 16px;">
-    <p>Deseja finalizar e salvar a avaliação?</p>
+    <p style="font-size: 18px" >Deseja finalizar e salvar a avaliação?</p>
     <p style="margin: 0;"><strong>Avaliador:</strong> {{ nomeAvaliador }}</p>
     <p style="margin: 0;"><strong>Setor:</strong> {{ setorSelecionado?.nome }}</p>
     <p style="margin: 0;"><strong>Média Geral:</strong> {{ calcularMediaGeral().toFixed(1) }}</p>
     <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px;">
-      <dx-button class="btn-confirmar" text="Confirmar" type="default" (onClick)="confirmarAvaliacao()"></dx-button>
+      <dx-button class="btn-confirmar" text="Confirmar" (onClick)="confirmarAvaliacao()"></dx-button>
       <dx-button class="btn-cancelar" text="Cancelar" (onClick)="popupConfirmarVisivel = false"></dx-button>
     </div>
   </div>
@@ -185,7 +185,7 @@
       </div>
       <dxi-column caption="Detalhes" [width]="90" cellTemplate="detalheTemplate" alignment="center"></dxi-column>
       <div *dxTemplate="let cell of 'detalheTemplate'">
-        <dx-button class="operator-btts" icon="search" hint="Ver detalhes" (onClick)="verDetalhe(cell.data)" height="28" width="28"></dx-button>
+        <dx-button class="operator-btts" icon="search" hint="Ver detalhes" (onClick)="verDetalhe(cell.data)" height="35" width="35" background-color: #087d52;></dx-button>
       </div>
     </dx-data-grid>
   </div>
