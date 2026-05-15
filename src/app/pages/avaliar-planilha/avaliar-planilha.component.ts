@@ -62,9 +62,13 @@ export class AvaliarPlanilhaComponent {
   avaliacoesSalvas: AvaliacaoSalva[] = [];
   avaliacaoDetalhe: AvaliacaoSalva | null = null;
   popupDetalheVisivel = false;
+  agrupadoresDetalheData: {nome: string; media: string; itens: ItemAvaliado[]} [] = [];
 
   // Popup confirmação
   popupConfirmarVisivel = false;
+
+  //Popup Cancelar
+  popupCancelarVisivel = false;
 
   private storageKey = 'AVALIACOES';
 
@@ -160,12 +164,17 @@ export class AvaliarPlanilhaComponent {
     return itensComNota.reduce((acc, i) => acc + (i.nota ?? 0), 0) / itensComNota.length;
   }
 
+  abrirCancelar(){
+    this.popupCancelarVisivel = true;
+  }
+
   resetarFormulario() {
     this.nomeAvaliador = '';
     this.dataAvaliacao = new Date();
     this.setorSelecionadoId = null;
     this.setorSelecionado = null;
     this.gridData = [];
+    this.popupCancelarVisivel = false;
   }
 
   // Histórico
@@ -182,6 +191,18 @@ export class AvaliarPlanilhaComponent {
 
   verDetalhe(avaliacao: AvaliacaoSalva) {
     this.avaliacaoDetalhe = avaliacao;
+
+    const agrupadores = [...new Set(avaliacao.itens.map(i => i.agrupador))];
+
+    this.agrupadoresDetalheData = agrupadores.map(nome => {
+      const itens = avaliacao.itens.filter(i => i.agrupador === nome);
+      const itensComNota = itens.filter(i => i.nota !== null);
+      const media = itensComNota.length > 0
+        ? (itensComNota.reduce((acc, i) => acc + (i.nota ?? 0), 0) / itensComNota.length).toFixed(1)
+        : 'Sem notas';
+
+        return { nome, media: `Média: ${media}`, itens };
+    })
     this.popupDetalheVisivel = true;
   }
 

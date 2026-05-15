@@ -54,7 +54,7 @@
         icon="cursorprohibition"
         class="cancel-button"
         hint="Cancelar"
-        (onClick)="resetarFormulario()"
+        (onClick)="abrirCancelar()"
         height="35" width="35"
       ></dx-button>
     </div>
@@ -159,6 +159,25 @@
   </div>
 </dx-popup>
 
+<!-- Popup: Confirmação do Cancelar -->
+<dx-popup
+  [(visible)]="popupCancelarVisivel"
+  title="Cancelar Avaliação"
+  [width]="500"
+  [height]="250"
+  [dragEnabled]="false"
+  [showCloseButton]="true"
+>
+  <div *dxTemplate="let d of 'content'" style="display: flex; flex-direction: column;">
+    <p style="font-size: 18px; " >Deseja cancelar a avaliação?</p>
+    <p style="font-size: 14px; color: red; margin-top: 0;">*Essa ação causará perda de todos os dados</p>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <dx-button class="btn-confirmar" text="Confirmar" (onClick)="resetarFormulario()"></dx-button>
+      <dx-button class="btn-cancelar" text="Cancelar" (onClick)="popupCancelarVisivel = false"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
 <!-- Popup: Histórico de avaliações -->
 <dx-popup
   [(visible)]="popupHistoricoVisivel"
@@ -209,22 +228,40 @@
     </div>
 
     <dx-scroll-view height="100%">
-      <div *ngFor="let agrupador of getAgrupadoresDetalhe()" style="margin-bottom: 16px;">
+      <div *ngFor="let agrupador of agrupadoresDetalheData" style="margin-bottom: 16px;">
+
+        <!-- Cabeçalho do agrupador -->
         <div style="display: flex; justify-content: space-between; background: #f0f0f0;
              padding: 6px 12px; border-radius: 4px; margin-bottom: 6px;">
-          <strong>{{ agrupador }}</strong>
-          <span style="color: #555; font-size: 13px;">{{ getMediaAgrupadorDetalhe(agrupador) }}</span>
+          <strong>{{ agrupador.nome }}</strong>
+          <span style="color: #555; font-size: 13px;">{{ agrupador.media }}</span>
         </div>
-        <dx-data-grid
-          [dataSource]="getItensPorAgrupador(agrupador)"
-          [showBorders]="true"
-          [showColumnHeaders]="true"
-          [rowAlternationEnabled]="true"
-        >
-          <dxi-column dataField="item" caption="Item"></dxi-column>
-          <dxi-column dataField="nota" caption="Nota" [width]="80" alignment="center"></dxi-column>
-          <dxi-column dataField="anotacao" caption="Anotação"></dxi-column>
-        </dx-data-grid>
+
+        <!-- Itens via *ngFor em vez de dx-data-grid aninhado -->
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="background: #fafafa; border-bottom: 1px solid #ddd;">
+              <th style="text-align: left; padding: 6px 10px; width: 50%;">Item</th>
+              <th style="text-align: center; padding: 6px 10px; width: 60px;">Nota</th>
+              <th style="text-align: left; padding: 6px 10px;">Comentário</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of agrupador.itens; let odd = odd"
+                [style.background]="odd ? '#f9f9f9' : '#fff'"
+                style="border-bottom: 1px solid #eee;">
+              <td style="padding: 6px 10px;">{{ item.item }}</td>
+              <td style="text-align: center; padding: 6px 10px;">{{ item.nota }}</td>
+              <td style="padding: 6px 10px;">
+                <span *ngIf="item.anotacao; else semComent">{{ item.anotacao }}</span>
+                <ng-template #semComent>
+                  <span style="color: #aaa; font-style: italic;">Sem comentário</span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
     </dx-scroll-view>
   </div>
