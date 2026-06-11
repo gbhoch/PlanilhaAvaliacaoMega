@@ -1,61 +1,51 @@
 import { SetorInterface } from './../models/interfaces/setores.interface';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { StorageService } from './storage.service';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SetoresService {
-  private storageKey = "SETORES";
+
+  private url: string;
   private setoresSubject = new BehaviorSubject<SetorInterface[]>([]);
   setores$ = this.setoresSubject.asObservable();
 
   constructor(
-    private storage : StorageService
-  ){}
+    private http: HttpClient,
+    private api: ApiService
+  ) {
+    this.url = `${this.api.baseUrl}/setores`;
+  }
 
+  // Carrega todos os setores da API e atualiza o BehaviorSubject
   getSetores(): Observable<SetorInterface[]> {
-    let memoryValue = this.setoresSubject.getValue();
-    if(memoryValue.length == 0 || memoryValue == null || memoryValue == undefined){
-      this.storage.GetItem(this.storageKey).subscribe((rst : any) => {
-        if(rst != null) this.setoresSubject.next(rst);
-      });
-    }
-    return this.setores$;
+    return this.http.get<SetorInterface[]>(this.url).pipe(
+      tap(setores => this.setoresSubject.next(setores))
+    );
   }
 
-  addSetor(setor: SetorInterface) {
-    const setores = this.setoresSubject.getValue();
-    const novoId =
-      setores.length > 0 ? Math.max(...setores.map((s) => s.id)) + 1 : 1;
-    const setorComId = { ...setor, id: novoId };
-
-    return this.storage.SetItem(this.storageKey, [...setores, setorComId])
-    .pipe(map((rst => {
-      this.setoresSubject.next(rst);
-      return rst
-    })));
+  addSetor(setor: SetorInterface): Observable<SetorInterface> {
+    return this.http.post<SetorInterface>(this.url, setor).pipe(
+      tap(() => this.getSetores().subscribe()) // atualiza a lista
+    );
   }
 
-  updateSetor(setor: SetorInterface) {
-    const setores = this.setoresSubject.getValue();
-    const index = setores.findIndex((s) => s.id === setor.id);
-    if (index !== -1) {
-      const novaLista = [...setores];
-      novaLista[index] = { ...setor };
-      this.storage.SetItem(this.storageKey, novaLista).subscribe((rst : any) => {
-        this.setoresSubject.next(rst);
-      });
-    }
+  updateSetor(setor: SetorInterface): Observable<SetorInterface> {
+    return this.http.put<SetorInterface>(`${this.url}/${setor.id}`, setor).pipe(
+      tap(() => this.getSetores().subscribe())
+    );
   }
 
-  removerSetor(setor : SetorInterface){
-    const setores = this.setoresSubject.getValue();
-    const novaLista = setores.filter(s => s.id !== setor.id);
+  removerSetor(setor: SetorInterface): Observable<any> {
+    return this.http.delete(`${this.url}/${setor.id}`).pipe(
+      tap(() => this.getSetores().subscribe())
+    );
+  }
 
-    this.storage.SetItem(this.storageKey, novaLista).subscribe((rst : any) => {
-      this.setoresSubject.next(rst);
-    });
+  getSetorComPlano(id : number) : Observable<SetorInterface> {
+    return this.http.get<SetorInterface>(`${this.url}/${id}/plano`);
   }
 }

@@ -10,22 +10,14 @@ import { SetoresService } from '../../services/setores.service';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { FormsModule } from '@angular/forms';
-import { StorageService } from '../../services/storage.service';
+// import { StorageService } from '../../services/storage.service';
+import { AvaliacoesService, AvaliacaoSalva, AvaliacaoPayload } from '../../services/avaliacoes.service';
 
 export interface ItemAvaliado {
   agrupador: string;
   item: string;
   nota: number | null;
   anotacao: string;
-}
-
-export interface AvaliacaoSalva {
-  id: number;
-  nomeAvaliador: string;
-  data: Date;
-  setor: string;
-  itens: ItemAvaliado[];
-  mediaGeral: number;
 }
 
 @Component({
@@ -74,12 +66,12 @@ export class AvaliarPlanilhaComponent {
 
   constructor(
     private setoresService: SetoresService,
-    private storageService: StorageService
+    private avaliacoesService: AvaliacoesService
   ) {
     this.setoresService.getSetores().subscribe((planilhas) => {
       this.planilhasList = planilhas;
     });
-    this.carregarAvaliacoes();
+    // this.carregarAvaliacoes();
   }
 
   onSetorSelecionado(e: any) {
@@ -142,20 +134,33 @@ export class AvaliarPlanilhaComponent {
 
   // Salvar avaliação
   confirmarAvaliacao() {
-    const novaAvaliacao: AvaliacaoSalva = {
-      id: Date.now(),
-      nomeAvaliador: this.nomeAvaliador,
-      data: this.dataAvaliacao,
-      setor: this.setorSelecionado!.nome,
-      itens: [...this.gridData],
-      mediaGeral: this.calcularMediaGeral()
+    if (!this.setorSelecionado) return;
+
+    // Monta o payload no formato que a API espera
+    const payload: AvaliacaoPayload = {
+      setor_id: this.setorSelecionado.id,
+      nome_avaliador: this.nomeAvaliador,
+      data_avaliacao: this.dataAvaliacao.toISOString().split('T')[0],
+      media_geral: this.calcularMediaGeral(),
+      itens: this.gridData.map(i => ({
+        agrupador: i.agrupador,
+        item: i.item,
+        nota: i.nota ?? 0,
+        anotacao: i.anotacao
+      }))
     };
 
-    this.avaliacoesSalvas = [...this.avaliacoesSalvas, novaAvaliacao];
-    this.storageService.SetItem(this.storageKey, this.avaliacoesSalvas).subscribe();
-
-    this.popupConfirmarVisivel = false;
-    this.resetarFormulario();
+    this.avaliacoesService.salvarAvaliacao(payload).subscribe({
+      next: () => {
+        this.popupConfirmarVisivel = false;
+        this.resetarFormulario();
+        alert('Avaliação salva com sucesso!');
+      },
+      error: (err) => {
+        console.error('Erro ao salvar avaliação:', err);
+        alert('Erro ao salvar avaliação. Tente novamente.');
+      }
+    })
   }
 
   calcularMediaGeral(): number {
@@ -178,48 +183,48 @@ export class AvaliarPlanilhaComponent {
   }
 
   // Histórico
-  carregarAvaliacoes() {
-    this.storageService.GetItem(this.storageKey).subscribe((rst: any) => {
-      if (rst) this.avaliacoesSalvas = rst;
-    });
-  }
 
   abrirHistorico() {
-    this.carregarAvaliacoes();
-    this.popupHistoricoVisivel = true;
+    this.avaliacoesService.getAvaliacoes().subscribe(avaliacoes => {
+      this.avaliacoesSalvas = avaliacoes;
+      this.popupHistoricoVisivel = true;
+    })
   }
 
   verDetalhe(avaliacao: AvaliacaoSalva) {
-    this.avaliacaoDetalhe = avaliacao;
+    this.avaliacoesService.getAvaliacaoById(avaliacao.id).subscribe(detalhe => {
+      this.avaliacaoDetalhe = detalhe;
 
-    const agrupadores = [...new Set(avaliacao.itens.map(i => i.agrupador))];
+      const agrupadores = [...new Set((detalhe.itens ?? []).map((i : any) => i.agrupador_nome))];
 
-    this.agrupadoresDetalheData = agrupadores.map(nome => {
-      const itens = avaliacao.itens.filter(i => i.agrupador === nome);
-      const itensComNota = itens.filter(i => i.nota !== null);
-      const media = itensComNota.length > 0
-        ? (itensComNota.reduce((acc, i) => acc + (i.nota ?? 0), 0) / itensComNota.length).toFixed(1)
-        : 'Sem notas';
+      this.agrupadoresDetalheData = agrupadores.map((nome : any) => {
+        const itens = (detalhe.itens ?? []).filter((i : any) => i.agrupador_nome === nome);
+        const media = itens.reduce((acc : number, i : any) => acc + i.nota, 0) / itens.length;
+        return {
+          nome,
+          media: `Média: ${media.toFixed(1)}`,
+          itens
+        };
+      });
 
-        return { nome, media: `Média: ${media}`, itens };
-    })
-    this.popupDetalheVisivel = true;
-  }
-
-  getMediaAgrupadorDetalhe(agrupadorNome: string): string {
-    if (!this.avaliacaoDetalhe) return '';
-    const itens = this.avaliacaoDetalhe.itens.filter(i => i.agrupador === agrupadorNome && i.nota !== null);
-    if (itens.length === 0) return 'Sem notas';
-    const media = itens.reduce((acc, i) => acc + (i.nota ?? 0), 0) / itens.length;
-    return `Média: ${media.toFixed(1)}`;
+      this.popupDetalheVisivel = true;
+    });
   }
 
   getAgrupadoresDetalhe(): string[] {
     if (!this.avaliacaoDetalhe) return [];
-    return [...new Set(this.avaliacaoDetalhe.itens.map(i => i.agrupador))];
+    return [...new Set((this.avaliacaoDetalhe.itens ?? []).map((i : any) => i.agrupador_nome))];
   }
 
-  getItensPorAgrupador(agrupador: string): ItemAvaliado[] {
-    return this.avaliacaoDetalhe?.itens.filter(i => i.agrupador === agrupador) ?? [];
-  }
+  // getMediaAgrupadorDetalhe(agrupadorNome: string): string {
+  //   if (!this.avaliacaoDetalhe) return '';
+  //   const itens = this.avaliacaoDetalhe.itens.filter(i => i.agrupador === agrupadorNome && i.nota !== null);
+  //   if (itens.length === 0) return 'Sem notas';
+  //   const media = itens.reduce((acc, i) => acc + (i.nota ?? 0), 0) / itens.length;
+  //   return `Média: ${media.toFixed(1)}`;
+  // }
+
+  // getItensPorAgrupador(agrupador: string): ItemAvaliado[] {
+  //   return this.avaliacaoDetalhe?.itens.filter(i => i.agrupador === agrupador) ?? [];
+  // }
 }

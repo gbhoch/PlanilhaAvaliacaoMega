@@ -221,11 +221,16 @@
 >
   <div *dxTemplate="let d of 'content'" style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
     <div style="display: flex; gap: 24px; font-size: 14px;">
-      <span><strong>Avaliador:</strong> {{ avaliacaoDetalhe?.nomeAvaliador }}</span>
-      <span><strong>Setor:</strong> {{ avaliacaoDetalhe?.setor }}</span>
-      <span><strong>Data:</strong> {{ avaliacaoDetalhe?.data | date:'dd/MM/yyyy' }}</span>
-      <span><strong>Média Geral:</strong> {{ avaliacaoDetalhe?.mediaGeral?.toFixed(1) }}</span>
+      <span><strong>Avaliador:</strong> {{ avaliacaoDetalhe?.nome_avaliador }}</span>
+      <span><strong>Setor:</strong> {{ avaliacaoDetalhe?.setor_id }}</span>
+      <span><strong>Data:</strong> {{ avaliacaoDetalhe?.data_avaliacao }}</span>
+      <span><strong>Média Geral:</strong> {{ avaliacaoDetalhe?.media_geral }}</span>
     </div>
+
+    <!--
+    | date:'dd/MM/yyyy'
+    ?.toFixed(1)
+    -->
 
     <dx-scroll-view height="100%">
       <div *ngFor="let agrupador of agrupadoresDetalheData" style="margin-bottom: 16px;">
