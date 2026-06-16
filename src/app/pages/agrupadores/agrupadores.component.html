@@ -68,6 +68,8 @@
               type="text"
               [(ngModel)]="agrupadorEditando!.nome"
               placeholder="Digite o nome do agrupador"
+              style="
+              max-width: 400px;"
             />
 
             <textarea
@@ -77,13 +79,14 @@
               style="
                 min-width: 250px;
                 min-height: 50px;
-                max-width: 500px;
+                max-width: 400px;
                 max-height: 100px;
               "
             ></textarea>
           </div>
 
-          <div class="agrupador-status">
+          <!-- STATUS -->
+          <!-- <div class="agrupador-status">
             <label>Status</label>
             <div class="status-indicator">
               <span
@@ -93,14 +96,14 @@
                 {{ agrupadorEditando?.ativo ? "Ativo" : "Inativo" }}
               </span>
             </div>
-          </div>
+          </div> -->
         </div>
         <hr class="drawer-divider" />
 
         <!-- Parte de baixo: cadastro de itens -->
         <div class="drawer-body">
           <div class="cadastro-itens">
-            <input type="text" placeholder="Novo item" [(ngModel)]="novoItem" />
+            <input type="text" placeholder="Novo item" [(ngModel)]="novoItem" style = "max-width: 400px" />
             <button class="btn-add" (click)="adicionarItem()">Adicionar</button>
           </div>
 

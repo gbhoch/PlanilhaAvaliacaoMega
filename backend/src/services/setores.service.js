@@ -33,7 +33,7 @@ function create(dados){
   const resultados = stmt.run({
     nome: dados.nome,
     descricao: dados.descricao || '',
-    ativo: dados.ativo !== undefined ? dados.ativo : 1
+    ativo: dados.ativo ? 1 : 0 // Converte boolean para 1/0
   });
 
   // Busca e retorna o registro recém-criado
@@ -59,7 +59,7 @@ function update(id, dados) {
     id,
     nome: dados.nome,
     descricao: dados.descricao || '',
-    ativo: dados.ativo !== undefined ? dados.ativo : 1
+    ativo: dados.ativo ? 1 : 0
   });
 
   // Retorna o registro atualizado
@@ -83,23 +83,67 @@ function getByIdComPlano(id) {
   const setor = db.prepare('SELECT * FROM setores WHERE id = ?').get(id);
   if (!setor) return null;
 
-  // Busca os agrupadores vinculados ao setor via plano_avaliacao
-  const agrupadores = db.prepare(`
-    SELECT a.* FROM agrupadores a
-    INNER JOIN plano avaliacao pa ON pa.agrupador id = a.id
+  // Busca as linhas do plano deste setor, juntando dados de agrupador e item
+  const linhas = db.prepare(`
+    SELECT
+      pa.agrupador_id,
+      pa.item_id,
+      pa.ordem_agrupador,
+      pa.ordem_item,
+      a.nome        AS agrupador_nome,
+      a.descricao   AS agrupador_descricao,
+      i.descricao   AS item_descricao
+    FROM plano_avaliacao pa
+    INNER JOIN agrupadores a    ON a.id = pa.agrupador_id
+    INNER JOIN itens_avaliacao i ON i.id = pa.item_id
     WHERE pa.setor_id = ?
-    ORDER BY pa.ordem ASC
+    ORDER BY pa.ordem_agrupador ASC, pa.ordem_item ASC
   `).all(id);
 
-  // Para cada agrupador, busca seus itens
-  setor.planoDeAvaliacao = agrupadores.map(agrupador => ({
-    ...agrupador,
-    itens: db.prepare(
-      'SELECT *FROM itens_avaliacao WHERE agrupador_id = ? ORDER BY id ASC'
-    ).all(agrupador.id)
-  }));
+  // Monta a estrutura aninhada: agrupadores com seus itens
+  const agrupadoresMap = new Map();
 
+  for (const linha of linhas) {
+    if (!agrupadoresMap.has(linha.agrupador_id)) {
+      agrupadoresMap.set(linha.agrupador_id, {
+        id: linha.agrupador_id,
+        nome: linha.agrupador_nome,
+        descricao: linha.agrupador_descricao,
+        itens: []
+      });
+    }
+
+    agrupadoresMap.get(linha.agrupador_id).itens.push({
+      id: linha.item_id,
+      descricao: linha.item_descricao,
+      ativo: true
+    });
+  }
+
+  setor.planoDeAvaliacao = Array.from(agrupadoresMap.values());
   return setor;
 }
 
-module.exports = { getAll, getById, create, update, remove };
+function salvarPlano(setorId, planoDeAvaliacao) {
+  const setor = db.prepare('SELECT * FROM setores WHERE id = ?').get(setorId);
+  if (!setor) return null;
+
+  //Remove Plano antigo
+  db.prepare('DELETE FROM plano_avaliacao WHERE setor_id = ?').run(setorId);
+
+  const stmt = db.prepare(`
+    INSERT INTO plano_avaliacao
+      (setor_id, agrupador_id, item_id, ordem_agrupador, ordem_item)
+    VALUES (?, ?, ?, ?, ?)
+  `);
+
+  planoDeAvaliacao.forEach((agrupador, ordemAgrupador) => {
+    (agrupador.itens ?? []).forEach((item, ordemItem) => {
+      stmt.run(setorId, agrupador.id, item.id, ordemAgrupador, ordemItem);
+    });
+  });
+
+  return getByIdComPlano(setorId);
+}
+
+module.exports = { getAll, getById, create, update, remove, getByIdComPlano, salvarPlano };

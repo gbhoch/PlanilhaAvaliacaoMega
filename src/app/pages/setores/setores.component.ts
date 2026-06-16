@@ -107,16 +107,25 @@ export class SetoresComponent implements OnDestroy {
 
     if (this.isNovoSetor) {
       this.subs.push(
-        this.setoresService
-          .addSetor(this.setorEditando)
-          .subscribe((rst: any) => {
-          }),
-      ); // ← Adiciona novo
+        this.setoresService.addSetor(this.setorEditando).subscribe({
+          next: () => {
+            this.recarregarLista();
+            this.fecharDrawer();
+          },
+          error: (err) => console.error('Erro ao adicionar setor:', err)
+        })
+      );
     } else {
-      this.setoresService.updateSetor(this.setorEditando); // ← Atualiza existente
+      this.subs.push(
+        this.setoresService.updateSetor(this.setorEditando).subscribe({
+          next: () => {
+            this.recarregarLista();
+            this.fecharDrawer();
+          },
+          error: (err) => console.error('Erro ao atualizar setor:', err)
+        })
+      );
     }
-
-    this.fecharDrawer();
   }
 
   cancelarAlteracoes() {
@@ -131,11 +140,25 @@ export class SetoresComponent implements OnDestroy {
 
   confirmarExclusao() {
     if (this.setorParaExcluir) {
-      this.setoresService.removerSetor(this.setorParaExcluir);
-
-      this.setorParaExcluir = undefined;
-      this.fecharPopup();
+      this.subs.push(
+        this.setoresService.removerSetor(this.setorParaExcluir).subscribe({
+          next: () => {
+            this.recarregarLista();
+            this.setorParaExcluir = undefined;
+            this.fecharPopup();
+          },
+          error: (err) => console.error('Erro ao remover setor:', err)
+        })
+      );
     }
+  }
+
+  private recarregarLista() {
+    this.subs.push(
+      this.setoresService.getSetores().subscribe(setores => {
+        this.setoresList = setores;
+      })
+    );
   }
 
   fecharPopup() {

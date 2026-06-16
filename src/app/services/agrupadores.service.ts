@@ -48,4 +48,8 @@ export class AgrupadoresService {
       tap(() => this.getAgrupList().subscribe())
     );
   }
+
+  verificarUsoItem(itemId: number): Observable<{ emUso: boolean }> {
+    return this.http.get<{ emUso: boolean }>(`${this.url}/itens/${itemId}/uso`);
+  }
 }

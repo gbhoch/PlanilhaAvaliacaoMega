@@ -25,24 +25,36 @@ function getById(id) {
 }
 
 function create(dados) {
-  const stmt = db.prepare(`
+  const resultado = db.prepare(`
     INSERT INTO agrupadores (nome, descricao, ativo)
     VALUES (@nome, @descricao, @ativo)
-  `);
-
-  const resultado = stmt.run({
+  `).run({
     nome: dados.nome,
     descricao: dados.descricao || '',
-    ativo: dados.ativo !== undefined ? dados.ativo : 1
+    ativo: dados.ativo !== undefined ? (dados.ativo ? 1 : 0) : 1
   });
 
-  return getById(resultado.lastInsertRowid);
+  const agrupadorId = resultado.lastInsertRowid;
+
+  // Salva os itens, se vierem junto
+  if (Array.isArray(dados.itens)) {
+    const stmtItem = db.prepare(`
+      INSERT INTO itens_avaliacao (agrupador_id, descricao, ativo)
+      VALUES (?, ?, 1)
+    `);
+    for (const item of dados.itens) {
+      stmtItem.run(agrupadorId, item.descricao);
+    }
+  }
+
+  return getById(agrupadorId);
 }
 
 function update(id, dados) {
   const existe = getById(id);
   if (!existe) return null;
 
+  // Atualiza os dados do agrupador
   db.prepare(`
     UPDATE agrupadores
     SET nome = @nome, descricao = @descricao, ativo = @ativo
@@ -51,8 +63,46 @@ function update(id, dados) {
     id,
     nome: dados.nome,
     descricao: dados.descricao || '',
-    ativo: dados.ativo !== undefined ? dados.ativo : 1
+    ativo: dados.ativo !== undefined ? (dados.ativo ? 1 : 0) : 1
   });
+
+  if (Array.isArray(dados.itens)) {
+    // IDs dos itens que vieram do frontend (os que devem permanecer)
+    const idsRecebidos = dados.itens
+      .filter(item => item.id)        // só os que já têm id (existentes)
+      .map(item => item.id);
+
+    // Busca os itens atuais no banco
+    const itensAtuais = db.prepare(
+      'SELECT id FROM itens_avaliacao WHERE agrupador_id = ?'
+    ).all(id);
+
+    // Remove apenas os itens que foram excluídos no frontend
+    // E que NÃO estão em uso em nenhum plano
+    for (const itemAtual of itensAtuais) {
+      if (!idsRecebidos.includes(itemAtual.id)) {
+        const emUso = db.prepare(
+          'SELECT COUNT(*) AS total FROM plano_avaliacao WHERE item_id = ?'
+        ).get(itemAtual.id);
+
+        if (emUso.total === 0) {
+          db.prepare('DELETE FROM itens_avaliacao WHERE id = ?').run(itemAtual.id);
+        }
+        // Se estiver em uso, mantém o item para não quebrar o plano
+      }
+    }
+
+    // Adiciona os itens novos (os que não têm id)
+    const stmtItem = db.prepare(`
+      INSERT INTO itens_avaliacao (agrupador_id, descricao, ativo)
+      VALUES (?, ?, 1)
+    `);
+    for (const item of dados.itens) {
+      if (!item.id) {
+        stmtItem.run(id, item.descricao);
+      }
+    }
+  }
 
   return getById(id);
 }
@@ -94,4 +144,11 @@ function removeItem(itemId) {
   return item;
 }
 
-module.exports = { getAll, getById, create, update, remove, addItem, removeItem };
+function itemEmUso(itemId) {
+  const resultado = db.prepare(
+    'SELECT COUNT(*) AS total FROM plano_avaliacao WHERE item_id = ?'
+  ).get(itemId);
+  return resultado.total > 0;
+}
+
+module.exports = { getAll, getById, create, update, remove, addItem, removeItem, itemEmUso };

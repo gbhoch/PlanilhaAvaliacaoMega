@@ -97,9 +97,28 @@ function buscarComPlano(req, res) {
     if (!setor) return res.status(404).json({ erro: 'Setor não encontrado' });
     res.json(setor);
   } catch (error) {
-    console.error('Erro ao buscar setor com plano: ', error);
+    console.error('Erro ao buscar setor com plano:', error);
     res.status(500).json({ erro: 'Erro interno do servidor' });
   }
 }
 
-module.exports = { listar, buscarPorId, criar, atualizar, remover };
+function salvarPlano(req, res) {
+  try {
+    const setorId = parseInt(req.params.id);
+    const { planoDeAvaliacao } = req.body;
+
+    if (!Array.isArray(planoDeAvaliacao)) {
+      return res.status(400).json({ erro: 'planoDeAvaliacao deve ser um array' });
+    }
+
+    const resultado = setoresService.salvarPlano(setorId, planoDeAvaliacao);
+    if (!resultado) return res.status(404).json({ erro: 'Setor não encontrado' });
+
+    res.json(resultado);
+  } catch (error) {
+    console.error('Erro ao salvar plano:', error);
+    res.status(500).json({ erro: 'Erro interno do servidor' });
+  }
+}
+
+module.exports = { listar, buscarPorId, criar, atualizar, remover, buscarComPlano, salvarPlano };

@@ -54,7 +54,7 @@ export class AvaliarPlanilhaComponent {
   avaliacoesSalvas: AvaliacaoSalva[] = [];
   avaliacaoDetalhe: AvaliacaoSalva | null = null;
   popupDetalheVisivel = false;
-  agrupadoresDetalheData: {nome: string; media: string; itens: ItemAvaliado[]} [] = [];
+  agrupadoresDetalheData: {nome: string; media: string; itens: any [] } [] = [];
 
   // Popup confirmação
   popupConfirmarVisivel = false;
@@ -75,22 +75,42 @@ export class AvaliarPlanilhaComponent {
   }
 
   onSetorSelecionado(e: any) {
-    const setor = this.planilhasList.find(s => s.id === e.value);
-    this.setorSelecionado = setor ?? null;
+    const setorBasico = this.planilhasList.find(s => s.id === e.value);
+    this.setorSelecionado = setorBasico ?? null;
+    this.gridData = [];
 
-    if (!setor?.planoDeAvaliacao) {
-      this.gridData = [];
-      return;
-    }
+    if (!setorBasico) return;
 
-    this.gridData = setor.planoDeAvaliacao.flatMap((agrupador: SensoInterface) =>
-      (agrupador.itens ?? []).map((item: ItemAvaliacaoInterface) => ({
-        agrupador: agrupador.nome,
-        item: item.descricao,
-        nota: null,
-        anotacao: ''
-      }))
-    );
+    // Busca o setor COM o plano de avaliação da API
+    this.setoresService.getSetorComPlano(setorBasico.id).subscribe({
+      next: (setor) => {
+        console.log('Setor com plano recebido:', setor); // ← log temporário
+        this.setorSelecionado = setor;
+
+        if (!setor?.planoDeAvaliacao?.length) {
+          console.log('Plano vazio ou inexistente');
+          this.gridData = [];
+          return;
+        }
+
+        const dados = setor.planoDeAvaliacao.flatMap((agrupador: any) =>
+          (agrupador.itens ?? []).map((item: any) => ({
+            agrupador: agrupador.nome,
+            item: item.descricao,
+            nota: null,
+            anotacao: ''
+          }))
+        );
+
+        this.gridData = [...dados];
+
+        console.log('gridData montado:', this.gridData); // ← log temporário
+      },
+      error: (err) => {
+        console.error('Erro ao buscar plano do setor:', err);
+        this.gridData = [];
+      }
+    });
   }
 
   // Calcula média por agrupador para exibir no grouping
@@ -191,15 +211,17 @@ export class AvaliarPlanilhaComponent {
     })
   }
 
-  verDetalhe(avaliacao: AvaliacaoSalva) {
+  verDetalhe(avaliacao: any) {
     this.avaliacoesService.getAvaliacaoById(avaliacao.id).subscribe(detalhe => {
       this.avaliacaoDetalhe = detalhe;
 
-      const agrupadores = [...new Set((detalhe.itens ?? []).map((i : any) => i.agrupador_nome))];
+      const agrupadores : string[] = [...new Set(
+        (detalhe.itens ?? []).map((i: any) => i.agrupador_nome as string)
+      )];
 
-      this.agrupadoresDetalheData = agrupadores.map((nome : any) => {
-        const itens = (detalhe.itens ?? []).filter((i : any) => i.agrupador_nome === nome);
-        const media = itens.reduce((acc : number, i : any) => acc + i.nota, 0) / itens.length;
+      this.agrupadoresDetalheData = agrupadores.map((nome: string) => {
+        const itens = (detalhe.itens ?? []).filter((i: any) => i.agrupador_nome === nome);
+        const media = itens.reduce((acc: number, i: any) => acc + i.nota, 0) / itens.length;
         return {
           nome,
           media: `Média: ${media.toFixed(1)}`,

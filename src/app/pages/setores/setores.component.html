@@ -53,6 +53,8 @@
               type="text"
               [(ngModel)]="setorEditando!.nome"
               placeholder="Digite o nome do setor"
+              style="
+              max-width: 400px;"
             />
 
             <textarea
@@ -60,13 +62,16 @@
               rows="4"
               placeholder="Descrição..."
               style="
-                max-width: 500px;
+                min-width: 250px;
+                min-height: 50px;
+                max-width: 400px;
                 max-height: 100px;
               "
             ></textarea>
           </div>
 
-          <div class="setor-status">
+          <!-- STATUS -->
+          <!-- <div class="setor-status">
             <label>Status</label>
             <div class="status-indicator">
               <span
@@ -76,7 +81,7 @@
                 {{ setorEditando?.ativo ? "Ativo" : "Inativo" }}
               </span>
             </div>
-          </div>
+          </div> -->
         </div>
         <hr class="drawer-divider" />
       </div>

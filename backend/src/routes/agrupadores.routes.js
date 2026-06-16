@@ -15,5 +15,6 @@ router.delete('/:id', agrupadoresController.remover);
 
 router.post('/:id/itens', agrupadoresController.adicionarItem);
 router.delete('/:id/itens/:itemId', agrupadoresController.removerItem);
+router.get('/itens/:itemId/uso', agrupadoresController.verificarUsoItem);
 
 module.exports = router;

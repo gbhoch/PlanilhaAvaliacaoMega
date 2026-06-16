@@ -48,4 +48,11 @@ export class SetoresService {
   getSetorComPlano(id : number) : Observable<SetorInterface> {
     return this.http.get<SetorInterface>(`${this.url}/${id}/plano`);
   }
+
+  salvarPlano(setorId: number, planoDeAvaliacao: any[]): Observable<SetorInterface> {
+    return this.http.put<SetorInterface>(
+      `${this.url}/${setorId}/plano`,
+      { planoDeAvaliacao }
+    );
+  }
 }

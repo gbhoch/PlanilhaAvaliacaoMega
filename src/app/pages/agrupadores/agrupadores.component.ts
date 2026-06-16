@@ -137,11 +137,39 @@ export class AgrupadoresComponent {
     }
 
     if (this.modoEdicao) {
-      this.AgrupadoresService.updateAgrupador(this.agrupadorEditando);
+      this.AgrupadoresService.updateAgrupador(this.agrupadorEditando).subscribe({
+        next: () => {
+          this.recarregarLista();
+          this.fecharDrawer();
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar agrupador:', err);
+          notify({ message: 'Erro ao atualizar agrupador', type: 'error', displayTime: 3000 },
+            { direction: 'up-stack', position: 'top center' });
+        }
+      });
     } else {
-      this.AgrupadoresService.addAgrupador(this.agrupadorEditando);
+      this.AgrupadoresService.addAgrupador(this.agrupadorEditando).subscribe({
+        next: () => {
+          this.recarregarLista();
+          this.fecharDrawer();
+        },
+        error: (err) => {
+          console.error('Erro ao adicionar agrupador:', err);
+          notify({ message: 'Erro ao adicionar agrupador', type: 'error', displayTime: 3000 },
+            { direction: 'up-stack', position: 'top center' });
+        }
+      });
     }
+  }
 
+  private recarregarLista() {
+    this.AgrupadoresService.getAgrupList().subscribe(data => {
+      this.agrupadoresList = data;
+    });
+  }
+
+  private fecharDrawer() {
     this.drawerAberto = false;
     this.agrupadorEditando = null;
   }
@@ -160,16 +188,81 @@ export class AgrupadoresComponent {
   }
 
   excluirItem(index: number) {
-    if (this.agrupadorEditando?.itens) {
+    const item = this.agrupadorEditando?.itens[index];
+    if (!item) return;
+
+    // Item novo (sem id) pode ser removido direto — ainda não está no banco
+    if (!item.id) {
       this.agrupadorEditando.itens.splice(index, 1);
+      return;
     }
+
+    // Item existente — verifica se está em uso antes de remover
+    this.AgrupadoresService.verificarUsoItem(item.id).subscribe({
+      next: (resultado) => {
+        if (resultado.emUso) {
+          notify(
+            {
+              message: 'Este item não pode ser removido pois está sendo usado em um ou mais setores.',
+              type: 'warning',
+              displayTime: 4000,
+              width: 400
+            },
+            { direction: 'up-stack', position: 'top center' }
+          );
+          return;
+        }
+
+        // Não está em uso — pode remover da lista
+        this.agrupadorEditando.itens.splice(index, 1);
+      },
+      error: (err) => {
+        console.error('Erro ao verificar uso do item:', err);
+      }
+    });
   }
 
   confirmarExclusao(): void {
-    this.agrupadorEditando.itens = this.agrupadorEditando.itens.filter(
-      (item: any) => item !== this.itemSelecionadoParaExcluir
-    );
-    this.popupExcluirVisible = false;
+    const item = this.itemSelecionadoParaExcluir;
+    if (!item) return;
+
+    // Item novo (sem id) — remove direto, ainda não está no banco
+    if (!item.id) {
+      this.agrupadorEditando.itens = this.agrupadorEditando.itens.filter(
+        (i: any) => i !== item
+      );
+      this.popupExcluirVisible = false;
+      return;
+    }
+
+    // Item existente — verifica uso antes de remover
+    this.AgrupadoresService.verificarUsoItem(item.id).subscribe({
+      next: (resultado) => {
+        if (resultado.emUso) {
+          notify(
+            {
+              message: 'Este item não pode ser removido pois está sendo usado em um ou mais setores.',
+              type: 'warning',
+              displayTime: 4000,
+              width: 400
+            },
+            { direction: 'up-stack', position: 'top center' }
+          );
+          this.popupExcluirVisible = false;
+          return;
+        }
+
+        // Não está em uso — remove
+        this.agrupadorEditando.itens = this.agrupadorEditando.itens.filter(
+          (i: any) => i !== item
+        );
+        this.popupExcluirVisible = false;
+      },
+      error: (err) => {
+        console.error('Erro ao verificar uso do item:', err);
+        this.popupExcluirVisible = false;
+      }
+    });
   }
 
   fecharPopup() {

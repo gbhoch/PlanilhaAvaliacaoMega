@@ -22,11 +22,11 @@ function buscarPorId(req, res) {
 
 function criar (req, res) {
   try {
-    const { nome, descricao, ativo } = req.body;
+    const { nome, descricao, ativo, itens } = req.body;
     if (!nome || nome.trim() === '') {
       return res.status(400).json({ erro: 'O campo NOME é obrigatório!'});
     }
-    res.status(201).json(agrupadoresService.create({ nome, descricao, ativo }));
+    res.status(201).json(agrupadoresService.create({ nome, descricao, ativo, itens }));
   } catch (error) {
     console.error('Erro ao criar agrupador: ', error);
     res.status(500).json({ erro: 'Erro interno do servidor' });
@@ -35,11 +35,11 @@ function criar (req, res) {
 
 function atualizar(req, res) {
   try {
-    const { nome, descricao, ativo } = req.body;
+    const { nome, descricao, ativo, itens } = req.body;
     if (!nome || nome.trim() === '') {
       return res.status(400).json({ erro: 'O campo NOME é obrigatório!' });
     }
-    const resultado = agrupadoresService.update(parseInt(req.params.id), { nome, descricao, ativo });
+    const resultado = agrupadoresService.update(parseInt(req.params.id), { nome, descricao, ativo, itens });
     if (!resultado) return res.status(404).json({ erro: 'Agrupador não encontrado'});
     res.json(resultado);
   } catch (error) {
@@ -91,4 +91,15 @@ function removerItem(req, res) {
   }
 }
 
-module.exports = { listar, buscarPorId, criar, atualizar, remover, adicionarItem, removerItem };
+function verificarUsoItem(req, res) {
+  try {
+    const itemId = parseInt(req.params.itemId);
+    const emUso = agrupadoresService.itemEmUso(itemId);
+    res.json({ emUso });
+  } catch (error) {
+    console.error('Erro ao verificar uso do item: ', error);
+    res.status(500).json({ erro: 'Erro interno do servidor' });
+  }
+}
+
+module.exports = { listar, buscarPorId, criar, atualizar, remover, adicionarItem, removerItem, verificarUsoItem };

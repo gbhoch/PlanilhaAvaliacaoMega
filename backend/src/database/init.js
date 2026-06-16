@@ -53,13 +53,16 @@ function initDatabase(){
     // Relaciona um setor com seus agrupadores configurados
     // É uma tabela de relacionamento N:N entre setores e agrupadores
     db.exec(`
-      CREATE TABLE IF NOT EXISTS plano_avalicao(
-        id           INTEGER PRIMARY KEY AUTOINCREMENT,
-        setor_id     INTEGER NOT NULL,
-        agrupador_id INTEGER NOT NULL,
-        ordem        INTEGER DEFAULT 0,
+      CREATE TABLE IF NOT EXISTS plano_avaliacao(
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        setor_id      INTEGER NOT NULL,
+        agrupador_id  INTEGER NOT NULL,
+        item_id       INTEGER NOT NULL,
+        ordem_agrupador INTEGER DEFAULT 0,
+        ordem_item    INTEGER DEFAULT 0,
         FOREIGN KEY (setor_id)     REFERENCES setores(id),
-        FOREIGN KEY (agrupador_id) REFERENCES agrupadores(id)
+        FOREIGN KEY (agrupador_id) REFERENCES agrupadores(id),
+        FOREIGN KEY (item_id)      REFERENCES itens_avaliacao(id)
       )
     `);
     //console.log('Tabela plano_avaliacao OK');

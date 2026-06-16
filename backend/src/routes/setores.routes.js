@@ -14,6 +14,7 @@ router.post('/', setoresController.criar);          // POST     /setores
 router.put('/:id', setoresController.atualizar);    // PUT      /setores/1
 router.delete('/:id', setoresController.remover);   // DELETE   /setores/1
 
-router.get('/:id/plano', setoresController.buscarPorId);
+router.get('/:id/plano', setoresController.buscarComPlano);
+router.put('/:id/plano', setoresController.salvarPlano);
 
 module.exports = router;

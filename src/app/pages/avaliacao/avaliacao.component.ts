@@ -105,22 +105,35 @@ export class AvaliacaoComponent {
   agrupadoresExpandidos: Record<string, boolean> = {};
 
   abrirDrawerSetor(setor: SetorInterface) {
-    this.setorEditando = structuredClone(setor); // Faz cópia para edição
     this.drawerAberto = true;
 
-    const planoProcessado: SensoInterface[] = (setor.planoDeAvaliacao ?? []).map(
-      (agrupador) => ({
-        ...agrupador,
-        itens: (agrupador.itens || []).map((item) => ({
-          descricao: item.descricao,
-          id: item.id || this.generateUniqueId(),
-          ativo: item.ativo ?? false
-        }))
-      })
-    )
+    // Busca o setor com o plano completo da API
+    this.setoresService.getSetorComPlano(setor.id).subscribe({
+      next: (setorCompleto) => {
+        this.setorEditando = structuredClone(setorCompleto);
 
-    this.agrupadoresSelecionados = planoProcessado;
-    this.atualizarMapaAgrupadores();
+        const planoProcessado: SensoInterface[] = (setorCompleto.planoDeAvaliacao ?? []).map(
+          (agrupador) => ({
+            ...agrupador,
+            itens: (agrupador.itens || []).map((item) => ({
+              descricao: item.descricao,
+              id: item.id,
+              ativo: item.ativo ?? false
+            }))
+          })
+        );
+
+        this.agrupadoresSelecionados = planoProcessado;
+        this.atualizarMapaAgrupadores();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar plano do setor:', err);
+        // Fallback: abre vazio
+        this.setorEditando = structuredClone(setor);
+        this.agrupadoresSelecionados = [];
+        this.atualizarMapaAgrupadores();
+      }
+    });
   }
 
   onCellDblClick(evt: any) {
@@ -171,10 +184,7 @@ export class AvaliacaoComponent {
 
   // Busca itens disponíveis no agrupadoresList (fonte do serviço)
   const agrupadorCadastrado = this.agrupadoresList.find(a => a.nome === agrupadorNome);
-  this.itensSelecionaveis = (agrupadorCadastrado?.itens ?? []).map(item => ({
-    ...item,
-    id: item.id || this.generateUniqueId()
-  }));
+  this.itensSelecionaveis = (agrupadorCadastrado?.itens ?? []);
 
   // Se o agrupador ainda não existe no Map, cria e adiciona aos selecionados
   if (!this.agrupadoresMap.has(agrupadorNome)) {
@@ -201,7 +211,6 @@ export class AvaliacaoComponent {
     if (agrupador) {
       agrupador.itens = this.itensSelecionadosTemp.map(item => ({
         ...item,
-        id: item.id || this.generateUniqueId(),
         ativo: true
       }));
 
@@ -338,34 +347,28 @@ export class AvaliacaoComponent {
       return;
     }
 
-    // ANEXAR o plano de avaliação (com os itens agrupados) ao setor
-    this.setorEditando.planoDeAvaliacao = this.agrupadoresSelecionados;
+    // Envia o plano montado para a API
+    this.setoresService.salvarPlano(this.setorEditando.id, this.agrupadoresSelecionados)
+      .subscribe({
+        next: (setorAtualizado) => {
+          console.log('Plano salvo com sucesso:', setorAtualizado);
 
-    // Encontra o setor original na lista principal para atualizá-lo.
-    const index = this.setoresList.findIndex(
-      (s) => s.id === this.setorEditando!.id,
-    );
+          // Recarrega a lista de setores
+          this.setoresService.getSetores().subscribe(setores => {
+            this.setoresList = setores;
+          });
 
-    if (index !== -1) {
-      this.setoresList[index] = { ...this.setorEditando! };
-      this.setoresList = [...this.setoresList];
-
-      this.setoresService.updateSetor(this.setorEditando);
-
-      console.log('Setor atualizado e salvo:', this.setoresList[index]);
-    } else {
-      // Se for um novo setor, adicionaria ele à lista aqui.
-      console.warn(
-        'Setor não encontrado para atualização. Isso deveria ser um novo setor?',
-      );
-    }
-
-    this.drawerAberto = false;
-
-    // Limpar o estado de edição
-    this.agrupadoresSelecionados = [];
-    this.atualizarMapaAgrupadores();
-    this.setorEditando = undefined;
+          // Limpa o estado e fecha o drawer
+          this.drawerAberto = false;
+          this.agrupadoresSelecionados = [];
+          this.atualizarMapaAgrupadores();
+          this.setorEditando = undefined;
+        },
+        error: (err) => {
+          console.error('Erro ao salvar plano:', err);
+          alert('Erro ao salvar o plano de avaliação. Tente novamente.');
+        }
+      });
   }
 
   cancelarAlteracoes(): void {

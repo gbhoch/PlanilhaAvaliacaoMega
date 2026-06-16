@@ -2,13 +2,21 @@ const db = require('../database/connection');
 
 function getAll() {
   return db.prepare(`
-    SELECT * FROM avaliacoes ORDER BY criado_em DESC
+    SELECT
+    a.*,
+    s.nome AS setor_nome
+    FROM avaliacoes a
+    LEFT JOIN setores s ON s.id = a.setor_id
+    ORDER BY a.criado_em DESC
   `).all();
 }
 
 function getByID(id) {
   const avaliacao = db.prepare(
-    'SELECT * FROM avaliacoes WHERE id = ?'
+    `SELECT a.*, s.nome AS setor_nome
+    FROM avaliacoes a
+    LEFT JOIN setores s ON s.id = a.setor_id
+    WHERE a.id = ?`
   ).get(id);
 
   if (!avaliacao) return null;
