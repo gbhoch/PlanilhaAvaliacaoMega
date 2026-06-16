@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { AuthService } from './../../../services/auth.service';
-import { Component, inject, NgModule, Type } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LoginType } from '../../../models/types/login';
 import notify from 'devextreme/ui/notify';
 import { DxButtonModule, DxNumberBoxModule, DxTextBoxModule } from 'devextreme-angular';

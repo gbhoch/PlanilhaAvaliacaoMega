@@ -73,18 +73,15 @@ export class AvaliacaoComponent {
     public itensVerifService: ItensVerificadosService,
   ) {
     this.setoresService.getSetores().subscribe((setores) => {
-      // console.log('Setores carregador:', setores);
       this.setoresList = setores;
     });
 
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
-      // console.log('AvaliacaoComponent', data);
     });
 
     this.itensVerifService.getItensVerificados().subscribe((itens) => {
       this.itensList = itens;
-      // console.log('ItensVerif', itens);
     });
   }
 
@@ -160,13 +157,7 @@ export class AvaliacaoComponent {
     // Carrega agrupadores cadastrados dinamicamente
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
-      // console.log(
-      //   'Agrupadores carregados na tela de avaliação:',
-      //   this.agrupadoresList,
-      // );
     });
-
-    // console.log('Botão clicado, abrindo novo drawer.');
   }
 
   onItemDeleting(e: { cancel: boolean }) {
@@ -213,8 +204,6 @@ export class AvaliacaoComponent {
         ...item,
         ativo: true
       }));
-
-      // this.itensDoAgrupadorMap[this.agrupadorAtual] = [...agrupador.itens];
     }
 
     this.popupVisivel = false;
@@ -272,7 +261,6 @@ export class AvaliacaoComponent {
         icon: 'trash',
         onClick: (e: any) => {
           this.itemSelecionadoExcluir = e.row.data;
-          console.error('Não é possível determinar o agrupadorName');
         },
       },
     ];
@@ -351,8 +339,6 @@ export class AvaliacaoComponent {
     this.setoresService.salvarPlano(this.setorEditando.id, this.agrupadoresSelecionados)
       .subscribe({
         next: (setorAtualizado) => {
-          console.log('Plano salvo com sucesso:', setorAtualizado);
-
           // Recarrega a lista de setores
           this.setoresService.getSetores().subscribe(setores => {
             this.setoresList = setores;

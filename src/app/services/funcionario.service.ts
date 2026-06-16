@@ -1,3 +1,5 @@
+// TODO(review): SUSPECTED UNUSED — not injected by any active component. Kept pending confirmation.
+// See REFATORACAO.md > "Arquivos marcados para revisão".
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';

@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login/login.component';
-import { AppComponent } from './app.component';
 import { AgrupadoresComponent } from './pages/agrupadores/agrupadores.component';
 import { LayoutComponent } from './layout/layout.component';
 import { SetoresComponent } from './pages/setores/setores.component';

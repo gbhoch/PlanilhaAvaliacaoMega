@@ -1,3 +1,6 @@
+// TODO(review): SUSPECTED UNUSED — HomeComponent has no route and forms a circular pair with
+// AddItemVerifComponent, backed by the mock AddItensService/ItensVerificadosService. Kept pending
+// confirmation. See REFATORACAO.md > "Arquivos marcados para revisão".
 import { AddItemVerifComponent } from './../add-item-verif/add-item-verif.component';
 import { ItensVerificados } from './../../models/ItensVerificados';
 import { ItensVerificadosService } from './../../services/itens-verificados.service';

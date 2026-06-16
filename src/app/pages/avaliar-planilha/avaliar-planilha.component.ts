@@ -10,7 +10,6 @@ import { SetoresService } from '../../services/setores.service';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 import { FormsModule } from '@angular/forms';
-// import { StorageService } from '../../services/storage.service';
 import { AvaliacoesService, AvaliacaoSalva, AvaliacaoPayload } from '../../services/avaliacoes.service';
 
 export interface ItemAvaliado {
@@ -62,8 +61,6 @@ export class AvaliarPlanilhaComponent {
   //Popup Cancelar
   popupCancelarVisivel = false;
 
-  private storageKey = 'AVALIACOES';
-
   constructor(
     private setoresService: SetoresService,
     private avaliacoesService: AvaliacoesService
@@ -71,7 +68,6 @@ export class AvaliarPlanilhaComponent {
     this.setoresService.getSetores().subscribe((planilhas) => {
       this.planilhasList = planilhas;
     });
-    // this.carregarAvaliacoes();
   }
 
   onSetorSelecionado(e: any) {
@@ -84,11 +80,9 @@ export class AvaliarPlanilhaComponent {
     // Busca o setor COM o plano de avaliação da API
     this.setoresService.getSetorComPlano(setorBasico.id).subscribe({
       next: (setor) => {
-        console.log('Setor com plano recebido:', setor); // ← log temporário
         this.setorSelecionado = setor;
 
         if (!setor?.planoDeAvaliacao?.length) {
-          console.log('Plano vazio ou inexistente');
           this.gridData = [];
           return;
         }
@@ -103,8 +97,6 @@ export class AvaliarPlanilhaComponent {
         );
 
         this.gridData = [...dados];
-
-        console.log('gridData montado:', this.gridData); // ← log temporário
       },
       error: (err) => {
         console.error('Erro ao buscar plano do setor:', err);
@@ -237,16 +229,4 @@ export class AvaliarPlanilhaComponent {
     if (!this.avaliacaoDetalhe) return [];
     return [...new Set((this.avaliacaoDetalhe.itens ?? []).map((i : any) => i.agrupador_nome))];
   }
-
-  // getMediaAgrupadorDetalhe(agrupadorNome: string): string {
-  //   if (!this.avaliacaoDetalhe) return '';
-  //   const itens = this.avaliacaoDetalhe.itens.filter(i => i.agrupador === agrupadorNome && i.nota !== null);
-  //   if (itens.length === 0) return 'Sem notas';
-  //   const media = itens.reduce((acc, i) => acc + (i.nota ?? 0), 0) / itens.length;
-  //   return `Média: ${media.toFixed(1)}`;
-  // }
-
-  // getItensPorAgrupador(agrupador: string): ItemAvaliado[] {
-  //   return this.avaliacaoDetalhe?.itens.filter(i => i.agrupador === agrupador) ?? [];
-  // }
 }

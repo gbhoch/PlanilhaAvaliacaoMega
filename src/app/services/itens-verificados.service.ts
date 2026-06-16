@@ -1,3 +1,6 @@
+// TODO(review): STUB — getItensVerificados() returns mock/empty data. Injected by the live
+// AvaliacaoComponent (where its result is currently unused) and by HomeComponent (no route).
+// Kept pending confirmation. See REFATORACAO.md > "Arquivos marcados para revisão".
 import { ItensVerificados } from './../models/ItensVerificados';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';

@@ -45,14 +45,4 @@ export class ToolbarMenuComponent {
     this.mostrarPopover = false;
     this.router.navigate(['/login']);
   }
-
-  // onUsuarioMenuClick(e: any) {
-  //   if (e.itemData?.action === 'logout') {
-  //     const confirmado = confirm('Deseja realmente sair?');
-  //     if (confirmado) {
-  //       // this.securityService.logoff().subscribe(() => this.router.navigate(['auth/login']));
-  //       console.log('Logout confirmado');
-  //     }
-  //   }
-  // }
 }

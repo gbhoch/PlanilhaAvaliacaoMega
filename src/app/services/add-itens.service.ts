@@ -1,3 +1,5 @@
+// TODO(review): SUSPECTED UNUSED — only used by AddItemVerifComponent (no route). Returns mock/empty data.
+// Kept pending confirmation. See REFATORACAO.md > "Arquivos marcados para revisão".
 import { of } from 'rxjs';
 import { AddItens } from './../models/AddItens';
 import { Injectable } from '@angular/core';

@@ -1,3 +1,5 @@
+// TODO(review): SUSPECTED UNUSED — only referenced by HomeComponent (which has no route).
+// Mock-data component kept pending confirmation. See REFATORACAO.md > "Arquivos marcados para revisão".
 import { AddItens } from './../../models/AddItens';
 import { AddItensService } from './../../services/add-itens.service';
 import { CommonModule } from '@angular/common';
@@ -32,7 +34,6 @@ export class AddItemVerifComponent {
   constructor (private AddItensService : AddItensService){
     this.AddItensService.getAddItens().subscribe(data => {
       this.add = data
-      console.log(data)
     });
 
     this.allMode = 'allPages';
