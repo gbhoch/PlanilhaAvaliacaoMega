@@ -1,52 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SensoInterface } from '../models/interfaces/senso.interface';
-// import { StorageService } from './storage.service';
-import { ApiService } from './api.service';
-
-// const agrupList: SensoInterface[] = [];
+import { BaseCrudService } from '../shared/services/base-crud.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AgrupadoresService {
-
-  private url: string;
-  private agrupadoresSubject = new BehaviorSubject<SensoInterface[]>([]);
-  agrupadores$ = this.agrupadoresSubject.asObservable();
-
-  // agrupadoresList: SensoInterface[] = agrupList;
-
-  constructor(
-    private http: HttpClient,
-    private api : ApiService
-  ) {
-    this.url = `${this.api.baseUrl}/agrupadores`;
-  }
+export class AgrupadoresService extends BaseCrudService<SensoInterface> {
+  protected readonly resource = 'agrupadores';
 
   getAgrupList(): Observable<SensoInterface[]> {
-    return this.http.get<SensoInterface[]>(this.url).pipe(
-      tap(agrupadores => this.agrupadoresSubject.next(agrupadores))
-    );
+    return this.list();
   }
 
-  addAgrupador(agrupador : SensoInterface): Observable<SensoInterface>{
-    return this.http.post<SensoInterface>(this.url, agrupador).pipe(
-      tap(() => this.getAgrupList().subscribe())
-    );
+  addAgrupador(agrupador: SensoInterface): Observable<SensoInterface> {
+    return this.add(agrupador);
   }
 
-  updateAgrupador(agrupador : SensoInterface): Observable<SensoInterface>{
-    return this.http.put<SensoInterface>(`${this.url}/${agrupador.id}`, agrupador).pipe(
-      tap(() => this.getAgrupList().subscribe())
-    );
+  updateAgrupador(agrupador: SensoInterface): Observable<SensoInterface> {
+    return this.update(agrupador);
   }
 
-  removerAgrupador(id: number): Observable<any>{
-    return this.http.delete(`${this.url}/${id}`).pipe(
-      tap(() => this.getAgrupList().subscribe())
-    );
+  removerAgrupador(id: number): Observable<unknown> {
+    return this.remove(id);
   }
 
   verificarUsoItem(itemId: number): Observable<{ emUso: boolean }> {

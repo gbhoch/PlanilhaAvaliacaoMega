@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './../../../services/auth.service';
 import { Component, inject } from '@angular/core';
 import { LoginType } from '../../../models/types/login';
-import notify from 'devextreme/ui/notify';
+import { NotificationService } from '../../../shared/services/notification.service';
 import { DxButtonModule, DxNumberBoxModule, DxTextBoxModule } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -17,6 +17,7 @@ export class LoginComponent {
 
   private AuthService = inject(AuthService)
   private router = inject(Router)
+  private notification = inject(NotificationService)
 
   public credentials : LoginType = {
     codigo : null,
@@ -26,12 +27,7 @@ export class LoginComponent {
   loginButton(){
     let result = this.AuthService.login(this.credentials);
     if(!result){
-      notify({
-        message : 'Usuário e/ou senha incorretos!',
-        type : 'warning',
-        displayTime : 3000,
-        width : 300
-      }, {direction : 'up-stack', position : 'top center'})
+      this.notification.warning('Usuário e/ou senha incorretos!', { width: 300 });
       return;
     }
 

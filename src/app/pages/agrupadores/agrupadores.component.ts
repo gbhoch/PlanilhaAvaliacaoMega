@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SensoInterface } from '../../models/interfaces/senso.interface';
 import { Router } from '@angular/router';
-import notify from 'devextreme/ui/notify';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-agrupadores',
@@ -58,7 +58,8 @@ export class AgrupadoresComponent {
 
   constructor(
     private AgrupadoresService: AgrupadoresService,
-    private router: Router
+    private router: Router,
+    private notification: NotificationService
   ) {
     this.AgrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
@@ -123,15 +124,7 @@ export class AgrupadoresComponent {
 
   salvarAlteracoes(): void {
     if (!this.agrupadorEditando || !this.agrupadorEditando.nome) {
-      notify(
-        {
-          message: 'Nome do Agrupador não definido!',
-          type: 'warning',
-          displayTime: 3000,
-          width: 300
-        },
-        { direction: 'up-stack', position: 'top center' }
-      );
+      this.notification.warning('Nome do Agrupador não definido!', { width: 300 });
       return;
     }
 
@@ -143,8 +136,7 @@ export class AgrupadoresComponent {
         },
         error: (err) => {
           console.error('Erro ao atualizar agrupador:', err);
-          notify({ message: 'Erro ao atualizar agrupador', type: 'error', displayTime: 3000 },
-            { direction: 'up-stack', position: 'top center' });
+          this.notification.error('Erro ao atualizar agrupador');
         }
       });
     } else {
@@ -155,8 +147,7 @@ export class AgrupadoresComponent {
         },
         error: (err) => {
           console.error('Erro ao adicionar agrupador:', err);
-          notify({ message: 'Erro ao adicionar agrupador', type: 'error', displayTime: 3000 },
-            { direction: 'up-stack', position: 'top center' });
+          this.notification.error('Erro ao adicionar agrupador');
         }
       });
     }
@@ -200,14 +191,9 @@ export class AgrupadoresComponent {
     this.AgrupadoresService.verificarUsoItem(item.id).subscribe({
       next: (resultado) => {
         if (resultado.emUso) {
-          notify(
-            {
-              message: 'Este item não pode ser removido pois está sendo usado em um ou mais setores.',
-              type: 'warning',
-              displayTime: 4000,
-              width: 400
-            },
-            { direction: 'up-stack', position: 'top center' }
+          this.notification.warning(
+            'Este item não pode ser removido pois está sendo usado em um ou mais setores.',
+            { width: 400, displayTime: 4000 }
           );
           return;
         }
@@ -238,14 +224,9 @@ export class AgrupadoresComponent {
     this.AgrupadoresService.verificarUsoItem(item.id).subscribe({
       next: (resultado) => {
         if (resultado.emUso) {
-          notify(
-            {
-              message: 'Este item não pode ser removido pois está sendo usado em um ou mais setores.',
-              type: 'warning',
-              displayTime: 4000,
-              width: 400
-            },
-            { direction: 'up-stack', position: 'top center' }
+          this.notification.warning(
+            'Este item não pode ser removido pois está sendo usado em um ou mais setores.',
+            { width: 400, displayTime: 4000 }
           );
           this.popupExcluirVisible = false;
           return;
