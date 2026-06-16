@@ -1,8 +1,7 @@
 import { SensoInterface } from './../../models/interfaces/senso.interface';
 import { AgrupadoresService } from './../../services/agrupadores.service';
-import { ItensVerificadosService } from './../../services/itens-verificados.service';
 import { SetoresService } from './../../services/setores.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   DxDataGridModule,
   DxButtonModule,
@@ -16,7 +15,6 @@ import { SetorInterface } from '../../models/interfaces/setores.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuToolbarService } from '../../services';
-import { ItensVerificados } from '../../models/ItensVerificados';
 import { ItemAvaliacaoInterface } from '../../models/interfaces/item-avaliacao.interface';
 
 type ReorderCtx =
@@ -48,7 +46,6 @@ export class AvaliacaoComponent {
   [x: string]: any;
   setoresList: SetorInterface[] = [];
   agrupadoresList: SensoInterface[] = [];
-  itensList: ItensVerificados[] = []; // Interafce de Itens Verificados
 
   agrupadoresMap = new Map<string, SensoInterface>();
 
@@ -66,22 +63,17 @@ export class AvaliacaoComponent {
   itemSelecionadoExcluir: any = null;
   itensDoAgrupadorMap: Record<string, ItemAvaliacaoInterface[]> = {};
 
-  constructor(
-    public menuService: MenuToolbarService,
-    private agrupadoresService: AgrupadoresService,
-    private setoresService: SetoresService,
-    public itensVerifService: ItensVerificadosService,
-  ) {
+  public menuService = inject(MenuToolbarService);
+  private agrupadoresService = inject(AgrupadoresService);
+  private setoresService = inject(SetoresService);
+
+  constructor() {
     this.setoresService.getSetores().subscribe((setores) => {
       this.setoresList = setores;
     });
 
     this.agrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
-    });
-
-    this.itensVerifService.getItensVerificados().subscribe((itens) => {
-      this.itensList = itens;
     });
   }
 

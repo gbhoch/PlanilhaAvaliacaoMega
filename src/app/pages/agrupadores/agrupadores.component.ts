@@ -1,5 +1,5 @@
 import { AgrupadoresService } from './../../services/agrupadores.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   DxButtonModule,
   DxDataGridModule,
@@ -56,11 +56,11 @@ export class AgrupadoresComponent {
   itemSelecionadoParaExcluir: any = null;
   modoEdicao = false;
 
-  constructor(
-    private AgrupadoresService: AgrupadoresService,
-    private router: Router,
-    private notification: NotificationService
-  ) {
+  private AgrupadoresService = inject(AgrupadoresService);
+  private router = inject(Router);
+  private notification = inject(NotificationService);
+
+  constructor() {
     this.AgrupadoresService.getAgrupList().subscribe((data) => {
       this.agrupadoresList = data;
     });

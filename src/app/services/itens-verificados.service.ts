@@ -1,6 +1,6 @@
-// TODO(review): STUB — getItensVerificados() returns mock/empty data. Injected by the live
-// AvaliacaoComponent (where its result is currently unused) and by HomeComponent (no route).
-// Kept pending confirmation. See REFATORACAO.md > "Arquivos marcados para revisão".
+// TODO(review): SUSPECTED UNUSED — getItensVerificados() returns mock/empty data and is now only
+// referenced by HomeComponent (no route). Candidate for removal together with the Home cluster.
+// See REFATORACAO.md > "Arquivos marcados para revisão".
 import { ItensVerificados } from './../models/ItensVerificados';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';

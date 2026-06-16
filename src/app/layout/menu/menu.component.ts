@@ -1,5 +1,5 @@
 import { navigation } from './../../models/navigation';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { DxDrawerModule, DxListModule } from 'devextreme-angular';
 import { MenuToolbarService } from '../../services';
 import { MenuItem } from '../../models/menu-item';
@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit {
   public menuItems : MenuItem[] = navigation;
   public menuState : boolean = true;
 
-  constructor (public menuService : MenuToolbarService){}
+  public menuService = inject(MenuToolbarService);
 
   ngOnInit(): void {
     this.menuService.$menuState.subscribe((state : boolean) => {

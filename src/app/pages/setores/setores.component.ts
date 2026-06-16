@@ -1,5 +1,5 @@
 import { SetoresService } from './../../services/setores.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   DxButtonModule,
@@ -41,7 +41,9 @@ export class SetoresComponent implements OnDestroy {
   selectedSetor: SetorInterface = {} as SetorInterface;
   drawerAberto = false;
 
-  constructor(private setoresService: SetoresService) {
+  private setoresService = inject(SetoresService);
+
+  constructor() {
     this.setoresService.getSetores().subscribe((setores) => {
       this.setoresList = setores;
     });

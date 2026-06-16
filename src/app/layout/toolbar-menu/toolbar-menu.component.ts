@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import {
   DxToolbarModule,
   DxButtonModule,
@@ -27,10 +27,8 @@ export class ToolbarMenuComponent {
   mostrarPopover = false;
   nomeUsuario = 'Gabriel Hochscheidt';
 
-  constructor(
-    private toolbarService: MenuToolbarService,
-    private router : Router
-  ) {}
+  private toolbarService = inject(MenuToolbarService);
+  private router = inject(Router);
 
   @ViewChild('botaoUsuario', { static: false }) botaoUsuario: ElementRef | undefined;
 

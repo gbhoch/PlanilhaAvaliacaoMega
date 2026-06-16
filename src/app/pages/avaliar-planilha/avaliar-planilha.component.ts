@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { SetorInterface } from './../../models/interfaces/setores.interface';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   DxButtonModule, DxDataGridModule, DxDateBoxModule,
   DxListModule, DxSelectBoxModule, DxPopupModule,
@@ -61,10 +61,10 @@ export class AvaliarPlanilhaComponent {
   //Popup Cancelar
   popupCancelarVisivel = false;
 
-  constructor(
-    private setoresService: SetoresService,
-    private avaliacoesService: AvaliacoesService
-  ) {
+  private setoresService = inject(SetoresService);
+  private avaliacoesService = inject(AvaliacoesService);
+
+  constructor() {
     this.setoresService.getSetores().subscribe((planilhas) => {
       this.planilhasList = planilhas;
     });
