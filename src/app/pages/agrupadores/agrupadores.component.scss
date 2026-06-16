@@ -1,0 +1,338 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container-lg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: $spacing-md;
+}
+
+#itemTitulo {
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  padding-left: $spacing-md;
+}
+
+.btn-criar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-primary;
+  color: $color-text-inverse !important;
+  border: none;
+  border-radius: $radius-lg;
+  font-size: 8px;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: background-color $transition-base, transform $transition-fast;
+  box-shadow: $shadow-sm;
+}
+
+/* Campos de Input */
+.input-box {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xl;
+  justify-content: flex-start;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.input-text {
+  flex: 1 1 200px;
+  min-width: 150px;
+  max-width: 100%;
+  height: 27px;
+  font-family: $font-family-base;
+  border: none;
+  border-radius: $radius-xs;
+  outline: none;
+  margin: $spacing-md;
+  box-sizing: border-box;
+}
+
+input {
+  @include input-clean;
+}
+
+/* Botões confirmar / cancelar — ver .btn-confirmar/.btn-cancelar globais */
+.buttons-btn {
+  margin: $spacing-xl;
+  width: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-xl;
+}
+
+/* DRAWER AGRUPADORES */
+.drawer {
+  @include drawer-panel;
+}
+
+.drawer-top {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-3xl;
+
+  h3 {
+    font-size: 1.4rem;
+    color: $color-text;
+    margin: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition: color $transition-base;
+
+    &:hover {
+      color: $color-danger-accent;
+    }
+  }
+}
+
+.agrupador-info {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-3xl;
+}
+
+.agrupador-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  input,
+  textarea {
+    @include form-input;
+  }
+}
+
+.agrupador-status {
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: $spacing-sm;
+}
+
+.status-indicator {
+  span {
+    @include status-badge;
+  }
+
+  .ativo {
+    background-color: $color-badge-success-bg;
+    color: $color-badge-success-text;
+    border: 1px solid $color-primary;
+  }
+
+  .inativo {
+    background-color: $color-badge-danger-bg;
+    color: $color-badge-danger-text;
+    border: 1px solid $color-badge-danger-text;
+  }
+}
+
+.drawer-divider {
+  border: none;
+  border-top: 1px solid $color-overlay;
+  margin: $spacing-md 0;
+}
+
+/* Body do Drawer */
+.drawer-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  label {
+    font-weight: $font-weight-semibold;
+    color: $color-text;
+  }
+
+  textarea {
+    width: 100%;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    font-family: $font-family-base;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    resize: vertical;
+    transition: border-color $transition-base;
+
+    &:focus {
+      border-color: $color-primary;
+      outline: none;
+    }
+  }
+
+  input[type='text'] {
+    padding: $spacing-sm;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    width: 50%;
+  }
+}
+
+.cadastro-itens input {
+  padding: $spacing-sm;
+  width: calc(100% - 100px);
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  margin-right: $spacing-md;
+
+  &:focus {
+    border-color: $color-primary;
+    outline: none;
+  }
+}
+
+.btn-add {
+  padding: $spacing-sm $spacing-lg;
+  background-color: $color-primary;
+  color: $color-text-inverse;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  font-weight: $font-weight-medium;
+
+  &:hover {
+    background-color: $color-primary-dark;
+  }
+}
+
+.lista-itens {
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+
+  dx-data-grid {
+    flex-grow: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  h4 {
+    margin: 0;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  li {
+    padding: 6px 0;
+    border-bottom: 1px solid $color-border-subtle;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-sm;
+  }
+}
+
+::ng-deep .dx-icon-trash:before {   /* Cor botão de Excluir Itens */
+  color: $color-primary;
+}
+
+::ng-deep .dx-datagrid .dx-link {   /* Cor botão editar */
+  color: $color-primary;
+}
+
+::ng-deep .dx-toast-warning {       /* Cor de fundo do Warning */
+  background-color: $color-warning !important;
+}
+
+.btn-trash {
+  margin-left: $spacing-md;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: $color-text-subtle;
+  transition: color $transition-base;
+
+  &:hover {
+    color: $color-danger-accent;
+  }
+}
+
+/* POP UP */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popup-input {
+  padding: $spacing-md;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  font-size: $font-size-sm;
+  transition: border-color $transition-slow;
+  outline: none;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.drawer-footer {
+  position: sticky;
+  bottom: 0;
+  padding-top: $spacing-md;
+  display: flex;
+  justify-content: flex-start;
+  z-index: $z-footer;
+}
+
+::ng-deep .dx-datagrid .dx-row-focused {
+  background-color: $color-row-focus !important;
+  color: $color-black;
+}
+
+::ng-deep .dx-datagrid .dx-row-selected {
+  background-color: $color-row-selected !important;
+}
+
+::ng-deep .dx-datagrid .dx-row-focused.dx-row-selected .dx-data-row {
+  outline: none !important;
+}

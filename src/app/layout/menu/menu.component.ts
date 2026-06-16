@@ -9,7 +9,7 @@ import { MenuItem } from '../../models/menu-item';
   standalone: true,
   imports: [DxDrawerModule, DxListModule],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
+  styleUrl: './menu.component.scss'
 })
 export class MenuComponent implements OnInit {
 

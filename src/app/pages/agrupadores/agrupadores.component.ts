@@ -27,7 +27,7 @@ import notify from 'devextreme/ui/notify';
     DxButtonModule,
   ],
   templateUrl: './agrupadores.component.html',
-  styleUrl: './agrupadores.component.css',
+  styleUrl: './agrupadores.component.scss',
 })
 export class AgrupadoresComponent {
   agrupadoresList: SensoInterface[] = [];

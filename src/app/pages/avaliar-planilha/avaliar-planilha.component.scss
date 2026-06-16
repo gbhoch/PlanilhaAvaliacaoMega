@@ -1,43 +1,44 @@
+@use 'tokens' as *;
+
 .container-lg {
   height: 100%;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
 }
 
-/* Alinha os itens no meio da Linha */
+/* Alinha os itens no meio da linha */
 ::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td,
 .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
   vertical-align: middle;
 }
 
 .titulo {
-  color: #087d52;
-  font-size: 15px;
-  font-weight: 500;
-  padding-left: 10px;
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  padding-left: $spacing-md;
 }
 
 .input-box {
-  padding: 10px;
+  padding: $spacing-md;
   width: 70%;
   display: grid;
   justify-content: space-evenly;
 }
 
-/* Todos Inputs respectivamente */
 .input-text {
-  font-family: "Outfit", serif;
+  font-family: $font-family-base;
   border: none;
   border-bottom-style: groove;
   outline: none;
 }
 
 .header-buttons {
-  padding: 10px;
+  padding: $spacing-md;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: $spacing-xs;
 }
 
 #operator-btts {
@@ -46,28 +47,20 @@
 }
 
 .dx-button-mode-contained {
-  background-color: #087d52;
-  border-color: #ddd;
+  background-color: $color-primary;
+  border-color: $color-border;
   justify-content: center;
   align-items: center;
 }
 
 .folder-button {
-  background-color: rgb(65, 124, 235);
+  background-color: $color-info;
 }
 
 .start-button {
-  background-color: #087d52;
+  background-color: $color-primary;
 }
 
 .cancel-button {
-  background-color: red;
-}
-
-.btn-confirmar{
-  background-color: rgb(35, 219, 35);
-}
-
-.btn-cancelar {
-  background-color: red;
+  background-color: $color-danger;
 }

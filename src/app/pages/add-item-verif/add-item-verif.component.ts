@@ -17,7 +17,7 @@ import themes from 'devextreme/ui/themes';
   template: `
     <ng-content/>
   `,
-  styleUrl: './add-item-verif.component.css'
+  styleUrl: './add-item-verif.component.scss'
 })
 export class AddItemVerifComponent {
 

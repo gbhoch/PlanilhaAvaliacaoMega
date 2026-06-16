@@ -1,0 +1,70 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+.container-lg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#itemTitulo {
+  color: $color-text-inverse;
+  margin: 14px;
+}
+
+#addItem {
+  margin: $spacing-sm $spacing-2xl;
+}
+
+#dataGrid {
+  width: 100%;
+  margin-top: $spacing-2xl;
+  background-color: $color-primary;
+}
+
+.input-box {
+  width: 100%;
+  gap: $spacing-xl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.input-text {
+  height: 27px;
+  font-family: $font-family-base;
+  border: none;
+  border-radius: $radius-xs;
+  outline: none;
+  margin: $spacing-md;
+}
+
+input {
+  @include input-clean;
+}
+
+/* Botão de adicionar mais itens */
+.button-add {
+  height: 30px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-surface;
+  color: $color-primary;
+  border: none;
+  border-radius: $radius-xs;
+  font-size: $font-size-xl;
+  opacity: 1;
+}
+
+.buttons-btn {
+  margin: $spacing-xl;
+  width: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-xl;
+}

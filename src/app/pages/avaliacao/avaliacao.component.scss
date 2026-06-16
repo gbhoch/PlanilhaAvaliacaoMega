@@ -1,0 +1,206 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* CONTAINER DATAGRID */
+.container-lg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: $spacing-md;
+}
+
+#itemTitulo {
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  padding-left: $spacing-md;
+}
+
+.btn-criar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-primary;
+  color: $color-text-inverse !important;
+  border: none;
+  border-radius: $radius-lg;
+  font-size: 8px;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: background-color $transition-base, transform $transition-fast;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    background-color: $color-primary-hover;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  .dx-icon {
+    font-size: 18px;
+  }
+}
+
+/* DRAWER */
+.drawer {
+  @include drawer-panel;
+}
+
+.drawer-top {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-3xl;
+
+  h3 {
+    font-size: 1.4rem;
+    color: $color-text;
+    margin: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition: color $transition-base;
+
+    &:hover {
+      color: $color-danger-accent;
+    }
+  }
+}
+
+/* Lista de Agrupadores */
+.agrupador-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $color-surface-muted;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-sm;
+  margin-top: $spacing-md;
+  width: 100%;
+}
+
+/* Largura do Input do Agrupadores */
+.dx-texteditor.dx-editor-outlined {
+  width: 90%;
+}
+
+/* Botão de adicionar Itens no Agrupador */
+.dx-button-mode-contained {
+  background-color: $color-primary;
+  height: 35px;
+  width: 35px;
+  justify-content: center;
+  align-items: center;
+
+  &.dx-button-default.dx-state-hover {
+    background-color: $color-primary-hover;
+  }
+}
+
+/* Centralizar número dos Sensos / seta */
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td,
+.dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
+  vertical-align: middle;
+}
+
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td.dx-datagrid-group-space,
+.dx-datagrid-content .dx-datagrid-table .dx-row > tr > td.dx-datagrid-group-space {
+  vertical-align: middle;
+}
+
+/* Remover padding top das setas ao lado do número */
+::ng-deep .dx-datagrid-table .dx-row .dx-command-expand.dx-datagrid-group-space {
+  padding: 0;
+}
+
+.drag-icon {
+  cursor: move;
+  font-size: 18px;
+  padding: 0 $spacing-sm;
+}
+
+::ng-deep .dx-datagrid .dx-link {
+  color: $color-primary;
+}
+
+/* POPUP SELECT ITENS */
+.popup-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: $spacing-md 0;
+}
+
+::ng-deep .dx-checkbox-checked .dx-checkbox-icon {
+  color: $color-primary;
+}
+
+/* Remove a cor azul padrão do checkbox dos Itens */
+::ng-deep .dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-hover .dx-checkbox-icon,
+.dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-hover .dx-radiobutton-icon,
+.dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-hover .dx-checkbox-icon,
+.dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-hover .dx-radiobutton-icon {
+  border-color: $color-primary;
+}
+
+::ng-deep .dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-focused .dx-checkbox-icon,
+.dx-list.dx-list-select-decorator-enabled .dx-list-item.dx-state-focused .dx-radiobutton-icon,
+.dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-focused .dx-checkbox-icon,
+.dx-list.dx-list-select-decorator-enabled .dx-list-select-all.dx-state-focused .dx-radiobutton-icon {
+  border: $color-primary;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid $color-border-light;
+  padding-top: $spacing-md;
+  text-align: right;
+  background-color: $color-surface;
+  gap: $spacing-md;
+}
+
+/* POP-UP EXCLUSÃO */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+/* FOOTER DRAWER */
+.drawer-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: $color-surface-alt;
+  padding-top: $spacing-md;
+  display: flex;
+  justify-content: flex-start;
+  z-index: $z-footer;
+}

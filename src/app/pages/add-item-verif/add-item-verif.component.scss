@@ -1,0 +1,66 @@
+@use 'tokens' as *;
+
+/* MODAL WINDOW */
+dialog {
+  box-shadow: 0px 0px 5px $color-modal-shadow;
+  border-radius: $radius-md;
+  border: 0.5px solid $color-modal-shadow;
+
+  &::backdrop {
+    backdrop-filter: blur(1px);
+  }
+
+  width: 50%;
+  height: 35%;
+}
+
+:host {
+  border: 0px;
+  border-radius: $radius-md;
+  box-shadow: $shadow-modal;
+  background-color: $color-highlight-bg;
+
+  &::backdrop {
+    backdrop-filter: blur(2px);
+  }
+}
+
+.header {
+  padding: 0;
+  margin: 0;
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $color-text-inverse;
+  background-color: $color-primary;
+  font-weight: $font-weight-light;
+}
+
+#input-text {
+  margin: 25px;
+  padding: $spacing-md;
+  width: 85%;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#divItem {
+  margin-top: $spacing-sm;
+  margin-left: $spacing-sm;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+.buttons-btn-modal {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $spacing-xl;
+  padding: 0.5rem;
+}

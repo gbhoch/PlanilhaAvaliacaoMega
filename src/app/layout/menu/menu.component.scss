@@ -1,0 +1,45 @@
+@use 'tokens' as *;
+
+.drawer {
+  background-color: $color-surface;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+::ng-deep .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-state-focused {
+  background-color: $color-primary !important;
+}
+
+::ng-deep .dx-overlay-content {
+  background-color: $color-neutral;
+}
+
+::ng-deep #view {
+  margin-left: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+::ng-deep #toolbar {
+  background-color: $color-surface-translucent;
+  padding: $spacing-xs $spacing-md;
+}
+
+// Fix: original used rgba(...,-0.15) (invalid negative alpha -> transparent).
+::ng-deep .dx-toolbar-button .dx-button {
+  background-color: transparent;
+  border: none;
+}
+
+::ng-deep .dx-toolbar-button > .dx-toolbar-item-content {
+  margin-left: -7px;
+}
+
+.dx-template-wrapper {
+  height: 100%;
+}
+
+.drawerList {
+  background-color: $color-neutral;
+}

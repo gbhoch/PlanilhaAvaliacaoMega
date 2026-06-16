@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
     CommonModule,
   ],
   templateUrl: './setores.component.html',
-  styleUrl: './setores.component.css',
+  styleUrl: './setores.component.scss',
 })
 export class SetoresComponent implements OnDestroy {
   setoresList: SetorInterface[] = [];

@@ -16,7 +16,7 @@ import themes from 'devextreme/ui/themes';
   standalone: true,
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrl: './home.component.scss',
   imports: [CommonModule, DxDataGridModule, DxButtonModule, AddItemVerifComponent, FormsModule]
 })
 

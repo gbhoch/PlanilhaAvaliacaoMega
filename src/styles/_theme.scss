@@ -50,4 +50,11 @@
   // Overlays
   --color-overlay:        rgba(0, 0, 0, 0.10);
   --color-overlay-strong: rgba(0, 0, 0, 0.15);
+
+  // Misc neutrals / accents
+  --color-neutral:              #d3d3d3; // light-gray DevExtreme surfaces
+  --color-surface-translucent:  rgba(191, 191, 191, 0.15);
+  --color-login-gradient-start: #605e5e;
+  --color-modal-shadow:         #757575;
+  --color-highlight-bg:         #e7ffb6; // legacy add-item modal (flagged for review)
 }

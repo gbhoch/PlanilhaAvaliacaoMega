@@ -29,7 +29,7 @@ export interface ItemAvaliado {
     DxTextAreaModule, DxNumberBoxModule, DxScrollViewModule
   ],
   templateUrl: './avaliar-planilha.component.html',
-  styleUrl: './avaliar-planilha.component.css'
+  styleUrl: './avaliar-planilha.component.scss'
 })
 export class AvaliarPlanilhaComponent {
 

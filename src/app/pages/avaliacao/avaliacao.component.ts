@@ -38,7 +38,7 @@ type ReorderCtx =
     DxPopupModule,
   ],
   templateUrl: './avaliacao.component.html',
-  styleUrl: './avaliacao.component.css',
+  styleUrl: './avaliacao.component.scss',
 })
 export class AvaliacaoComponent {
   private generateUniqueId(): number {

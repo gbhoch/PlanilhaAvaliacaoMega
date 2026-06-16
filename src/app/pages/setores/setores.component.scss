@@ -1,0 +1,231 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container-lg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: $spacing-md;
+}
+
+#itemTitulo {
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  padding-left: $spacing-md;
+}
+
+.btn-criar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-primary;
+  color: $color-text-inverse !important;
+  border: none;
+  border-radius: $radius-lg;
+  font-size: 8px;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: background-color $transition-base, transform $transition-fast;
+  box-shadow: $shadow-sm;
+}
+
+.input-box {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xl;
+  justify-content: flex-start;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.input-text {
+  flex: 1 1 200px;
+  min-width: 150px;
+  max-width: 100%;
+  height: 27px;
+  font-family: $font-family-base;
+  border: none;
+  border-radius: $radius-xs;
+  outline: none;
+  margin: $spacing-md;
+  box-sizing: border-box;
+}
+
+input {
+  @include input-clean;
+}
+
+::ng-deep .dx-datagrid .dx-link {
+  color: $color-primary;
+}
+
+.buttons-btn {
+  margin: $spacing-xl;
+  width: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-xl;
+}
+
+/* DRAWER SETOR */
+.drawer {
+  @include drawer-panel;
+}
+
+.drawer-top {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-3xl;
+
+  h3 {
+    font-size: 1.4rem;
+    color: $color-text;
+    margin: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition: color $transition-base;
+
+    &:hover {
+      color: $color-danger-accent;
+    }
+  }
+}
+
+.setor-info {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-3xl;
+}
+
+.setor-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  input,
+  textarea {
+    @include form-input;
+  }
+}
+
+.setor-status {
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: $spacing-sm;
+}
+
+.status-indicator {
+  span {
+    @include status-badge;
+  }
+
+  .ativo {
+    background-color: $color-badge-success-bg;
+    color: $color-badge-success-text;
+    border: 1px solid $color-primary;
+  }
+
+  .inativo {
+    background-color: $color-badge-danger-bg;
+    color: $color-badge-danger-text;
+    border: 1px solid $color-badge-danger-text;
+  }
+}
+
+.drawer-divider {
+  border: none;
+  border-top: 1px solid $color-overlay;
+  margin: $spacing-md 0;
+}
+
+/* Text Area da Aba Descrição */
+.drawer-body {
+  textarea {
+    width: 100%;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    font-family: $font-family-base;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    resize: vertical;
+    transition: border-color $transition-base;
+
+    &:focus {
+      border-color: $color-primary;
+      outline: none;
+    }
+  }
+
+  input[type='text'] {
+    padding: $spacing-sm;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    width: 50%;
+  }
+}
+
+/* POP UP */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popup-input {
+  padding: $spacing-md;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  font-size: $font-size-sm;
+  transition: border-color $transition-slow;
+  outline: none;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.drawer-footer {
+  position: sticky;
+  bottom: 0;
+  padding-top: $spacing-md;
+  display: flex;
+  justify-content: flex-start;
+  z-index: $z-footer;
+}
