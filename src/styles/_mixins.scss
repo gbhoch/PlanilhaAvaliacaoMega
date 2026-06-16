@@ -1,0 +1,85 @@
+// =============================================================================
+// MIXINS — reusable patterns extracted from previously duplicated component CSS.
+// =============================================================================
+@use 'tokens' as *;
+
+// Slide-in drawer panel (was duplicated across agrupadores/setores/avaliacao).
+@mixin drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: $drawer-width;
+  height: 100%;
+  background-color: $color-surface-alt;
+  box-shadow: $shadow-drawer;
+  padding: $spacing-3xl;
+  z-index: $z-drawer;
+  display: flex;
+  flex-direction: column;
+  font-family: $font-family-base;
+  transform: translateX(100%);
+  transition: transform $transition-slow;
+
+  &.open {
+    transform: translateX(0%);
+    pointer-events: auto;
+    visibility: visible;
+  }
+}
+
+// Pill action button (confirm / cancel) used in drawer footers and popups.
+@mixin action-button($bg) {
+  background-color: $bg;
+  border: none;
+  border-radius: $radius-xs;
+  font-family: $font-family-base;
+  font-style: normal;
+  height: 35px;
+}
+
+// Text input / textarea inside drawers and popups.
+@mixin form-input {
+  width: 100%;
+  padding: $spacing-sm;
+  font-family: $font-family-base;
+  font-size: $font-size-sm;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  outline: none;
+
+  &:focus {
+    border-color: $color-primary;
+  }
+}
+
+// Status badge (ativo / inativo).
+@mixin status-badge {
+  padding: 6px $spacing-lg;
+  border-radius: $radius-sm;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+}
+
+// Elevated surface / card.
+@mixin card {
+  background-color: $color-surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+// Hide native number-input spinners and the placeholder on focus.
+@mixin input-clean {
+  &:focus::-webkit-input-placeholder { opacity: 0; }
+  &:focus::-moz-placeholder { opacity: 0; }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type='number'] {
+    -moz-appearance: textfield;
+  }
+}

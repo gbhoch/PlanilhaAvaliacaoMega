@@ -1,0 +1,58 @@
+// =============================================================================
+// GLOBAL STYLES — design tokens, theme palette, resets and shared elements.
+// DevExtreme's base theme (dx.light.css) and the Outfit font are loaded via
+// angular.json and index.html respectively.
+// =============================================================================
+@use 'styles/tokens' as *;
+@use 'styles/mixins' as *;
+@use 'styles/theme'; // emits the :root color custom properties
+
+* {
+  font-family: $font-family-base;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+app-root {
+  height: 100vh;
+}
+
+app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+app-toolbar-menu {
+  display: flex;
+}
+
+app-menu {
+  flex-grow: 1;
+  display: flex;
+}
+
+button {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.4s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Canonical confirm / cancel buttons (previously copy-pasted into 7 files).
+.btn-confirmar {
+  @include action-button($color-success);
+}
+
+.btn-cancelar {
+  @include action-button($color-danger);
+}
